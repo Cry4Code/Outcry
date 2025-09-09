@@ -34,6 +34,8 @@
 # Visual Studio cache directory
 .vs/
 
+.idea/
+/Assets/99. Externals/
 # Gradle cache directory
 .gradle/
 
