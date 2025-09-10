@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Unity.Burst.Intrinsics;
 using UnityEditor.Tilemaps;
@@ -12,7 +13,7 @@ public class ResourceManager : Singleton<ResourceManager>
     public T LoadAsset<T>(string assetName,string path) where T : Object
     {
         T result = default;
-        string assetPath = path + assetName;
+        string assetPath = Path.Combine(path,assetName);
 
         if (!assetPool.ContainsKey(assetPath))
         {
