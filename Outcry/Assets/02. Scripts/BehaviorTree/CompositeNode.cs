@@ -9,7 +9,7 @@ public abstract class CompositeNode : Node
 
     public CompositeNode(List<Node> children = null)
     {
-        this.children = children;
+        this.children = children ?? new List<Node>();
     }
 
     public virtual void AddChild(Node node)
