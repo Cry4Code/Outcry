@@ -9,7 +9,7 @@ public class GameManager : Singleton<GameManager>
 {
     private void Start()
     {
-        var testPrefab = ResourceManager.Instance.LoadAssetAddressableSync<GameObject>("JoannaStatusUI/TestPrefab.prefab");
+        var testPrefab = ResourceManager.Instance.LoadAssetAddressable<GameObject>("JoannaStatusUI/TestPrefab.prefab");
 
         if(testPrefab != null)
         {
