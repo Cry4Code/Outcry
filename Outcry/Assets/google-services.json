@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "49288271999",
+    "project_id": "outcry-7f20d",
+    "storage_bucket": "outcry-7f20d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49288271999:android:587d2475ee068cbe60874a",
+        "android_client_info": {
+          "package_name": "com.cry4code.outcry"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBypbVIJQzd6vyyeWd0j-dl6OfZeRvizqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

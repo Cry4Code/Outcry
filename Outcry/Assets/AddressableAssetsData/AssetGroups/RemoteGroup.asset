@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: RemoteGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: RemoteGroup
+  m_Data:
+    m_SerializedData: []
+  m_GUID: ed5b8af7439aa5547a65b0e4a6609a43
+  m_SerializeEntries:
+  - m_GUID: f53b493068ab25c42bcba9e0a690b070
+    m_Address: JoannaStatusUI
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - RemoteGroup
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d0f9944382aabec4ba959c039543c507, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 610cfd75b6fe278479680534cec63618, type: 2}
+    - {fileID: 11400000, guid: c63fcef82eb42cb4ea95af4a22fdba41, type: 2}
