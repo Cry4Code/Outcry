@@ -18,7 +18,8 @@ public class PlayerMove : MonoBehaviour
     [field : Header("Movement Settings")] 
     [field : SerializeField] public float MoveSpeed { get; set; }
     private Vector2 curMoveInput;
-    private bool isLeft = false;
+    private bool keyboardLeft = false;
+    private bool lookLeft = false;
     
     #endregion
     
@@ -26,6 +27,7 @@ public class PlayerMove : MonoBehaviour
     [field : Header("Jump Settings")]
     [field : SerializeField] public float JumpForce { get; set; }
     [field : SerializeField] public float WallJumpForce { get; set; }
+    [field : SerializeField] public float WallJumpBounceForce { get; set; }
     public LayerMask groundMask; 
     private float colliderHeightHalf;
     private bool groundJump = false;
@@ -34,6 +36,8 @@ public class PlayerMove : MonoBehaviour
     private float groundCheckBoxX;
     private float groundCheckBoxY;
     private Collider2D currentWall;
+    private bool isWallJumped = false;
+    private bool lastWallIsLeft = false;
     #endregion
 
     #region 시야 관련
@@ -49,7 +53,7 @@ public class PlayerMove : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public PlayerInputs Inputs { get; set; }
     private bool isDodged = false;
-    private bool isWallJumped = false;
+    
 
 
     private void Awake()
@@ -64,9 +68,9 @@ public class PlayerMove : MonoBehaviour
     private void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        wallCheckBoxX = boxCollider.size.x / 100f;
+        wallCheckBoxX = boxCollider.size.x * 0.1f;
         groundCheckBoxX = boxCollider.size.x * 0.8f;
-        groundCheckBoxY = boxCollider.size.y / 100f;
+        groundCheckBoxY = boxCollider.size.y * 0.1f;
     }
 
     /// <summary>
@@ -116,6 +120,8 @@ public class PlayerMove : MonoBehaviour
         }
         
         Move();
+        /*Debug.Log($"{isWallJumped}");*/
+        /*Debug.Log($"{rb.velocity}");*/
         /*Debug.Log($"점프 카운트 {jumpCount}");
         Debug.Log($"땅에 닿았는가 {IsGrounded()}");*/
 
@@ -127,7 +133,7 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private void LateUpdate()
     {
-        
+        Look();
     }
 
     /// <summary>
@@ -137,13 +143,16 @@ public class PlayerMove : MonoBehaviour
     private void OnMove(InputAction.CallbackContext context)
     {
         curMoveInput = context.ReadValue<Vector2>();
+        if(curMoveInput.x > 0) keyboardLeft = false;
+        else keyboardLeft = true;
+        
         if (IsWallTouched(out bool isWallInLeft, out var hit))
         {
-            if (isWallInLeft && curMoveInput.x > 0)
+            if (isWallInLeft && !keyboardLeft)
             {
                 rb.AddForce(Vector2.right * 0.1f, ForceMode2D.Impulse);
             }
-            else if (!isWallInLeft && curMoveInput.x < 0)
+            else if (!isWallInLeft && keyboardLeft)
             {
                 rb.AddForce(Vector2.left * 0.1f, ForceMode2D.Impulse);
             }
@@ -173,8 +182,16 @@ public class PlayerMove : MonoBehaviour
             if (currentWall != wallHit)
             {
                 Debug.Log($"벽점!");
+                rb.velocity = Vector2.zero;
+                lastWallIsLeft = isWallInLeft;
                 currentWall = wallHit;
-                rb.AddForce(((isWallInLeft ? Vector2.right : Vector2.left) + Vector2.up) * WallJumpForce, ForceMode2D.Impulse);
+                Vector2 jumpPower = ((isWallInLeft ? Vector2.right : Vector2.left) + Vector2.up).normalized *
+                                    WallJumpForce;
+                /*Vector2 jumpPower = (Vector2.up * WallJumpForce);*/
+                
+                rb.AddForce(jumpPower,ForceMode2D.Impulse);
+                isWallJumped = true;
+                
                 return;
             }
         }
@@ -221,6 +238,12 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     void Move()
     {
+        if (isWallJumped)
+        {
+            if (curMoveInput.x == 0) return;
+            if (lastWallIsLeft && curMoveInput.x <= 0) return;
+            else if (!lastWallIsLeft && curMoveInput.x >= 0) return;
+        }
         Vector2 dir = transform.right * curMoveInput.x;
         dir *= MoveSpeed;
 
@@ -254,9 +277,11 @@ public class PlayerMove : MonoBehaviour
         Collider2D hit = Physics2D.OverlapBox(boxcenter, boxsize, 0.0f, groundMask);
         if (hit != null)
         {
+            /*Debug.Log("바닥 터치");*/
             airJumpCount = 0;
             groundJump = false;
             currentWall = null;
+            isWallJumped = false;
             return true;
         }
 
@@ -281,17 +306,20 @@ public class PlayerMove : MonoBehaviour
     {
 
         Vector2 boxcenter = (Vector2)transform.position
-            + ((isLeft ? Vector2.left : Vector2.right)
+            + ((keyboardLeft ? Vector2.left : Vector2.right)
             * (boxCollider.size.x / 2f));
 
         Vector2 boxsize = new Vector2(wallCheckBoxX, boxCollider.size.y);
         
         wallHit = Physics2D.OverlapBox(boxcenter, boxsize, 0.0f, groundMask);
 
-        isWallInLeft = isLeft;
+        isWallInLeft = keyboardLeft;
         
         if (wallHit != null)
         {
+            /*Debug.Log("벽 터치");*/
+            if(wallHit != currentWall)
+                isWallJumped = false;
             return true;
         }
 
@@ -301,8 +329,18 @@ public class PlayerMove : MonoBehaviour
 
     void Look()
     {
-        
-        
+        // 플레이어는 오른쪽을 봐야함.
+        if (CursorManager.Instance.mousePosition.x > transform.position.x)
+        {
+            lookLeft = false;
+        }
+        // 플레이어는 왼쪽을 봐야함.
+        else
+        {
+            lookLeft = true;
+        }
+
+        spriteRenderer.flipX = lookLeft;
     }
 
 #if UNITY_EDITOR
@@ -318,7 +356,7 @@ public class PlayerMove : MonoBehaviour
         Gizmos.DrawWireCube(boxcenter, boxsize);
         
         Vector2 wallBoxcenter = (Vector2)transform.position
-                            + ((isLeft ? Vector2.left : Vector2.right)
+                            + ((keyboardLeft ? Vector2.left : Vector2.right)
                                * (boxCollider.size.x / 2f));
 
         Vector2 wallBoxsize = new Vector2(wallCheckBoxX, boxCollider.size.y);
