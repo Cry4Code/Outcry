@@ -18,14 +18,13 @@ public class PlayerMove : MonoBehaviour
     #region 점프 관련
     [field : Header("Jump Settings")]
     [field : SerializeField] public float JumpForce { get; set; }
-
-    [SerializeField] private float wallCheckRadius; 
-    
     
     public LayerMask groundMask; 
     private float colliderHeightHalf;
     private int jumpCount = 0;
-    
+    private float wallCheckBoxX;
+    private float groundCheckBoxX;
+    private float groundCheckBoxY;
     #endregion
 
     #region 시야 관련
@@ -55,6 +54,9 @@ public class PlayerMove : MonoBehaviour
     private void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        wallCheckBoxX = boxCollider.size.x / 100f;
+        groundCheckBoxX = boxCollider.size.x * 0.8f;
+        groundCheckBoxY = boxCollider.size.y / 100f;
     }
 
     /// <summary>
@@ -104,6 +106,10 @@ public class PlayerMove : MonoBehaviour
         
         Move();
         if (IsGrounded()) jumpCount = 0;
+        Debug.Log($"점프 카운트 {jumpCount}");
+        Debug.Log($"땅에 닿았는가 {IsGrounded()}");
+
+        //Debug.Log($"벽에 닿았는가?  {IsWallTouched()}");
     }
 
     /// <summary>
@@ -140,9 +146,10 @@ public class PlayerMove : MonoBehaviour
     private void OnJump(InputAction.CallbackContext context)
     {
         // 2단 이상 점프 방지
-        if (jumpCount > 2) return;
+        if (jumpCount > 1) return;
         rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
         jumpCount++;
+
     }
     
     /// <summary>
@@ -171,8 +178,20 @@ public class PlayerMove : MonoBehaviour
     {
         Vector2 dir = transform.right * curMoveInput.x;
         dir *= MoveSpeed;
-        dir.y = rb.velocity.y;
-        rb.velocity = dir;
+
+        if (IsWallTouched() && curMoveInput != Vector2.zero && !IsGrounded())
+        {
+            rb.gravityScale = 0.5f;
+
+            Debug.Log("벽에 붙음");
+        }
+        else
+        {
+            rb.gravityScale = 1f;
+
+            dir.y = rb.velocity.y;
+            rb.velocity = dir;
+        }
     }
     
     
@@ -183,21 +202,47 @@ public class PlayerMove : MonoBehaviour
     /// <returns>닿았으면 true</returns>
     bool IsGrounded()
     {
-        if (Physics2D.Raycast(transform.position, Vector2.down, colliderHeightHalf + 0.01f, groundMask))
+
+        Vector2 boxcenter = (Vector2)transform.position+ (Vector2.down)*(boxCollider.size.y / 2f);
+
+        Vector2 boxsize = new Vector2(groundCheckBoxX, groundCheckBoxY);
+
+        Collider2D hit = Physics2D.OverlapBox(boxcenter, boxsize, 0.0f, groundMask);
+        if (hit != null)
         {
             return true;
         }
-        
+
         return false;
+        /*
+    if (Physics2D.Raycast(transform.position, Vector2.down, colliderHeightHalf + 0.01f, groundMask))
+    {
+         return true;
     }
 
-    
+    return false;*/
+    }
+
+
     /// <summary>
     /// 벽에 닿았는지 체크
     /// </summary>
     /// <returns>닿았으면 true</returns>
     bool IsWallTouched()
     {
+
+        Vector2 boxcenter = (Vector2)transform.position
+            + ((isLeft ? Vector2.left : Vector2.right)
+            * (boxCollider.size.x / 2f));
+
+        Vector2 boxsize = new Vector2(wallCheckBoxX, boxCollider.size.y);
+
+        Collider2D hit = Physics2D.OverlapBox(boxcenter, boxsize, 0.0f, groundMask);
+        if (hit != null)
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -207,4 +252,18 @@ public class PlayerMove : MonoBehaviour
         
         
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        // 디버깅용: Scene 뷰에 GroundCheck 원을 그려주는 코드
+        Gizmos.color = IsGrounded() ? Color.green : Color.red;
+        //Gizmos.DrawWireSphere(transform.position, 5f);
+
+        Vector2 boxcenter = (Vector2)transform.position + (Vector2.down) * (boxCollider.size.y / 2f);
+        Vector2 boxsize = new Vector2(groundCheckBoxX, groundCheckBoxY);
+
+        Gizmos.DrawWireCube(boxcenter, boxsize);
+    }
+#endif
 }
