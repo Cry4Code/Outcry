@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class MonsterBase : MonoBehaviour
 {
     [Header("Data")]
-    protected MonsterDataBase monsterData;
+    protected MonsterModelBase monsterModel;
     
     [Header("Components")]
     protected MonsterCondition condition;
@@ -13,8 +13,7 @@ public abstract class MonsterBase : MonoBehaviour
     protected Animator animator;
 
     [HideInInspector]
-    public MonsterDataBase MonsterData => monsterData;
-    public abstract void Initialize(MonsterDataBase monsterData);
-
+    public MonsterModelBase MonsterModel => monsterModel;
+    public abstract void Initialize(MonsterModelBase monsterModel);
     protected abstract void InitializeSkills();
 }

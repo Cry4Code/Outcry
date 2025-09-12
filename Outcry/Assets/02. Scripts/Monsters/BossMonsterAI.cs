@@ -53,7 +53,7 @@ public class BossMonsterAI : MonsterAI
     private Player target;
     private bool isAttacking;
 
-    private BossMonsterData monsterData;
+    private BossMonsterModel monsterModel;
 
     private void Start()
     {
@@ -63,7 +63,7 @@ public class BossMonsterAI : MonsterAI
             Debug.LogError("BossMonsterAI: BossMonster component not found!");
             return;
         }
-        monsterData = monster.GetMonsterData();
+        /*monsterData = monster.GetMonsterData();*/
         InitializeBehaviorTree();
     }
 
@@ -94,7 +94,7 @@ public class BossMonsterAI : MonsterAI
         
         //스페셜 스킬 셀럭터 노드 자식들 생성.
         SelectorNode specialSkillSelectorNode = new SelectorNode();
-        foreach (int id in monsterData.specialSkillIds)
+        foreach (int id in monsterModel.specialSkillIds)
         {
             SkillNode skillNode = BehaviorTreeNodeData.skillNodes.Find(x => x.skillId == id);
             
@@ -107,7 +107,7 @@ public class BossMonsterAI : MonsterAI
         
         //일반 스킬 셀럭터 노드 자식들 생성.
         SelectorNode commonSkillSelectorNode = new SelectorNode();
-        foreach (int id in monsterData.commonSkillIds)
+        foreach (int id in monsterModel.commonSkillIds)
         {
             SkillNode skillNode = BehaviorTreeNodeData.skillNodes.Find(x => x.skillId == id);
             if (skillNode != null)

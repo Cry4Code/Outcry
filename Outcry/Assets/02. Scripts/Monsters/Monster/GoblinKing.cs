@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
 public class GoblinKing : BossMonster
 {
     protected override void Initialize()
@@ -16,3 +17,4 @@ public class GoblinKing : BossMonster
 
     }
 }
+*/

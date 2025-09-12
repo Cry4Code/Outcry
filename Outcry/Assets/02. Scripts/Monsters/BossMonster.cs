@@ -5,12 +5,12 @@ using UnityEngine;
 
 #region 임시 데이터 클래스
 
-public static class Temp_DataTableManager
+public static class Temp_DataBase
 {
-    public static List<MonsterSkillDataBase> monsterSkillDatas = new List<MonsterSkillDataBase>()
+    public static List<MonsterSkillModel> monsterSkillDatas = new List<MonsterSkillModel>()
     {
-        new MonsterSkillDataBase(1, "MonsterSkill1"),
-        new MonsterSkillDataBase(2, "MonsterSkill2")
+        new MonsterSkillModel(1, "MonsterSkill1", 1, 1f, "첫번째 스킬입니다."),
+        new MonsterSkillModel(2, "MonsterSkill2",2, 2f, "두번째 스킬입니다.")
     };
 }
 
@@ -18,8 +18,8 @@ public static class Temp_DataTableManager
 public class BossMonster : MonsterBase
 {
     [Header("Data")]
-    private List<MonsterSkillDataBase> specialSkillDatas;
-    private List<MonsterSkillDataBase> commonSkillDatas;
+    private List<MonsterSkillModel> specialSkillDatas;
+    private List<MonsterSkillModel> commonSkillDatas;
     
     [Header("Components")]
     private MonsterCondition condition;
@@ -37,7 +37,7 @@ public class BossMonster : MonsterBase
         }*/
     }
     
-    public override void Initialize(MonsterDataBase monsterData)
+    public override void Initialize(MonsterModelBase monsterModel)
     {
         /*this.monsterData = monsterData;
         

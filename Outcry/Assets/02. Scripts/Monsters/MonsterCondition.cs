@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterCondition : MonoBehaviour /*, IDamagable*/
+public class MonsterCondition : MonoBehaviour, IDamagable
 {
     private MonsterBase monster;
     
