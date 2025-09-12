@@ -2,14 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossMonsterData
+public class BossMonsterData : MonsterDataBase   //주원님 이거 readonly로 생성해주세요...
 {
-    private int monsterId;
-    private string monsterName;
-    private int health;
-    private float chaseSpeed;
-    private float attackRange;
-    private float attackCooldown;
-    private int[] specialSkillIds;
-    private int[] commonSkillIds;
+    public int[] specialSkillIds;
+    public int[] commonSkillIds;
 }
