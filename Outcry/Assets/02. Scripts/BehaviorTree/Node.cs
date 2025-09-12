@@ -11,5 +11,13 @@ public enum NodeState
 
 public abstract class Node
 {
-    public abstract NodeState Evaluate();
+    protected NodeState nodeState;
+    protected string nodeName;  // 디버그용
+
+    public abstract NodeState Tick();
+
+    public virtual void Reset()
+    {
+
+    }
 }

@@ -5,13 +5,14 @@ using UnityEngine;
 public abstract class CompositeNode : Node
 {
     protected List<Node> children;
+    protected int currentIndex;
 
-    protected CompositeNode(List<Node> children = null)
+    public CompositeNode(List<Node> children = null)
     {
         this.children = children;
     }
 
-    public virtual void Add(Node node)
+    public virtual void AddChild(Node node)
     {
         children.Add(node);
     }

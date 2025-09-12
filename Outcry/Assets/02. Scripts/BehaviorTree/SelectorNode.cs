@@ -1,25 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 
-public class Sequence : CompositeNode
+public class SelectorNode : CompositeNode
 {
-    public override NodeState Evaluate()
+    public override NodeState Tick()
     {
         foreach (var child in children)
         {
-            switch (child.Evaluate())
-            {                
+            switch (child.Tick())
+            {
+                case NodeState.Success:
+                    return NodeState.Success;
                 case NodeState.Running:
                     return NodeState.Running;
                 case NodeState.Failure:
-                    return NodeState.Failure;
-                case NodeState.Success:
                     continue;
             }
         }
 
-        return NodeState.Success;
+        return NodeState.Failure;
     }
 }

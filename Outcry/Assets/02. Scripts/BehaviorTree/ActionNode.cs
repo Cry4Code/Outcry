@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionNode : Node
+public class ActionNode : LeafNode
 {
-    Func<NodeState> action;
+    protected Func<NodeState> action;
 
-    protected ActionNode(Func<NodeState> action)
+    public ActionNode(Func<NodeState> action = null)
     {
         this.action = action;
     }
 
-    public override NodeState Evaluate()
+    public override NodeState Tick()
     {
         return action.Invoke();
     }
