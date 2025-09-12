@@ -120,12 +120,6 @@ public class PlayerMove : MonoBehaviour
         }
         
         Move();
-        /*Debug.Log($"{isWallJumped}");*/
-        /*Debug.Log($"{rb.velocity}");*/
-        /*Debug.Log($"점프 카운트 {jumpCount}");
-        Debug.Log($"땅에 닿았는가 {IsGrounded()}");*/
-
-        //Debug.Log($"벽에 닿았는가?  {IsWallTouched()}");
     }
 
     /// <summary>
@@ -187,7 +181,6 @@ public class PlayerMove : MonoBehaviour
                 currentWall = wallHit;
                 Vector2 jumpPower = ((isWallInLeft ? Vector2.right : Vector2.left) + Vector2.up).normalized *
                                     WallJumpForce;
-                /*Vector2 jumpPower = (Vector2.up * WallJumpForce);*/
                 
                 rb.AddForce(jumpPower,ForceMode2D.Impulse);
                 isWallJumped = true;
@@ -195,7 +188,6 @@ public class PlayerMove : MonoBehaviour
                 return;
             }
         }
-        
         
         // 2단 이상 점프 방지
         if (!IsGrounded())
@@ -206,6 +198,7 @@ public class PlayerMove : MonoBehaviour
         }
         else
         {
+            // 바닥에서 점프 안했을 때
             if (!groundJump)
             {
                 rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
@@ -288,13 +281,6 @@ public class PlayerMove : MonoBehaviour
         }
 
         return false;
-        /*
-    if (Physics2D.Raycast(transform.position, Vector2.down, colliderHeightHalf + 0.01f, groundMask))
-    {
-         return true;
-    }
-
-    return false;*/
     }
 
 
@@ -348,9 +334,7 @@ public class PlayerMove : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        // 디버깅용: Scene 뷰에 GroundCheck 원을 그려주는 코드
         Gizmos.color = IsWallTouched(out bool isWallInLeft, out var hit) ? Color.green : Color.red;
-        //Gizmos.DrawWireSphere(transform.position, 5f);
 
         Vector2 boxcenter = (Vector2)transform.position + (Vector2.down) * (boxCollider.size.y / 2f);
         Vector2 boxsize = new Vector2(groundCheckBoxX, groundCheckBoxY);
