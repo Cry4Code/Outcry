@@ -241,14 +241,16 @@ public class PlayerMove : MonoBehaviour
         if (isWallJumped)
         {
             if (curMoveInput.x == 0) return;
-            if (lastWallIsLeft && curMoveInput.x <= 0) return;
-            else if (!lastWallIsLeft && curMoveInput.x >= 0) return;
         }
         Vector2 dir = transform.right * curMoveInput.x;
         dir *= MoveSpeed;
-
-
-        if (IsWallTouched(out var isWallInLeft, out var hit) && !IsGrounded())
+        
+        
+        // 벽에 붙고, 땅이 아니면서, 벽의 방향과 입력 방향이 같고, 입력이 0이 아닐 때
+        if (IsWallTouched(out var isWallInLeft, out var hit) 
+            && !IsGrounded() 
+            && isWallInLeft == keyboardLeft 
+            && curMoveInput.x != 0)
         {
             rb.gravityScale = 0.5f;
         }
