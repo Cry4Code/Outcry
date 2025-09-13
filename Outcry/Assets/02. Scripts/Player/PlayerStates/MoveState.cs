@@ -1,0 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MoveState : IPlayerState
+{
+    public void Enter(PlayerController player) => player.SetAnimation("Move");
+
+    public void HandleInput(PlayerController player)
+    {
+        var input = player.Inputs.Player.Move.ReadValue<Vector2>();
+        if (input.x == 0) player.ChangeState(new IdleState());
+        else if (player.Inputs.Player.Jump.triggered) player.ChangeState(new JumpState());
+        // else if (player.Inputs.Player.Dodge.triggered) player.ChangeState(new DodgeState());
+    }
+
+
+    public void LogicUpdate(PlayerController player)
+    {
+        player.PlayerMove.Move();
+    }
+
+    public void Exit(PlayerController player) { }
+}
