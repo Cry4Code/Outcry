@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class BossMonsterModel : MonsterModelBase   //주원님 이거 readonly로 생성해주세요...
+[Serializable]
+public class BossMonsterModel : MonsterModelBase
 {
-    public readonly int[] specialSkillIds;
-    public readonly int[] commonSkillIds;
+    public int[] specialSkillIds;
+    public int[] commonSkillIds;
 
     public BossMonsterModel(
         int monsterId, string monsterName, int health, float chaseSpeed, float attackRange, float attackCooldown, 

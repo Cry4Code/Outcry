@@ -10,6 +10,9 @@ public class MonsterCondition : MonoBehaviour, IDamagable
     private int maxHealth;
     private int currentHealth;
     private bool isDead = false;
+    
+    public Action OnHealthChanged;
+    public Action OnDeath;  //todo. think. BT 중지도 여기에 하면 될듯? 그럼 isDead 필요 없음? 고민해봐야할듯.
 
     private void Start()
     {
@@ -20,17 +23,17 @@ public class MonsterCondition : MonoBehaviour, IDamagable
             return;
         }
 
-        Initialized();
+        Initialize();
     }
 
-    public void Initialized()
+    public void Initialize()    //오브젝트 풀이 필요할 것인가? 상정하고 짜뒀음.
     {
-        // SetMaxHealth(monster.health);
+        SetMaxHealth();
     }
 
-    public void SetMaxHealth(int maxHealth)
+    private void SetMaxHealth()
     {
-        this.maxHealth = maxHealth;
+        maxHealth = monster.MonsterData.health;
         currentHealth = maxHealth;
     }
     

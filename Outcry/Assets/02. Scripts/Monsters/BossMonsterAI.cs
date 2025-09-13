@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 #region 임시 클래스들
 
 //임시 클래스들
-
 public class SkillNode
 {
     public int skillId;
@@ -38,42 +39,14 @@ public class Skill1Sequence : SequenceNode
     }
 }
 
-public class MonsterAI : MonoBehaviour
-{
-    
-}
 //이상 임시끝
-
 #endregion
-public class BossMonsterAI : MonsterAI
+
+// [RequireComponent(typeof(BossMonster))] //todo. think. 쓸까 말까?
+public class BossMonsterAI : MonsterAIBase
 {
-    private BossMonster monster;
-    
-    private Node rootNode;
-    private Player target;
-    private bool isAttacking;
-
-    private BossMonsterModel monsterModel;
-
-    private void Start()
+    public override void InitializeBehaviorTree()
     {
-        monster = GetComponent<BossMonster>();
-        if (monster == null)
-        {
-            Debug.LogError("BossMonsterAI: BossMonster component not found!");
-            return;
-        }
-        /*monsterData = monster.GetMonsterData();*/
-        InitializeBehaviorTree();
-    }
-
-    void Update()
-    {
-        UpdateAI();
-    }
-    private void InitializeBehaviorTree()
-    {
-        
         SelectorNode rootNode = new SelectorNode();
         
         //isDead
@@ -91,10 +64,15 @@ public class BossMonsterAI : MonsterAI
         
         rootNode.AddChild(attackSequenceNode);
         
+        BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
+        if (monsterModel == null)
+        {
+            Debug.Log("monsterModel 이게 null이라서 짜증나겠지만 어쨋든 null인걸 어쩌라고.. 짜증나......");
+        }
         
         //스페셜 스킬 셀럭터 노드 자식들 생성.
         SelectorNode specialSkillSelectorNode = new SelectorNode();
-        foreach (int id in monsterModel.specialSkillIds)
+        foreach (int id in monsterModel.specialSkillIds )
         {
             SkillNode skillNode = BehaviorTreeNodeData.skillNodes.Find(x => x.skillId == id);
             
@@ -116,7 +94,7 @@ public class BossMonsterAI : MonsterAI
             }
         }
         attackSelectorNode.AddChild(commonSkillSelectorNode);
-
+        
         //chase
         SelectorNode chaseSelectorNode = new SelectorNode();
         
@@ -131,14 +109,8 @@ public class BossMonsterAI : MonsterAI
         //chase Action
         ActionNode chaseActionNode = new ActionNode(() => NodeState.Running); //임시
         chaseSelectorNode.AddChild(chaseActionNode);
-
+        
         this.rootNode = rootNode;
+        Debug.Log("rootNode initialized");
     }
-    
-    void UpdateAI()
-    {
-        if (rootNode == null) return;
-        rootNode.Tick();
-    }
-
 }

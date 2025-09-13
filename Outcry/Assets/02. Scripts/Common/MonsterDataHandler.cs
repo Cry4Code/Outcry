@@ -22,9 +22,8 @@ public class MonsterDataHandler
     /// </summary>
     public BossMonsterModel MapFromTableData(MonsterTableData tableData)
     {   
-        //todo think. deepcopy를 굳이 해줘야하나?
-        
-        //
+        // deep copy 이유: 해당 모델 인스펙터에서 보여주기 위해 public 인자를 갖고 있음.
+        // 데이터 변경이 되더라도 해당 객체의 데이터만 변경될 것임.
         int[] specialSkillIds = new int[tableData.specialSkillIds.Length];
         Array.Copy(tableData.specialSkillIds, specialSkillIds, specialSkillIds.Length);
         int[] commonSkillIds = new int[tableData.commonSkillIds.Length];
