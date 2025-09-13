@@ -12,7 +12,10 @@ public static class Temp_DataBase
     public static List<MonsterSkillModel> monsterSkillDatas = new List<MonsterSkillModel>()
     {
         new MonsterSkillModel(1, "MonsterSkill1", 1, 1f, "첫번째 스킬입니다."),
-        new MonsterSkillModel(2, "MonsterSkill2",2, 2f, "두번째 스킬입니다.")
+        new MonsterSkillModel(2, "MonsterSkill2",2, 2f, "두번째 스킬입니다."),
+        new MonsterSkillModel(3, "MonsterSkill3",2, 2f, "세번째 스킬입니다."),
+        new MonsterSkillModel(4, "MonsterSkill4",2, 2f, "네번째 스킬입니다."),
+        new MonsterSkillModel(5, "MonsterSkill5",2, 2f, "다섯번째 스킬입니다.")
     };
 
     public static MonsterSkillModel GetMonsterSkillById(int id)
@@ -28,6 +31,7 @@ public class BossMonster : MonsterBase
     [SerializeField] private List<MonsterSkillModel> specialSkillDatas;
     [SerializeField] private List<MonsterSkillModel> commonSkillDatas;
 
+
     protected void Awake()
     {
         //test용 코드
@@ -38,54 +42,22 @@ public class BossMonster : MonsterBase
         base.Awake();
     }
 
-    protected void Update()
-    {
-        monsterAI.UpdateAI();
-    }
-
     public override void Initialize()
     {
         Debug.Log($"Initialize: {monsterData.monsterId}");
         monsterAI.InitializeBehaviorTree();
     }
-    
-    // public override void Initialize(MonsterModelBase monsterData)   //외부에서 호출하는 Initializer
-    // {
-    //     this.monsterData = monsterData;
-    //     if (monsterData != null)    //
-    //         Initialize();
-    // }
-    //
-    // private void Initialize()   //내부 호출용 Initializer
-    // {
-    //     if(condition == null)
-    //     {
-    //         condition = this.AddComponent<MonsterCondition>();
-    //     }
-    //     if (monsterData != null)
-    //     {
-    //         condition.Initialize();
-    //         InitializeSkills();
-    //         if(monsterAI == null)
-    //         {
-    //             monsterAI = this.AddComponent<BossMonsterAI>();
-    //         }
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("monsterData is null");
-    //     }
-    // }
 
     protected override void InitializeSkills()
     {
         if (monsterData is BossMonsterModel bossMonsterData)
         {
+            Debug.Log("BossMonster임");
             //스페셜 스킬 데이터 초기화
             foreach (int skillId in bossMonsterData.specialSkillIds)
             {
                 MonsterSkillModel skillData =
-                    Temp_DataBase.GetMonsterSkillById(bossMonsterData.specialSkillIds[skillId]);
+                    Temp_DataBase.GetMonsterSkillById(skillId);
                 if (skillData != null)
                 {
                     specialSkillDatas.Add(skillData);
@@ -96,10 +68,10 @@ public class BossMonster : MonsterBase
             foreach (int skillId in bossMonsterData.commonSkillIds)
             {
                 MonsterSkillModel skillData =
-                    Temp_DataBase.GetMonsterSkillById(bossMonsterData.commonSkillIds[skillId]);
+                    Temp_DataBase.GetMonsterSkillById(skillId);
                 if (skillData != null)
                 {
-                    specialSkillDatas.Add(skillData);
+                    commonSkillDatas.Add(skillData);
                 }
             }
         }

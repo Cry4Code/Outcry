@@ -1,14 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class MonsterSkillModel
 {
-    public readonly int skillId;
-    public readonly string skillName;
-    public readonly int damage;
-    public readonly float delay;
-    public readonly string description;
+    public int skillId;
+    public string skillName;
+    public int damage;
+    public float delay;
+    public string description;
     
     public MonsterSkillModel(int skillId, string skillName, int damage, float delay, string description)
     {

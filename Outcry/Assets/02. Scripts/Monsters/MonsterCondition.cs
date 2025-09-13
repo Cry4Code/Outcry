@@ -9,7 +9,7 @@ public class MonsterCondition : MonoBehaviour, IDamagable
     
     private int maxHealth;
     private int currentHealth;
-    private bool isDead = false;
+    public bool IsDead { get; private set; } = false;
     
     public Action OnHealthChanged;
     public Action OnDeath;  //todo. think. BT 중지도 여기에 하면 될듯? 그럼 isDead 필요 없음? 고민해봐야할듯.
@@ -44,7 +44,7 @@ public class MonsterCondition : MonoBehaviour, IDamagable
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            isDead = true;
+            IsDead = true;
         }
     }
 }

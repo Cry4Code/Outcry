@@ -32,8 +32,16 @@ public abstract class MonsterBase : MonoBehaviour
         }
         
         Initialize();
+        InitializeSkills();
     }
 
+    protected void Update()
+    {
+        if (!condition.IsDead)
+        {
+            monsterAI.UpdateAI();
+        }
+    }
     public void SetMonsterData(MonsterModelBase monsterModel)
     {
         this.monsterData = monsterModel;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public abstract class MonsterModelBase
+public class MonsterModelBase
 {
     public int monsterId;
     public string monsterName;
