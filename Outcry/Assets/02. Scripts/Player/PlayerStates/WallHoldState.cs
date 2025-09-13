@@ -7,6 +7,7 @@ public class WallHoldState : IPlayerState
     public void Enter(PlayerController player)
     {
         Debug.Log("벽짚기 진입");
+        player.PlayerMove.ChangeGravity(true);
     }
 
     public void Exit(PlayerController player)
@@ -16,11 +17,23 @@ public class WallHoldState : IPlayerState
 
     public void HandleInput(PlayerController player)
     {
-        Debug.Log("벽짚기 키 입력 처리");
+        var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
+        if ((((moveInput.x < 0 && player.PlayerMove.lastWallIsLeft) 
+            || moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft)) 
+            && player.Inputs.Player.Jump.triggered
+            && player.PlayerMove.curWall != player.PlayerMove.prevWall)
+        {
+            player.ChangeState<WallJumpState>();
+        }
+
+        if (moveInput.x == 0) player.ChangeState<FallState>();
+        else if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+        
     }
 
     public void LogicUpdate(PlayerController player)
     {
-        Debug.Log("벽짚기 로직 실행");
+        if (player.PlayerMove.keyboardLeft != player.PlayerMove.lastWallIsLeft)
+            player.PlayerMove.Move();
     }
 }

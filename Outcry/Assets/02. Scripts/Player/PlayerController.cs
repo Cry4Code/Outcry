@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour
             { typeof(MoveState), new MoveState() },
             { typeof(JumpState), new JumpState() },
             { typeof(DoubleJumpState), new DoubleJumpState() },
-            { typeof(WallJumpState), new WallJumpState() }
+            { typeof(WallJumpState), new WallJumpState() },
+            { typeof(WallHoldState), new WallHoldState() },
+            { typeof(FallState), new FallState() },
         };
     }
 
@@ -47,8 +49,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log($"{currentState.GetType().Name}");
-        Debug.Log($"{PlayerMove.isGrounded}");
+        Debug.Log($"상태 : {currentState.GetType().Name}");
+        Debug.Log($"땅 : {PlayerMove.isGrounded} || 일반 점프 : {PlayerMove.isGroundJump} || 이단 점프 : {PlayerMove.isDoubleJump}");
         currentState.HandleInput(this);
         currentState.LogicUpdate(this);
     }
