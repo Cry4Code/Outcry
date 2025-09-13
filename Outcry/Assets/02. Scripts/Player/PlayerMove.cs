@@ -32,6 +32,7 @@ public class PlayerMove : MonoBehaviour
     public LayerMask groundMask;
     [HideInInspector] public bool isGroundJump = false; // 지상에서 첫 점프 했는지
     [HideInInspector] public bool isDoubleJump = false; // 더블점프 했는지
+    private float checkDistance;
     private float wallCheckBoxX;
     private float wallCheckBoxY;
     [HideInInspector] public Collider2D prevWall;
@@ -73,6 +74,7 @@ public class PlayerMove : MonoBehaviour
     private void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        checkDistance = boxCollider.size.x * 0.5f;
         wallCheckBoxX = boxCollider.size.x * 0.1f;
         wallCheckBoxY = boxCollider.size.y * 0.85f;
     }
@@ -102,8 +104,16 @@ public class PlayerMove : MonoBehaviour
 
     public void WallJump()
     {
-        Vector2 dir = (lastWallIsLeft ? Vector2.right : Vector2.left + Vector2.up).normalized * WallJumpForce;
+        Vector2 dir = ((lastWallIsLeft ? Vector2.right : Vector2.left) + Vector2.up).normalized * WallJumpForce;
         rb.AddForce(dir, ForceMode2D.Impulse);
+
+
+        // 벽점 당시에 왼쪽 벽인지 아닌지 확인한 다음에 벽 체크
+        Vector2 rightCheckPos = (Vector2)transform.position + Vector2.right * checkDistance;
+        Vector2 leftCheckPos = (Vector2)transform.position + Vector2.left * checkDistance;
+
+
+
     }   
 
     public void ChangeGravity(bool holdWall)
@@ -136,7 +146,7 @@ public class PlayerMove : MonoBehaviour
         Vector2 moveInput = Controller.Inputs.Player.Move.ReadValue<Vector2>();
         rb.velocity = new Vector2(moveInput.x * MoveSpeed, rb.velocity.y);
         if (moveInput.x < 0) keyboardLeft = true;
-        else keyboardLeft = false;
+        else if (moveInput.x > 0) keyboardLeft = false;
 
     }
    
@@ -170,6 +180,7 @@ public class PlayerMove : MonoBehaviour
         {
             Debug.Log("벽");
             UpdateGrounded(collision);
+            UpdateWallTouched(collision);
         }
     }
 
@@ -178,6 +189,13 @@ public class PlayerMove : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             UpdateGrounded(collision);
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                if (contact.normal.x != 0)
+                {
+                    isWallTouched = true;
+                }
+            }
         }
     }
 
@@ -207,23 +225,30 @@ public class PlayerMove : MonoBehaviour
                 curWall = null;
                 return;
             }
-
-            if(contact.normal.x != 0)
-            {
-                isWallTouched = true;
-                if(curWall != collision.collider)
-                {
-                    Debug.Log("다른 벽 건드림");
-                    prevWall = curWall;
-                    curWall = collision.collider;
-                    lastWallIsLeft = contact.normal.x > 0 ? true : false;
-                }
-                
-            }
         }
 
         // 위쪽으로 부딪히거나 옆으로 부딪히면 grounded 안 됨
         isGrounded = false;
+    }
+
+    private void UpdateWallTouched(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+
+            if (contact.normal.x != 0)
+            {
+                isWallTouched = true;
+                //if (curWall != collision.collider)
+                //{
+                //    Debug.Log("다른 벽 건드림");
+                //    prevWall = curWall;
+                //    curWall = collision.collider;
+                //    lastWallIsLeft = contact.normal.x > 0;
+                //}
+            }
+        }
+        isWallTouched = false;
     }
 
 #if UNITY_EDITOR

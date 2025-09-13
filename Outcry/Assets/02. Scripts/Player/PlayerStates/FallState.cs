@@ -19,17 +19,22 @@ public class FallState : IPlayerState
         // 공중에서 이동 가능
         var input = player.Inputs.Player.Move.ReadValue<Vector2>();
         if (input.x != 0)
+        {
             player.ChangeState<MoveState>();
+            return;
+        }
 
         if (player.Inputs.Player.Jump.triggered)
         {
             if(!player.PlayerMove.isGroundJump)
             {
                 player.ChangeState<JumpState>();
+                return;
             }
             else if (!player.PlayerMove.isDoubleJump)
             {
                 player.ChangeState<DoubleJumpState>();
+                return;
             }
         }
     }

@@ -18,18 +18,29 @@ public class JumpState : IPlayerState
             if(!player.PlayerMove.isDoubleJump)
             {
                 player.ChangeState<DoubleJumpState>();
-
+                return;
             }
         }
         else if (player.PlayerMove.isWallTouched)
+        {
             player.ChangeState<WallHoldState>();
+            return;
+        }
     }
 
     public void LogicUpdate(PlayerController player)
     {
-        if (!player.PlayerMove.isGroundJump) player.PlayerMove.isGroundJump = true;
+        if (!player.PlayerMove.isGroundJump)
+        {
+            player.PlayerMove.isGroundJump = true;
+            return;
+        }
         player.PlayerMove.Move();
-        if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
+        if (player.PlayerMove.rb.velocity.y < 0)
+        {
+            player.ChangeState<FallState>();
+            return;
+        }
     }
 
     public void Exit(PlayerController player) { }

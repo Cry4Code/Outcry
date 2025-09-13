@@ -771,8 +771,8 @@ MonoBehaviour:
   keyboardLeft: 0
   lookLeft: 0
   <JumpForce>k__BackingField: 5
-  <WallJumpForce>k__BackingField: 5
-  <GroundThresholdForce>k__BackingField: 0.1
+  <WallJumpForce>k__BackingField: 10
+  <GroundThresholdForce>k__BackingField: 0.5
   <GroundThresholdDistance>k__BackingField: 0.1
   groundMask:
     serializedVersion: 2

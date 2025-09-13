@@ -15,14 +15,23 @@ public class DoubleJumpState : IPlayerState
         if(player.PlayerMove.isWallTouched)
         {
             player.ChangeState<WallHoldState>();
+            return;
         }
     }
 
     public void LogicUpdate(PlayerController player)
     {
         player.PlayerMove.Move();
-        if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
-        else if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+        if (player.PlayerMove.rb.velocity.y < 0)
+        {
+            player.ChangeState<FallState>();
+            return;
+        }
+        if (player.PlayerMove.isGrounded)
+        {
+            player.ChangeState<IdleState>();
+            return;
+        }
     }
 
     public void Exit(PlayerController player) { }
