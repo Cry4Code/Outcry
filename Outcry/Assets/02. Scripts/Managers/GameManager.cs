@@ -31,20 +31,6 @@ public class GameManager : Singleton<GameManager>
         // Firebase 초기화가 완료되었음이 보장되는 시점
         Debug.Log("GameManager: Firebase is confirmed to be initialized. Starting game logic.");
 
-        FirebaseManager.Instance.LogStageStart("Test");
-
-        var testPrefab = ResourceManager.Instance.LoadAsset<GameObject>("TestUIPrefab", Paths.Prefabs.UI);
-
-        if (testPrefab != null)
-        {
-            GameObject prefab = Instantiate(testPrefab, Vector3.zero, Quaternion.identity);
-            StartCoroutine(DestroyTestCoroutine(prefab));
-        }
-    }
-
-    private IEnumerator DestroyTestCoroutine(GameObject prefab)
-    {
-        yield return new WaitForSeconds(5f);
-        Destroy(prefab);
+        //FirebaseManager.Instance.LogStageStart("Test");
     }
 }

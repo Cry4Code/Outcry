@@ -1,16 +1,23 @@
 using UnityEngine;
 using Firebase;
+using Firebase.Auth;
 using Firebase.Analytics;
 using Firebase.Extensions; // ContinueWithOnMainThread를 위해 필수
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 
 public class FirebaseManager : Singleton<FirebaseManager>
 {
     // 파이어베이스가 제공하는 모든 기능에 접근 가능하도록 하는 클래스
     private FirebaseApp app;
 
-    // Analytics 초기화 완료 여부 플래그
+    // 인증 관련
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private bool bIsAuthInit = false;
+
+    // 애널리틱스 관련
     private bool bIsAnalyticsInit = false;
 
     private void Awake()
@@ -21,8 +28,7 @@ public class FirebaseManager : Singleton<FirebaseManager>
     /// Firebase 서비스 초기화 확인
     public bool IsInit()
     {
-        // 현재 Analytics만 사용하므로 이 플래그 하나만 확인
-        return bIsAnalyticsInit;
+        return bIsAuthInit && bIsAnalyticsInit;
     }
 
     // Firebase 서비스 초기화를 진행하는 코루틴
@@ -39,7 +45,8 @@ public class FirebaseManager : Singleton<FirebaseManager>
                 // FirebaseApp 인스턴스 초기화
                 app = FirebaseApp.DefaultInstance;
 
-                // Analytics 서비스 초기화 시작
+                // 파이어베이스 서비스 초기화
+                InitAuth();
                 InitAnalytics();
             }
             else
@@ -69,8 +76,229 @@ public class FirebaseManager : Singleton<FirebaseManager>
         }
     }
 
-    #region ANALYTICS
+    #region AUTH
+    /// <summary>
+    /// Firebase Auth 서비스 초기화
+    /// </summary>
+    private void InitAuth()
+    {
+        auth = FirebaseAuth.DefaultInstance;
+        // 사용자의 로그인 상태가 바뀔 때마다(로그인, 로그아웃) OnAuthStateChanged 함수를 호출하도록 등록
+        auth.StateChanged += OnAuthStateChanged;
+        bIsAuthInit = true;
+        Debug.Log("Firebase Auth initialized.");
+    }
 
+    /// <summary>
+    /// 로그인 상태 변경 시 호출되는 이벤트 핸들러
+    /// </summary>
+    private void OnAuthStateChanged(object sender, System.EventArgs eventArgs)
+    {
+        if (auth.CurrentUser != user)
+        {
+            bool signedIn = (auth.CurrentUser != null);
+            if (signedIn)
+            {
+                user = auth.CurrentUser;
+                Debug.Log($"Firebase User Signed In: {user.UserId}");
+
+                // 사용자의 로그인 유형에 따라 꼬리표를 붙임
+                if (user.IsAnonymous)
+                {
+                    FirebaseAnalytics.SetUserProperty("login_type", "anonymous");
+                }
+                else
+                {
+                    FirebaseAnalytics.SetUserProperty("login_type", "email");
+                }
+
+                // TODO: 로그인 성공 후 필요한 작업 (예: 유저 데이터 로드)을 여기서 시작?
+            }
+            else
+            {
+                Debug.Log("Firebase User Signed Out.");
+                user = null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 익명으로 Firebase에 로그인합니다. (게스트 로그인)
+    /// </summary>
+    /// <returns>로그인 성공 여부 Task</returns>
+    public async Task<bool> SignInAnonymouslyAsync()
+    {
+        if (!IsInit() || user != null)
+        {
+            Debug.LogWarning("Firebase not initialized or user already signed in.");
+            return false;
+        }
+
+        try
+        {
+            // 익명 로그인 시도
+            // AuthResult 객체로 결과를 받음
+            AuthResult result = await auth.SignInAnonymouslyAsync();
+            // 결과 객체 안의 User 프로퍼티 사용
+            FirebaseUser newUser = result.User;
+            Debug.Log($"Anonymous sign-in successful. User ID: {newUser.UserId}");
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Anonymous sign-in failed with exception: {e}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 이메일과 비밀번호로 새 계정 생성(회원가입)
+    /// </summary>
+    public async Task<bool> SignUpWithEmailAsync(string email, string password)
+    {
+        if (!IsInit())
+        {
+            Debug.LogWarning("Firebase not initialized.");
+            return false;
+        }
+
+        try
+        {
+            AuthResult result = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
+            FirebaseUser newUser = result.User;
+            Debug.Log($"Email sign-up successful. User ID: {newUser.UserId}");
+            return true;
+        }
+        catch (FirebaseException e)
+        {
+            // Firebase 관련 에러 처리
+            AuthError errorCode = (AuthError)e.ErrorCode;
+            switch (errorCode)
+            {
+                case AuthError.EmailAlreadyInUse:
+                    Debug.LogError("Email already in use.");
+                    break;
+                case AuthError.WeakPassword:
+                    Debug.LogError("Password is too weak.");
+                    break;
+                default:
+                    Debug.LogError($"Sign-up failed with Firebase exception: {e}");
+                    break;
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            // 기타 에러 처리
+            Debug.LogError($"Sign-up failed with exception: {e}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 이메일과 비밀번호로 로그인
+    /// </summary>
+    public async Task<bool> SignInWithEmailAsync(string email, string password)
+    {
+        if (!IsInit())
+        {
+            Debug.LogWarning("Firebase not initialized.");
+            return false;
+        }
+
+        try
+        {
+            AuthResult result = await auth.SignInWithEmailAndPasswordAsync(email, password);
+            FirebaseUser signInuser = result.User;
+            Debug.Log($"Email sign-in successful. User ID: {signInuser.UserId}");
+            return true;
+        }
+        catch (FirebaseException e)
+        {
+            AuthError errorCode = (AuthError)e.ErrorCode;
+            switch (errorCode)
+            {
+                case AuthError.WrongPassword:
+                    Debug.LogError("Wrong password.");
+                    break;
+                case AuthError.UserNotFound:
+                    Debug.LogError("User not found.");
+                    break;
+                default:
+                    Debug.LogError($"Sign-in failed with Firebase exception: {e}");
+                    break;
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Sign-in failed with exception: {e}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 현재 사용자 로그아웃
+    /// </summary>
+    public void SignOut()
+    {
+        if (auth.CurrentUser != null)
+        {
+            Debug.Log("Signing out current user.");
+
+            auth.SignOut();
+        }
+    }
+
+    /// <summary>
+    /// 현재 로그인된 익명 계정을 영구적인 이메일/비밀번호 계정으로 연동(업그레이드)
+    /// </summary>
+    public async Task<bool> LinkEmailToCurrentUserAsync(string email, string password)
+    {
+        // 반드시 익명 유저가 로그인한 상태여야 함
+        if (user == null || !user.IsAnonymous)
+        {
+            Debug.LogError("No anonymous user is currently signed in to link.");
+            return false;
+        }
+
+        try
+        {
+            // 이메일/비밀번호로 자격 증명(Credential) 생성
+            Credential credential = EmailAuthProvider.GetCredential(email, password);
+
+            // 현재 익명 유저에게 새 자격 증명을 연결
+            await user.LinkWithCredentialAsync(credential);
+
+            Debug.Log("Anonymous account successfully upgraded to an Email account.");
+            return true;
+        }
+        catch (FirebaseException e)
+        {
+            AuthError errorCode = (AuthError)e.ErrorCode;
+            switch (errorCode)
+            {
+                case AuthError.EmailAlreadyInUse:
+                    Debug.LogError("This email is already associated with another account.");
+                    break;
+                case AuthError.CredentialAlreadyInUse:
+                    Debug.LogError("This credential is already linked to another user.");
+                    break;
+                default:
+                    Debug.LogError($"Account linking failed with Firebase exception: {e}");
+                    break;
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Account linking failed with exception: {e}");
+            return false;
+        }
+    }
+    #endregion
+
+    #region ANALYTICS
     /// <summary>
     /// Firebase Analytics 서비스 초기화
     /// </summary>
@@ -139,4 +367,13 @@ public class FirebaseManager : Singleton<FirebaseManager>
         Debug.Log($"Analytics: Skill Usage logged - {skillName}");
     }
     #endregion
+
+    private void OnDestroy()
+    {
+        if (auth != null)
+        {
+            auth.StateChanged -= OnAuthStateChanged;
+            auth = null;
+        }
+    }
 }
