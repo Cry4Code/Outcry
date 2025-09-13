@@ -28,7 +28,6 @@ public class CursorManager : Singleton<CursorManager>
             Debug.LogWarning($"커서가 지정되지 않음.");
         }
 
-        Debug.Log("CursorManager Awake");
         SetInGame(true); // 테스트용
     }
 
@@ -51,7 +50,6 @@ public class CursorManager : Singleton<CursorManager>
     public void OnLook(InputAction.CallbackContext context)
     {
         Vector2 mousePos = context.ReadValue<Vector2>();
-        Debug.Log("마우스 이동 중");
 
         // 전투 중
         if (IsInGame)

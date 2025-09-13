@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    private Dictionary<System.Type, IPlayerState> states; // 상태 저장용
     public PlayerInputs Inputs { get; private set; }
     public PlayerMove PlayerMove { get; private set; }
     private IPlayerState currentState;
@@ -14,6 +16,15 @@ public class PlayerController : MonoBehaviour
         Inputs = new PlayerInputs();
         Inputs.Enable();
         PlayerMove = GetComponent<PlayerMove>();
+
+        states = new Dictionary<System.Type, IPlayerState>
+        {
+            { typeof(IdleState), new IdleState() },
+            { typeof(MoveState), new MoveState() },
+            { typeof(JumpState), new JumpState() },
+            { typeof(DoubleJumpState), new DoubleJumpState() },
+            { typeof(WallJumpState), new WallJumpState() }
+        };
     }
 
     private void Start()
@@ -36,6 +47,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //Debug.Log($"{currentState.GetType().Name}");
+        Debug.Log($"{PlayerMove.isGrounded}");
         currentState.HandleInput(this);
         currentState.LogicUpdate(this);
     }
@@ -45,10 +58,11 @@ public class PlayerController : MonoBehaviour
         PlayerMove.Look();
     }
 
-    public void ChangeState(IPlayerState newState)
+    public void ChangeState<T>() where T : IPlayerState
     {
-        currentState.Exit(this);
-        currentState = newState;
+        currentState?.Exit(this);
+
+        currentState = states[typeof(T)];
         currentState.Enter(this);
     }
 

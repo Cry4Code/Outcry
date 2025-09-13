@@ -27,17 +27,17 @@ public class PlayerMove : MonoBehaviour
     [field : Header("Jump Settings")]
     [field : SerializeField] public float JumpForce { get; set; }
     [field : SerializeField] public float WallJumpForce { get; set; }
-    [field : SerializeField] public float WallJumpBounceForce { get; set; }
+    [field : SerializeField] public float GroundThresholdForce { get; set; } // 땅으로 인식하는 법선 벡터 크기 조건
+    [field: SerializeField] public float GroundThresholdDistance { get; set; } // 땅으로 인식하는 거리 최소 조건
     public LayerMask groundMask; 
-    private float colliderHeightHalf;
-    private bool groundJump = false;
-    private int airJumpCount = 0;
+    public bool isGroundJump = false; // 지상에서 첫 점프 했는지
+    public bool isDoubleJump = false; // 더블점프 했는지
     private float wallCheckBoxX;
-    private float groundCheckBoxX;
-    private float groundCheckBoxY;
     private Collider2D currentWall;
-    private bool isWallJumped = false;
-    private bool lastWallIsLeft = false;
+    public bool isWallJumped = false; // 벽점 했는지
+    public bool lastWallIsLeft = false; // 마지막에 부딛힌 벽이 왼쪽에 있는지
+    public bool isGrounded = true;
+
     #endregion
 
     #region 시야 관련
@@ -62,17 +62,13 @@ public class PlayerMove : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if(boxCollider == null)
             boxCollider = GetComponent<BoxCollider2D>();
-        colliderHeightHalf = boxCollider.size.y / 2f;
         Controller = GetComponent<PlayerController>();
     }
 
     private void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        wallCheckBoxX = boxCollider.size.x * 0.1f;
-        groundCheckBoxX = boxCollider.size.x * 0.8f;
-        groundCheckBoxY = boxCollider.size.y * 0.1f;
-    }
+        wallCheckBoxX = boxCollider.size.x * 0.1f;    }
 
 
     /// <summary>
@@ -80,15 +76,15 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        if (IsGrounded())
+        isGrounded = false;
+        Debug.Log("Jump!");
+        if (!isGroundJump)
         {
-            rb.velocity = new Vector2(rb.velocity.x, JumpForce);
-            airJumpCount = 0;
+            rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+            isGroundJump = true;
         }
-        else if (IsWallTouched(out var isWallInLeft, out var wallHit))
-        {
-            WallJump();
-        }
+        
+        
 
         //Debug.Log($"점프 카운트 : {airJumpCount}");
 
@@ -133,8 +129,9 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     public void DoubleJump()
     {
-        rb.velocity = new Vector2(rb.velocity.x, JumpForce);
-        airJumpCount++;
+        if (isDoubleJump) return;
+        rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+        isDoubleJump = true;
     }
 
     public void WallJump()
@@ -144,9 +141,9 @@ public class PlayerMove : MonoBehaviour
         lastWallIsLeft = !lastWallIsLeft;
     }   
 
-    public void HandleGravity()
+    public void ChangeGravity(bool holdWall)
     {
-        if (!IsGrounded() && IsWallTouched(out var isWallInLeft,  out var wallHit)) rb.gravityScale = 0.5f;
+        if (holdWall) rb.gravityScale = 0.5f;
         else rb.gravityScale = 1f;
     }
 
@@ -159,6 +156,11 @@ public class PlayerMove : MonoBehaviour
         CursorManager.Instance.SetInGame(!CursorManager.Instance.IsInGame);
     }
 
+
+    public void Stop()
+    {
+        rb.velocity = new Vector2(0, rb.velocity.y);
+    }
 
 
     /// <summary>
@@ -193,34 +195,7 @@ public class PlayerMove : MonoBehaviour
         //    rb.velocity = dir;
         //}
     }
-    
-    
-    
-    /// <summary>
-    /// 땅에 닿았는지 체크
-    /// </summary>
-    /// <returns>닿았으면 true</returns>
-    public bool IsGrounded()
-    {
-
-        Vector2 boxcenter = (Vector2)transform.position+ (Vector2.down)*(boxCollider.size.y / 2f);
-
-        Vector2 boxsize = new Vector2(groundCheckBoxX, groundCheckBoxY);
-
-        Collider2D hit = Physics2D.OverlapBox(boxcenter, boxsize, 0.0f, groundMask);
-        if (hit != null)
-        {
-            /*Debug.Log("바닥 터치");*/
-            airJumpCount = 0;
-            groundJump = false;
-            currentWall = null;
-            isWallJumped = false;
-            return true;
-        }
-
-        return false;
-    }
-
+   
 
     /// <summary>
     /// 벽에 닿았는지 체크. 
@@ -274,15 +249,51 @@ public class PlayerMove : MonoBehaviour
         spriteRenderer.flipX = lookLeft;
     }
 
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == groundMask)
+            UpdateGrounded(collision);
+    }
+
+    //private void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    UpdateGrounded(collision);
+    //}
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.layer == groundMask)
+            isGrounded = false; 
+    }
+
+    private void UpdateGrounded(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            // 캐릭터가 아래로 향하는 충돌에서만 grounded
+            if (contact.normal.y > GroundThresholdForce)    
+            {
+
+                isGrounded = true;
+                isDoubleJump = false;
+                isGroundJump = false;
+                isWallJumped = false;
+                currentWall = null;
+                return;
+
+            }
+        }
+
+        // 위쪽으로 부딪히거나 옆으로 부딪히면 grounded 안 됨
+        isGrounded = false;
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = IsWallTouched(out bool isWallInLeft, out var hit) ? Color.green : Color.red;
 
-        Vector2 boxcenter = (Vector2)transform.position + (Vector2.down) * (boxCollider.size.y / 2f);
-        Vector2 boxsize = new Vector2(groundCheckBoxX, groundCheckBoxY);
-
-        Gizmos.DrawWireCube(boxcenter, boxsize);
         
         Vector2 wallBoxcenter = (Vector2)transform.position
                             + ((keyboardLeft ? Vector2.left : Vector2.right)

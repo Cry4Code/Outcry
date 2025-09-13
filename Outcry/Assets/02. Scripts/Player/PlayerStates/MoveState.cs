@@ -9,8 +9,10 @@ public class MoveState : IPlayerState
     public void HandleInput(PlayerController player)
     {
         var input = player.Inputs.Player.Move.ReadValue<Vector2>();
-        if (input.x == 0) player.ChangeState(new IdleState());
-        else if (player.Inputs.Player.Jump.triggered) player.ChangeState(new JumpState());
+        if (player.Inputs.Player.Jump.triggered 
+            && player.PlayerMove.isGrounded 
+            && !player.PlayerMove.isGroundJump) player.ChangeState<JumpState>();
+        else if (input.x == 0) player.ChangeState<IdleState>();
         // else if (player.Inputs.Player.Dodge.triggered) player.ChangeState(new DodgeState());
     }
 
