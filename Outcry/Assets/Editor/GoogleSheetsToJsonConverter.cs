@@ -103,15 +103,25 @@ public class GoogleSheetsToJsonConverter : EditorWindow
     // Step 1 버튼 로직
     private void GenerateAllClasses()
     {
-        if (!ValidateInputs()) return;
+        if (!ValidateInputs())
+        {
+            return;
+        }
+
         EditorPrefs.SetString(SpreadSheetIdKey, spreadSheetId);
         EditorPrefs.SetString(CredentialPathKey, credentialPath);
 
         var service = Authenticate();
-        if (service == null) return;
+        if (service == null)
+        {
+            return;
+        }
 
         var tables = FetchAllTables(service);
-        if (tables == null) return;
+        if (tables == null)
+        {
+            return;
+        }
 
         foreach (var pair in tables)
         {

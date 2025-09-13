@@ -16,13 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: ed5b8af7439aa5547a65b0e4a6609a43
-  m_SerializeEntries:
-  - m_GUID: f53b493068ab25c42bcba9e0a690b070
-    m_Address: JoannaStatusUI
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - RemoteGroup
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d0f9944382aabec4ba959c039543c507, type: 2}
   m_SchemaSet:

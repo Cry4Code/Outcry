@@ -9,9 +9,33 @@ public class GameManager : Singleton<GameManager>
 {
     private void Start()
     {
-        var testPrefab = ResourceManager.Instance.LoadAssetAddressable<GameObject>("JoannaStatusUI/TestPrefab.prefab");
+        // Firebase 초기화를 기다리는 코루틴 시작
+        StartCoroutine(WaitForFirebaseAndInitialize());
+    }
 
-        if(testPrefab != null)
+    private IEnumerator WaitForFirebaseAndInitialize()
+    {
+        // FirebaseManager.Instance.IsInit()가 true가 될 때까지 매 프레임 기다림
+        while (!FirebaseManager.Instance.IsInit())
+        {
+            yield return null;
+        }
+
+        // 이 시점은 Firebase 초기화가 100% 완료되었음이 보장됨
+        InitializeGame();
+    }
+
+    // 게임의 실제 로직을 처리하는 메서드
+    private void InitializeGame()
+    {
+        // Firebase 초기화가 완료되었음이 보장되는 시점
+        Debug.Log("GameManager: Firebase is confirmed to be initialized. Starting game logic.");
+
+        FirebaseManager.Instance.LogStageStart("Test");
+
+        var testPrefab = ResourceManager.Instance.LoadAsset<GameObject>("TestUIPrefab", Paths.Prefabs.UI);
+
+        if (testPrefab != null)
         {
             GameObject prefab = Instantiate(testPrefab, Vector3.zero, Quaternion.identity);
             StartCoroutine(DestroyTestCoroutine(prefab));
@@ -21,9 +45,6 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator DestroyTestCoroutine(GameObject prefab)
     {
         yield return new WaitForSeconds(5f);
-
         Destroy(prefab);
-
-        ResourceManager.Instance.ReleaseAddressableAsset("JoannaStatusUI/TestPrefab.prefab");
     }
 }
