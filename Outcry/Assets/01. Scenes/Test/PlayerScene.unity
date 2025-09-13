@@ -658,6 +658,7 @@ GameObject:
   - component: {fileID: 983397182}
   - component: {fileID: 983397181}
   - component: {fileID: 983397183}
+  - component: {fileID: 983397184}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -801,6 +802,18 @@ MonoBehaviour:
   uiCursor: {fileID: 306343950}
   inGameCursor: {fileID: 635744431}
   mousePosition: {x: 0, y: 0, z: 0}
+--- !u!114 &983397184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983397177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 439d7197eafcae143b57036961bae967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1074110626
 GameObject:
   m_ObjectHideFlags: 0
@@ -1041,8 +1054,8 @@ Transform:
   m_GameObject: {fileID: 1432518975}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.4825, y: -0.8819, z: 0}
-  m_LocalScale: {x: 6.1800575, y: 6.1752872, z: 1}
+  m_LocalPosition: {x: -4.2437, y: -0.8819, z: 0}
+  m_LocalScale: {x: 0.6575581, y: 6.1752872, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

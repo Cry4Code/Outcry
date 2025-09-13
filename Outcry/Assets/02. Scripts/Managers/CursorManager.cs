@@ -16,7 +16,6 @@ public class CursorManager : Singleton<CursorManager>
     private Camera mainCam;
     public bool IsInGame { get; set; } = false;
 
-    private PlayerInputs playerInputs;
     public Vector3 mousePosition;
 
     private void Awake()
@@ -29,17 +28,8 @@ public class CursorManager : Singleton<CursorManager>
             Debug.LogWarning($"커서가 지정되지 않음.");
         }
 
+        Debug.Log("CursorManager Awake");
         SetInGame(true); // 테스트용
-    }
-
-    private void Start()
-    {
-        PlayerManager.Instance.player.Mover.Inputs.Player.Look.performed += OnLook;
-    }
-
-    private void OnDisable()
-    {
-        PlayerManager.Instance.player.Mover.Inputs.Player.Look.performed -= OnLook;
     }
 
     /// <summary>
@@ -58,9 +48,10 @@ public class CursorManager : Singleton<CursorManager>
     /// 마우스 이동 시 자동 실행 됨
     /// </summary>
     /// <param name="context"></param>
-    private void OnLook(InputAction.CallbackContext context)
+    public void OnLook(InputAction.CallbackContext context)
     {
         Vector2 mousePos = context.ReadValue<Vector2>();
+        Debug.Log("마우스 이동 중");
 
         // 전투 중
         if (IsInGame)
