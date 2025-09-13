@@ -23,7 +23,7 @@ public class WallHoldState : IPlayerState
             || moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft)) )
         {
             if(player.Inputs.Player.Jump.triggered
-            && player.PlayerMove.curWall != player.PlayerMove.prevWall)
+            &&((player.PlayerMove.curWall != player.PlayerMove.prevWall) || (player.PlayerMove.prevWall == null)))
             {
                 Debug.Log("벽점으로");
                 player.ChangeState<WallJumpState>();

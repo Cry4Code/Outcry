@@ -32,15 +32,16 @@ public class PlayerMove : MonoBehaviour
     public LayerMask groundMask;
     [HideInInspector] public bool isGroundJump = false; // 지상에서 첫 점프 했는지
     [HideInInspector] public bool isDoubleJump = false; // 더블점프 했는지
-    private float checkDistance;
-    private float wallCheckBoxX;
-    private float wallCheckBoxY;
     [HideInInspector] public Collider2D prevWall;
     [HideInInspector] public Collider2D curWall;
     [HideInInspector] public bool isWallJumped = false; // 벽점 했는지
     [HideInInspector] public bool lastWallIsLeft = false; // 마지막에 부딛힌 벽이 왼쪽에 있는지
     [HideInInspector] public bool isGrounded = true;
     [HideInInspector] public bool isWallTouched = false;
+    private Vector2 rightWallCheckPos;
+    private Vector2 leftWallCheckPos;
+    private Vector2 wallCheckBoxSize;
+    private float checkDistance;
 
     #endregion
 
@@ -75,8 +76,9 @@ public class PlayerMove : MonoBehaviour
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         checkDistance = boxCollider.size.x * 0.5f;
-        wallCheckBoxX = boxCollider.size.x * 0.1f;
-        wallCheckBoxY = boxCollider.size.y * 0.85f;
+
+        wallCheckBoxSize = new Vector2(boxCollider.size.x * 0.1f, boxCollider.size.y * 0.85f);
+        
     }
 
 
@@ -109,10 +111,19 @@ public class PlayerMove : MonoBehaviour
 
 
         // 벽점 당시에 왼쪽 벽인지 아닌지 확인한 다음에 벽 체크
-        Vector2 rightCheckPos = (Vector2)transform.position + Vector2.right * checkDistance;
-        Vector2 leftCheckPos = (Vector2)transform.position + Vector2.left * checkDistance;
+        rightWallCheckPos = (Vector2)transform.position + Vector2.right * checkDistance;
+        leftWallCheckPos = (Vector2)transform.position + Vector2.left * checkDistance;
 
+        prevWall = curWall;
 
+        if(lastWallIsLeft)
+        {
+            curWall = Physics2D.OverlapBox(leftWallCheckPos, wallCheckBoxSize, 0f, groundMask);
+        }
+        else
+        {
+            curWall = Physics2D.OverlapBox(rightWallCheckPos, wallCheckBoxSize, 0f, groundMask);
+        }
 
     }   
 
@@ -194,6 +205,7 @@ public class PlayerMove : MonoBehaviour
                 if (contact.normal.x != 0)
                 {
                     isWallTouched = true;
+                    
                 }
             }
         }
@@ -239,6 +251,8 @@ public class PlayerMove : MonoBehaviour
             if (contact.normal.x != 0)
             {
                 isWallTouched = true;
+                // 벽면에서 나오는 방향이 법선벡터이기 때문에, 왼쪽 벽으로 부딛혔다면 (1,0) 이 나옴.
+                lastWallIsLeft = contact.normal.x > 0; 
                 //if (curWall != collision.collider)
                 //{
                 //    Debug.Log("다른 벽 건드림");
@@ -260,10 +274,8 @@ public class PlayerMove : MonoBehaviour
         Vector2 wallBoxcenter = (Vector2)transform.position
                             + ((keyboardLeft ? Vector2.left : Vector2.right)
                                * (boxCollider.size.x / 2f));
-
-        Vector2 wallBoxsize = new Vector2(wallCheckBoxX, wallCheckBoxY);
         
-        Gizmos.DrawWireCube(wallBoxcenter, wallBoxsize);
+        Gizmos.DrawWireCube(wallBoxcenter, wallCheckBoxSize);
     }
 #endif
 }

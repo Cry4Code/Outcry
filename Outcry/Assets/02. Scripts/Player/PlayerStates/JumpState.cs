@@ -21,7 +21,7 @@ public class JumpState : IPlayerState
                 return;
             }
         }
-        else if (player.PlayerMove.isWallTouched)
+        if (player.PlayerMove.isWallTouched)
         {
             player.ChangeState<WallHoldState>();
             return;

@@ -18,7 +18,7 @@ public class FallState : IPlayerState
     {
         // 공중에서 이동 가능
         var input = player.Inputs.Player.Move.ReadValue<Vector2>();
-        if (input.x != 0)
+        if (input != null)
         {
             player.ChangeState<MoveState>();
             return;
@@ -31,7 +31,7 @@ public class FallState : IPlayerState
                 player.ChangeState<JumpState>();
                 return;
             }
-            else if (!player.PlayerMove.isDoubleJump)
+            if (!player.PlayerMove.isDoubleJump)
             {
                 player.ChangeState<DoubleJumpState>();
                 return;
@@ -41,6 +41,7 @@ public class FallState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
+
         if (player.PlayerMove.isGrounded)
         {
             player.ChangeState<IdleState>();
