@@ -747,7 +747,7 @@ Transform:
   m_GameObject: {fileID: 983397177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.54, z: 0}
+  m_LocalPosition: {x: 0, y: -2.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -770,10 +770,16 @@ MonoBehaviour:
   <MoveSpeed>k__BackingField: 5
   <JumpForce>k__BackingField: 5
   <WallJumpForce>k__BackingField: 5
-  <WallJumpBounceForce>k__BackingField: 8
+  <GroundThresholdForce>k__BackingField: 0.6
+  <GroundThresholdDistance>k__BackingField: 0.1
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  isGroundJump: 0
+  isDoubleJump: 0
+  isWallJumped: 0
+  lastWallIsLeft: 0
+  isGrounded: 1
 --- !u!114 &983397182
 MonoBehaviour:
   m_ObjectHideFlags: 0

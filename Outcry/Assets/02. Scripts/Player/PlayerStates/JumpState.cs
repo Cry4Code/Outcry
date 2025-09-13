@@ -12,16 +12,22 @@ public class JumpState : IPlayerState
 
     public void HandleInput(PlayerController player)
     {
-        if (!player.PlayerMove.IsGrounded() && player.Inputs.Player.Jump.triggered)
-            player.ChangeState(new DoubleJumpState());
+        if (player.Inputs.Player.Jump.triggered)
+        {
+            if(player.PlayerMove.isGroundJump && !player.PlayerMove.isDoubleJump)
+            {
+                player.ChangeState<DoubleJumpState>();
+
+            }
+        }
         else if (player.PlayerMove.IsWallTouched(out var isWallInLeft, out var wallHit))
-            player.ChangeState(new WallJumpState());
+            player.ChangeState<WallJumpState>();
     }
 
     public void LogicUpdate(PlayerController player)
     {
-        if (player.PlayerMove.IsGrounded()) player.ChangeState(new IdleState());
-        else player.PlayerMove.HandleGravity();
+        player.PlayerMove.Move();
+        if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
     }
 
     public void Exit(PlayerController player) { }

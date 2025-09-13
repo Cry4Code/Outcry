@@ -14,8 +14,7 @@ public class WallJumpState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
-        if (player.PlayerMove.IsGrounded()) player.ChangeState(new IdleState());
-        else player.PlayerMove.HandleGravity();
+        if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
     }
 
     public void Exit(PlayerController player) { }

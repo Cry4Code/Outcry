@@ -14,8 +14,8 @@ public class DoubleJumpState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
-        if (player.PlayerMove.IsGrounded()) player.ChangeState(new IdleState());
-        else player.PlayerMove.HandleGravity();
+        player.PlayerMove.Move();
+        if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
     }
 
     public void Exit(PlayerController player) { }
