@@ -20,6 +20,10 @@ public class MoveState : IPlayerState
     public void LogicUpdate(PlayerController player)
     {
         player.PlayerMove.Move();
+        if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
+        else if (!player.PlayerMove.isGrounded 
+            && player.PlayerMove.isWallTouched
+            && player.PlayerMove.keyboardLeft == player.PlayerMove.lastWallIsLeft) player.ChangeState<WallHoldState>();
     }
 
     public void Exit(PlayerController player) { }

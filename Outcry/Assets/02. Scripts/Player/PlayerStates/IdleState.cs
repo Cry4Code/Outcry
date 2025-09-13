@@ -10,6 +10,7 @@ public class IdleState : IPlayerState
         // player.SetAnimation("Idle");
 
         player.PlayerMove.Stop();
+        player.PlayerMove.ChangeGravity(false);
     }
 
     public void HandleInput(PlayerController player)
@@ -24,6 +25,9 @@ public class IdleState : IPlayerState
         // else if (player.Inputs.Player.Dodge.triggered) player.ChangeState(new DodgeState());
     }
 
-    public void LogicUpdate(PlayerController player) { }
+    public void LogicUpdate(PlayerController player) 
+    {
+        if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
+    }
     public void Exit(PlayerController player) { }
 }
