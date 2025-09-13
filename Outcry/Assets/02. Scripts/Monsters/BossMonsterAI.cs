@@ -46,7 +46,7 @@ public class Skill1Sequence : SequenceNode
 public class BossMonsterAI : MonsterAIBase
 {
     public Transform player; //임시 테스트용
-    public override void InitializeBehaviorTree()
+    protected override void InitializeBehaviorTree()
     {
         SelectorNode rootNode = new SelectorNode();
         

@@ -42,12 +42,6 @@ public class BossMonster : MonsterBase
         base.Awake();
     }
 
-    public override void Initialize()
-    {
-        Debug.Log($"Initialize: {monsterData.monsterId}");
-        monsterAI.InitializeBehaviorTree();
-    }
-
     protected override void InitializeSkills()
     {
         if (monsterData is BossMonsterModel bossMonsterData)

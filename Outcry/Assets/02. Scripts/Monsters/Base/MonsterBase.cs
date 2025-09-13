@@ -5,15 +5,15 @@ using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour
 {
+    [Header("Data")]
+    [SerializeField] protected MonsterModelBase monsterData;
     
     [Header("Components")]
     protected MonsterCondition condition;
     protected MonsterAIBase monsterAI;
-
-    [Header("Data")]
-    [SerializeField] protected MonsterModelBase monsterData;
+    
     public MonsterModelBase MonsterData => monsterData;
-
+    
     protected void Awake()
     {
         if (monsterData == null)
@@ -32,7 +32,6 @@ public abstract class MonsterBase : MonoBehaviour
         }
         
         Initialize();
-        InitializeSkills();
     }
 
     protected void Update()
@@ -48,6 +47,12 @@ public abstract class MonsterBase : MonoBehaviour
         if (monsterData != null)
             Initialize();
     }
-    public abstract void Initialize();
+
+    public void Initialize()
+    {
+        Debug.Log($"Initialize: {monsterData.monsterId}");
+        monsterAI.Initialize(this);
+        InitializeSkills();
+    }
     protected abstract void InitializeSkills();
 }

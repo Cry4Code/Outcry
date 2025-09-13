@@ -21,7 +21,7 @@ public class MoveToTargetActionNode : ActionNode
 
     private NodeState MoveToTarget()
     {
-        Debug.Log("MoveToTarget");
+        // Debug.Log("MoveToTarget");
         if (target == null)
         {
             return NodeState.Failure;
@@ -39,7 +39,7 @@ public class MoveToTargetActionNode : ActionNode
                 target.position,
                 speed * Time.deltaTime
             );
+            return NodeState.Running;
         }
-        return NodeState.Failure;
     }
 }

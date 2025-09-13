@@ -7,8 +7,8 @@ public class MonsterCondition : MonoBehaviour, IDamagable
 {
     private MonsterBase monster;
     
-    private int maxHealth;
-    private int currentHealth;
+    [SerializeField] private int maxHealth;
+    [SerializeField] private int currentHealth;
     public bool IsDead { get; private set; } = false;
     
     public Action OnHealthChanged;
@@ -19,7 +19,7 @@ public class MonsterCondition : MonoBehaviour, IDamagable
         monster = GetComponent<MonsterBase>();
         if (monster == null)
         {
-            Debug.LogError("BossMonsterAI: BossMonster component not found!");
+            Debug.LogError("MonsterCondition: MonsterBase component not found!");
             return;
         }
 
