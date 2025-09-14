@@ -21,7 +21,7 @@ public class BossMonsterAI : MonsterAIBase
             monster.transform, target.transform, monster.MonsterData.attackRange);
         SelectorNode attackSelectorNode = new SelectorNode();
         
-        ActionNode waitActionNode = new ActionNode(() => NodeState.Running); //대기 액션 노드 임시
+        WaitActionNode waitActionNode = new WaitActionNode(1.0f); //대기 액션 노드 임시
         attackSequenceNode.AddChild(canAttackNode);
         attackSequenceNode.AddChild(attackSelectorNode);
         attackSequenceNode.AddChild(waitActionNode);
