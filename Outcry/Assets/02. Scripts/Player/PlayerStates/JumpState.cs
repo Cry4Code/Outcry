@@ -6,7 +6,7 @@ public class JumpState : IPlayerState
 {
     public void Enter(PlayerController player)
     {
-        player.SetAnimation("Jump");
+        player.SetAnimation(PlayerAnimID.Jump, true);
         player.PlayerMove.Jump();
         if (!player.PlayerMove.isGroundJump) player.PlayerMove.isGroundJump = true;
     }

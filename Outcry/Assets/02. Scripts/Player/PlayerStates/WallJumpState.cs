@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class WallJumpState : IPlayerState
 {
+    private float wallJumpStartTime;
+    private float wallHoldAbleTime = 0.5f;
+
     public void Enter(PlayerController player)
     {
-        Debug.Log("벽점!");
-        player.SetAnimation("WallJump");
+        // Debug.Log("벽점!");
+        // 벽점할 때에는 벽 반대방향 봐야됨
+        player.PlayerMove.ForceLook(!player.PlayerMove.lastWallIsLeft);
+        player.isLookLocked = true;
+        // 벽점했으니까 강제로 벽 터치 취소
+        player.PlayerAnimator.ClearBool(); // WallHold 끄려고
+        player.PlayerMove.isWallTouched = false;
+        player.SetAnimation(PlayerAnimID.WallJump, true);
+        wallJumpStartTime = Time.time;
         player.PlayerMove.WallJump();
     }
 
@@ -21,18 +31,20 @@ public class WallJumpState : IPlayerState
 
         var moveInputs = player.Inputs.Player.Move.ReadValue<Vector2>();
 
-        if (player.PlayerMove.isWallTouched 
-            && ((player.PlayerMove.lastWallIsLeft && moveInputs.x < 0) || (!player.PlayerMove.lastWallIsLeft && moveInputs.x > 0)))
-        {
-
-            player.ChangeState<WallHoldState>();
-            return;
-        }
-
-        if(player.Inputs.Player.Jump.triggered && !player.PlayerMove.isDoubleJump)
+        if (player.Inputs.Player.Jump.triggered && !player.PlayerMove.isDoubleJump)
         {
             player.ChangeState<DoubleJumpState>();
             return;
+        }
+
+        if(Time.time - wallJumpStartTime > wallHoldAbleTime && player.PlayerMove.isWallTouched)
+        {
+            player.ChangeState<WallHoldState>();
+            return;
+        }
+        else
+        {
+            player.PlayerMove.isWallTouched = false;
         }
 
     }
@@ -52,5 +64,8 @@ public class WallJumpState : IPlayerState
         }
     }
 
-    public void Exit(PlayerController player) { }
+    public void Exit(PlayerController player) 
+    {
+        player.isLookLocked = false;
+    }
 }

@@ -6,7 +6,7 @@ public class DoubleJumpState : IPlayerState
 {
     public void Enter(PlayerController player)
     {
-        player.SetAnimation("DoubleJump");
+        player.SetAnimation(PlayerAnimID.DoubleJump, true);
         player.PlayerMove.DoubleJump();
     }
 

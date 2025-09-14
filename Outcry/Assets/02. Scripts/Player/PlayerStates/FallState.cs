@@ -6,6 +6,7 @@ public class FallState : IPlayerState
 {
     public void Enter(PlayerController player)
     {
+        player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Fall);
         player.PlayerMove.ChangeGravity(false);
     }
 

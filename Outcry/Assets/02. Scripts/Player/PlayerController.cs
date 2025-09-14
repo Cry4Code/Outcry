@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public PlayerInputs Inputs { get; private set; }
     public PlayerMove PlayerMove { get; private set; }
     private IPlayerState currentState;
+    public bool isLookLocked = false;
+    
+    public PlayerAnimator PlayerAnimator { get; private set; }
 
     private void Awake()
     {
@@ -31,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        PlayerAnimator = GetComponentInChildren<PlayerAnimator>();
         currentState = new IdleState();
         currentState.Enter(this);
     }
@@ -50,14 +54,15 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Debug.Log($"상태 : {currentState.GetType().Name}");
-        Debug.Log($"땅 : {PlayerMove.isGrounded} || 일반 점프 : {PlayerMove.isGroundJump} || 이단 점프 : {PlayerMove.isDoubleJump}");
+        Debug.Log($"벽 터치 : {PlayerMove.isWallTouched}");
+        // Debug.Log($"땅 : {PlayerMove.isGrounded} || 일반 점프 : {PlayerMove.isGroundJump} || 이단 점프 : {PlayerMove.isDoubleJump}");
         currentState.HandleInput(this);
         currentState.LogicUpdate(this);
     }
 
     private void LateUpdate()
     {
-        PlayerMove.Look();
+        if(!isLookLocked) PlayerMove.Look();
     }
 
     public void ChangeState<T>() where T : IPlayerState
@@ -68,8 +73,9 @@ public class PlayerController : MonoBehaviour
         currentState.Enter(this);
     }
 
-    public void SetAnimation(string animName)
+    public void SetAnimation(int animHash, bool isTrigger = false)
     {
-        PlayerMove.SetAnimation(animName);
+        if (isTrigger) PlayerAnimator.SetTriggerAnimation(animHash);
+        else  PlayerAnimator.SetBoolAnimation(animHash);
     }
 }
