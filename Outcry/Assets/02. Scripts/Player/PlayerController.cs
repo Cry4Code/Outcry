@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public PlayerInputs Inputs { get; private set; }
     public PlayerMove PlayerMove { get; private set; }
     private IPlayerState currentState;
-    public bool isLookLocked = false;
+    [HideInInspector] public bool isLookLocked = false;
     
     public PlayerAnimator PlayerAnimator { get; private set; }
 

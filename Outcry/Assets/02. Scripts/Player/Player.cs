@@ -4,21 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public PlayerMove Mover;
+    public PlayerMove PlayerMove;
+    public PlayerController PlayerController;
+    public PlayerCondition PlayerCondition;
+ 
 
     private void Awake()
     {
-        Mover = GetComponent<PlayerMove>();
+        PlayerMove = GetComponent<PlayerMove>();
+        PlayerController = GetComponent<PlayerController>();
+        PlayerCondition = GetComponent<PlayerCondition>();
 
-    }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
