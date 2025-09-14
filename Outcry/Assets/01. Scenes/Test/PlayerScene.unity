@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 90641006}
   m_Layer: 3
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -527,7 +527,7 @@ GameObject:
   - component: {fileID: 897346704}
   m_Layer: 3
   m_Name: Ground (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -638,7 +638,7 @@ Transform:
   m_GameObject: {fileID: 897346703}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.33, y: 0.7887, z: 0}
+  m_LocalPosition: {x: 2.7, y: 0.7887, z: 0}
   m_LocalScale: {x: 0.5538091, y: 9.516201, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -658,9 +658,10 @@ GameObject:
   - component: {fileID: 983397182}
   - component: {fileID: 983397181}
   - component: {fileID: 983397183}
-  m_Layer: 0
+  - component: {fileID: 983397184}
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -679,7 +680,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.09
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -746,7 +747,7 @@ Transform:
   m_GameObject: {fileID: 983397177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.54, z: 0}
+  m_LocalPosition: {x: 0, y: -2.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -767,12 +768,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 983397179}
   <MoveSpeed>k__BackingField: 5
+  keyboardLeft: 0
+  lookLeft: 0
   <JumpForce>k__BackingField: 5
   <WallJumpForce>k__BackingField: 5
-  <WallJumpBounceForce>k__BackingField: 8
+  <GroundThresholdForce>k__BackingField: 0.5
+  <GroundThresholdDistance>k__BackingField: 0.1
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  isGroundJump: 0
+  isDoubleJump: 0
+  prevWall: {fileID: 0}
+  curWall: {fileID: 0}
+  isWallJumped: 0
+  lastWallIsLeft: 0
+  isGrounded: 1
+  isWallTouched: 0
+  rb: {fileID: 0}
 --- !u!114 &983397182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,6 +814,18 @@ MonoBehaviour:
   uiCursor: {fileID: 306343950}
   inGameCursor: {fileID: 635744431}
   mousePosition: {x: 0, y: 0, z: 0}
+--- !u!114 &983397184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983397177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 439d7197eafcae143b57036961bae967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1074110626
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +868,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1235685765}
   - component: {fileID: 1235685766}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -930,7 +955,7 @@ GameObject:
   - component: {fileID: 1432518976}
   m_Layer: 3
   m_Name: Ground (2)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1041,8 +1066,8 @@ Transform:
   m_GameObject: {fileID: 1432518975}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.4825, y: -0.8819, z: 0}
-  m_LocalScale: {x: 6.1800575, y: 6.1752872, z: 1}
+  m_LocalPosition: {x: -2.58, y: -0.8819, z: 0}
+  m_LocalScale: {x: 0.6575581, y: 6.1752872, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
