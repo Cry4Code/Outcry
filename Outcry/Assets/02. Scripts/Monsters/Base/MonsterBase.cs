@@ -13,6 +13,8 @@ public abstract class MonsterBase : MonoBehaviour
     protected MonsterAIBase monsterAI;
     
     public MonsterModelBase MonsterData => monsterData;
+    public MonsterCondition Condition => condition;
+    public MonsterAIBase MonsterAI => monsterAI;
     
     protected void Awake()
     {

@@ -22,7 +22,7 @@ public class SkillNode
     public int skillId;
     public SequenceNode skillNode;
 }
-public static class SkillNodeDataBase
+public static class SkillNodeDatabase
 {
     public static List<SkillNode> skillNodes = new List<SkillNode>()
     {

@@ -15,14 +15,16 @@ public class BossMonsterAI : MonsterAIBase
         // ConditionNode isDeadNode = new ConditionNode(() => false); //임시
         // rootNode.AddChild(isDeadNode);
         //
-        // //AttackSequence
-        // SequenceNode attackSequenceNode = new SequenceNode();
-        // ConditionNode canAttackNode = new ConditionNode(() => true); //임시
-        // SelectorNode attackSelectorNode = new SelectorNode();
-        // ActionNode waitActionNode = new ActionNode(() => NodeState.Running); //대기 액션 노드 임시
-        // attackSequenceNode.AddChild(canAttackNode);
-        // attackSequenceNode.AddChild(attackSelectorNode);
-        // attackSequenceNode.AddChild(waitActionNode);
+        //AttackSequence
+        SequenceNode attackSequenceNode = new SequenceNode();
+        CanAttackConditionNode canAttackNode = new CanAttackConditionNode(
+            monster.transform, target.transform, monster.MonsterData.attackRange);
+        SelectorNode attackSelectorNode = new SelectorNode();
+        
+        ActionNode waitActionNode = new ActionNode(() => NodeState.Running); //대기 액션 노드 임시
+        attackSequenceNode.AddChild(canAttackNode);
+        attackSequenceNode.AddChild(attackSelectorNode);
+        attackSequenceNode.AddChild(waitActionNode);
         //
         // rootNode.AddChild(attackSequenceNode);
         //
@@ -73,6 +75,7 @@ public class BossMonsterAI : MonsterAIBase
         // chaseSelectorNode.AddChild(chaseActionNode);
         //
         
+        //todo. movetotargetActionNode는 테스트용으로 작성한 것이므로, 추후에 chase랑 patrol로 나누어서 작성해야됨.
         MoveToTargetActionNode moveToTargetActionNode = new MoveToTargetActionNode(monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.attackRange);
         rootNode.AddChild(moveToTargetActionNode);
         this.rootNode = rootNode;
