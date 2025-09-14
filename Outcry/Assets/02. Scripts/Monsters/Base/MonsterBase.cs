@@ -36,7 +36,7 @@ public abstract class MonsterBase : MonoBehaviour
         Initialize();
     }
 
-    protected void Update()
+    protected void FixedUpdate()
     {
         if (!condition.IsDead)
         {
