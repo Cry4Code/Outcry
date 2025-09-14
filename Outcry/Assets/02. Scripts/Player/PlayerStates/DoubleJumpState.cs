@@ -21,7 +21,10 @@ public class DoubleJumpState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
-        player.PlayerMove.Move();
+        var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
+        if(moveInput != null)
+            player.PlayerMove.Move();
+
         if (player.PlayerMove.rb.velocity.y < 0)
         {
             player.ChangeState<FallState>();

@@ -19,7 +19,10 @@ public class WallJumpState : IPlayerState
         //    return;
         //}
 
-        if (player.PlayerMove.isWallTouched && player.PlayerMove.prevWall != player.PlayerMove.curWall)
+        var moveInputs = player.Inputs.Player.Move.ReadValue<Vector2>();
+
+        if (player.PlayerMove.isWallTouched 
+            && ((player.PlayerMove.lastWallIsLeft && moveInputs.x < 0) || (!player.PlayerMove.lastWallIsLeft && moveInputs.x > 0)))
         {
 
             player.ChangeState<WallHoldState>();

@@ -16,13 +16,16 @@ public class FallState : IPlayerState
 
     public void HandleInput(PlayerController player)
     {
-        // 공중에서 이동 가능
-        var input = player.Inputs.Player.Move.ReadValue<Vector2>();
-        if (input != null)
+        var moveInputs = player.Inputs.Player.Move.ReadValue<Vector2>();
+
+        if (player.PlayerMove.isWallTouched
+            && ((player.PlayerMove.lastWallIsLeft && moveInputs.x < 0) || (!player.PlayerMove.lastWallIsLeft && moveInputs.x > 0)))
         {
-            player.ChangeState<MoveState>();
+
+            player.ChangeState<WallHoldState>();
             return;
         }
+
 
         if (player.Inputs.Player.Jump.triggered)
         {
@@ -41,6 +44,13 @@ public class FallState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
+
+        // 공중에서 이동 가능
+        var input = player.Inputs.Player.Move.ReadValue<Vector2>();
+        if (input != null)
+        {
+            player.PlayerMove.Move();
+        }
 
         if (player.PlayerMove.isGrounded)
         {

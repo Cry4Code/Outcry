@@ -32,7 +32,6 @@ public class PlayerMove : MonoBehaviour
     public LayerMask groundMask;
     [HideInInspector] public bool isGroundJump = false; // 지상에서 첫 점프 했는지
     [HideInInspector] public bool isDoubleJump = false; // 더블점프 했는지
-    [HideInInspector] public Collider2D prevWall;
     [HideInInspector] public Collider2D curWall;
     [HideInInspector] public bool isWallJumped = false; // 벽점 했는지
     [HideInInspector] public bool lastWallIsLeft = false; // 마지막에 부딛힌 벽이 왼쪽에 있는지
@@ -68,7 +67,6 @@ public class PlayerMove : MonoBehaviour
         if(boxCollider == null)
             boxCollider = GetComponent<BoxCollider2D>();
         Controller = GetComponent<PlayerController>();
-        prevWall = null;
         curWall = null;
     }
 
@@ -104,26 +102,29 @@ public class PlayerMove : MonoBehaviour
         isDoubleJump = true;
     }
 
-    public void WallJump()
+    public bool CanWallJump()
     {
-        Vector2 dir = ((lastWallIsLeft ? Vector2.right : Vector2.left) + Vector2.up).normalized * WallJumpForce;
-        rb.AddForce(dir, ForceMode2D.Impulse);
-
-
         // 벽점 당시에 왼쪽 벽인지 아닌지 확인한 다음에 벽 체크
         rightWallCheckPos = (Vector2)transform.position + Vector2.right * checkDistance;
         leftWallCheckPos = (Vector2)transform.position + Vector2.left * checkDistance;
 
-        prevWall = curWall;
+        Collider2D hit = Physics2D.OverlapBox(keyboardLeft? leftWallCheckPos : rightWallCheckPos, wallCheckBoxSize, 0f, groundMask);
+        if(hit != curWall)
+        {
+            return true;
+        }
+        return false;
+    }
 
-        if(lastWallIsLeft)
-        {
-            curWall = Physics2D.OverlapBox(leftWallCheckPos, wallCheckBoxSize, 0f, groundMask);
-        }
-        else
-        {
-            curWall = Physics2D.OverlapBox(rightWallCheckPos, wallCheckBoxSize, 0f, groundMask);
-        }
+    public void WallJump()
+    {
+        rightWallCheckPos = (Vector2)transform.position + Vector2.right * checkDistance;
+        leftWallCheckPos = (Vector2)transform.position + Vector2.left * checkDistance;
+
+        curWall = Physics2D.OverlapBox(keyboardLeft ? leftWallCheckPos : rightWallCheckPos, wallCheckBoxSize, 0f, groundMask);
+
+        Vector2 dir = ((lastWallIsLeft ? Vector2.right : Vector2.left) + Vector2.up).normalized * WallJumpForce;
+        rb.AddForce(dir, ForceMode2D.Impulse);
 
     }   
 
@@ -216,6 +217,7 @@ public class PlayerMove : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
+            isWallTouched = false;
         }
             
     }

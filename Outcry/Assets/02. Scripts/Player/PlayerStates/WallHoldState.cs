@@ -22,8 +22,8 @@ public class WallHoldState : IPlayerState
         if ((((moveInput.x < 0 && player.PlayerMove.lastWallIsLeft) 
             || moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft)) )
         {
-            if(player.Inputs.Player.Jump.triggered
-            &&((player.PlayerMove.curWall != player.PlayerMove.prevWall) || (player.PlayerMove.prevWall == null)))
+            // 점프 키가 눌림 and 벽점 가능함
+            if(player.Inputs.Player.Jump.triggered && player.PlayerMove.CanWallJump())
             {
                 Debug.Log("벽점으로");
                 player.ChangeState<WallJumpState>();
