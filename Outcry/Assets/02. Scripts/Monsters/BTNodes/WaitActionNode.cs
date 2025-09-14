@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// waitTime 동안 대기하는 Action Node
+/// </summary>
 public class WaitActionNode : ActionNode
 {
     private float waitTime;

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// me와 target의 거리가 attackRange 이내인지 확인하는 노드
+/// </summary>
 public class IsInAttackRangeConditionNode : ConditionNode
 {
     private Transform me;

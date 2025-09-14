@@ -17,36 +17,27 @@ public class BossMonsterAI : MonsterAIBase
         
         //AttackSequence
         SequenceNode attackSequenceNode = new SequenceNode();
+        CanAttackConditionNode canAttackConditionNode = new CanAttackConditionNode(this);
         SelectorNode attackSelectorNode = new SelectorNode();
-        // SelectorNode delaySelectorNode = new SelectorNode();    //공격 애니메이션이 끝나면 딜레이를 진행하도록 돕는 셀렉터
-        
-        // InverterNode inverterNode = new InverterNode();
-        // IsAttackingConditionNode isAttackingConditionNode = new IsAttackingConditionNode(monster.Animator);
         WaitActionNode waitActionNode = new WaitActionNode(3.0f); //대기 액션 노드 임시
 
+        attackSequenceNode.AddChild(canAttackConditionNode);
         attackSequenceNode.AddChild(attackSelectorNode);
-        // attackSequenceNode.AddChild(delaySelectorNode);
-        
         attackSequenceNode.AddChild(waitActionNode);
         
-        
         rootNode.AddChild(attackSequenceNode);
-
-        // IsInAttackRangeConditionNode isInAttackRangeNode = new IsInAttackRangeConditionNode(
-        //     monster.transform, target.transform, monster.MonsterData.attackRange);
         
-        // attackSequenceNode.AddChild(isInAttackRangeNode);
-
-        #region ForDebug
-
-        attackSelectorNode.AddChild(new ActionNode(() =>
-        {
-            Debug.Log("BossMonster Attack!");
-            monster.Animator.Play("Attack");    //Trigger를 쓰니까 전환되는 동안 애니메이션 전환되는 프레임마다 BT가 한두번 찝져서 발동함.
-            return NodeState.Success;
-        })); //공격 액션 노드 임시
-
-        #endregion
+        // #region ForDebug
+        //
+        // attackSelectorNode.AddChild(new ActionNode(() =>
+        // {
+        //     Debug.Log("BossMonster Attack!");
+        //     monster.Animator.SetTrigger("Attack");
+        //     IsAttacking = true;
+        //     return NodeState.Success;
+        // })); //공격 액션 노드 임시
+        //
+        // #endregion
         
         
         //스킬은 보스몬스터로 형변환 후에 접근.
@@ -56,18 +47,23 @@ public class BossMonsterAI : MonsterAIBase
             Debug.Log("monsterModel 이게 null이라서 짜증나겠지만 어쨋든 null인걸 어쩌라고.. 짜증나......");
         }
         
-        // // 스페셜 스킬 셀럭터 노드 자식들 생성.
-        // SelectorNode specialSkillSelectorNode = new SelectorNode();
-        // foreach (int id in monsterModel.specialSkillIds )
-        // {
-        //     SkillNode skillNode = BehaviorTreeNodeData.skillNodes.Find(x => x.skillId == id);
-        //     
-        //     if (skillNode != null)
-        //     {
-        //         specialSkillSelectorNode.AddChild(skillNode.skillNode);
-        //     }
-        // }
-        // attackSelectorNode.AddChild(specialSkillSelectorNode);
+        // 스페셜 스킬 셀럭터 노드 자식들 생성.
+        SelectorNode specialSkillSelectorNode = new SelectorNode();
+        specialSkillSelectorNode.nodeName = "SpecialSkillSelectorNode"; //디버깅용 노드 이름 설정.
+        foreach (int id in monsterModel.specialSkillIds )
+        {
+            SkillSequenceNode skillNode = SkillNodeDatabase.GetSkillNode(id);
+            MonsterSkillModel skillData = Temp_DataBase.GetMonsterSkillById(id);
+            if (skillNode != null)
+            {
+                skillNode.InitializeSkillSequenceNode(monster, target, skillData);
+                skillNode.nodeName = "SkillNode_" + skillData.skillName; //디버깅용 노드 이름 설정.
+                specialSkillSelectorNode.AddChild(skillNode);
+            }
+        }
+        specialSkillSelectorNode.ShuffleChildren();
+        
+        attackSelectorNode.AddChild(specialSkillSelectorNode);
         //
         // //일반 스킬 셀럭터 노드 자식들 생성.
         // SelectorNode commonSkillSelectorNode = new SelectorNode();
@@ -80,37 +76,28 @@ public class BossMonsterAI : MonsterAIBase
         //     }
         // }
         // attackSelectorNode.AddChild(commonSkillSelectorNode);
-        //
-        // //chase
-        // SelectorNode chaseSelectorNode = new SelectorNode();
-        //
-        // //dash
-        // SequenceNode dashSequenceNode = new SequenceNode();
-        // ConditionNode canDashNode = new ConditionNode(() => false); //임시
-        // ActionNode dashActionNode = new ActionNode(() => NodeState.Running); //임시
-        // dashSequenceNode.AddChild(canDashNode);
-        // dashSequenceNode.AddChild(dashActionNode);
-        // chaseSelectorNode.AddChild(dashSequenceNode);
-        //
-        // //chase Action
-        // ActionNode chaseActionNode = new ActionNode(() => NodeState.Running); //임시
-        // chaseSelectorNode.AddChild(chaseActionNode);
-        //
         
-        //todo. movetotargetActionNode는 테스트용으로 작성한 것이므로, 추후에 chase랑 patrol로 나누어서 작성해야됨.
-        MoveToTargetActionNode moveToTargetActionNode = new MoveToTargetActionNode(monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.attackRange);
-        rootNode.AddChild(moveToTargetActionNode);
+        //ChaseSelector
+        SelectorNode chaseSelectorNode = new SelectorNode();
+        //todo. 추후 DashSequenceNode및, ActionNode 추가할 것.
+        ChaseActionNode chaseActionNode = new ChaseActionNode(
+            monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.attackRange,
+            monster.Animator);
+        chaseSelectorNode.AddChild(chaseActionNode);
+        
+        rootNode.AddChild(chaseSelectorNode);
 
         #region NamingForDebug
 
         rootNode.nodeName = "RootNode";
         attackSequenceNode.nodeName = "AttackSequenceNode";
-        inverterNode.nodeName = "InverterNode";
-        isAttackingConditionNode.nodeName = "IsAttackingConditionNode";
-        // isInAttackRangeNode.nodeName = "CanAttackConditionNode";
+        // inverterNode.nodeName = "InverterNode";
+        // isAttackingConditionNode.nodeName = "IsAttackingConditionNode";
+        canAttackConditionNode.nodeName = "CanAttackConditionNode";
         attackSelectorNode.nodeName = "AttackSelectorNode";
         waitActionNode.nodeName = "WaitActionNode";
-        moveToTargetActionNode.nodeName = "MoveToTargetActionNode";
+        chaseSelectorNode.nodeName = "ChaseSelectorNode";
+        chaseActionNode.nodeName = "ChaseActionNode";
         
         #endregion
         

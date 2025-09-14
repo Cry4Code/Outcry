@@ -3,7 +3,7 @@
 
 using System;
 
-public class MonsterTableData{ //테이블에서 받아온 데이터. (가공전)
+public class MonsterTableData{ //테이블에서 받아온 데이터. (가공전: 추후 기획테이블에서 자동생성될 예정)
     public int monsterId;
     public string monsterName;
     public int health;
