@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CanAttackConditionNode : ConditionNode
+public class IsInAttackRangeConditionNode : ConditionNode
 {
     private Transform me;
     private Transform target;
     private float attackRange;
     
-    public CanAttackConditionNode(Transform me, Transform target, float attackRange)
+    public IsInAttackRangeConditionNode(Transform me, Transform target, float attackRange)
     {
         this.me = me;
         this.target = target;

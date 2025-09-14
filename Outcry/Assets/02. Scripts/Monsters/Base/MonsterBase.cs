@@ -11,16 +11,19 @@ public abstract class MonsterBase : MonoBehaviour
     [Header("Components")]
     protected MonsterCondition condition;
     protected MonsterAIBase monsterAI;
+    protected Animator animator;
     
     public MonsterModelBase MonsterData => monsterData;
     public MonsterCondition Condition => condition;
     public MonsterAIBase MonsterAI => monsterAI;
+    public Animator Animator => animator;
     
     protected void Awake()
     {
         if (monsterData == null)
         {
             Debug.LogError("MonsterData is null");
+            return;
         }
         condition = GetComponent<MonsterCondition>();
         if (condition == null)
@@ -31,6 +34,11 @@ public abstract class MonsterBase : MonoBehaviour
         if (monsterAI == null)
         {
             Debug.LogError(this.monsterData.monsterId + ": monsterAI is missing");
+        }
+        animator = GetComponentInChildren<Animator>();
+        if (animator == null)
+        {
+            Debug.LogError(this.monsterData.monsterId + ": animator is missing");
         }
         
         Initialize();

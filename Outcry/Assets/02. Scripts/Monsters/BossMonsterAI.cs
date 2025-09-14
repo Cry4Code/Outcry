@@ -17,12 +17,12 @@ public class BossMonsterAI : MonsterAIBase
         
         //AttackSequence
         SequenceNode attackSequenceNode = new SequenceNode();
-        CanAttackConditionNode canAttackNode = new CanAttackConditionNode(
+        IsInAttackRangeConditionNode isInAttackRangeNode = new IsInAttackRangeConditionNode(
             monster.transform, target.transform, monster.MonsterData.attackRange);
         SelectorNode attackSelectorNode = new SelectorNode();
         WaitActionNode waitActionNode = new WaitActionNode(3.0f); //대기 액션 노드 임시
         
-        attackSequenceNode.AddChild(canAttackNode);
+        attackSequenceNode.AddChild(isInAttackRangeNode);
         attackSequenceNode.AddChild(attackSelectorNode);
         attackSequenceNode.AddChild(waitActionNode);
         
@@ -33,6 +33,7 @@ public class BossMonsterAI : MonsterAIBase
         attackSelectorNode.AddChild(new ActionNode(() =>
         {
             Debug.Log("BossMonster Attack!");
+            monster.Animator.SetTrigger("Attack");
             return NodeState.Success;
         })); //공격 액션 노드 임시
 
@@ -95,7 +96,7 @@ public class BossMonsterAI : MonsterAIBase
 
         rootNode.nodeName = "RootNode";
         attackSequenceNode.nodeName = "AttackSequenceNode";
-        canAttackNode.nodeName = "CanAttackConditionNode";
+        isInAttackRangeNode.nodeName = "CanAttackConditionNode";
         attackSelectorNode.nodeName = "AttackSelectorNode";
         waitActionNode.nodeName = "WaitActionNode";
         moveToTargetActionNode.nodeName = "MoveToTargetActionNode";

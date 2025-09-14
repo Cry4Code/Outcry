@@ -32,7 +32,7 @@ public class BossMonster : MonsterBase
     [SerializeField] private List<MonsterSkillModel> commonSkillDatas;
 
 
-    protected void Awake()
+    protected new void Awake()
     {
         //test용 코드
         this.monsterData = new BossMonsterModel(
