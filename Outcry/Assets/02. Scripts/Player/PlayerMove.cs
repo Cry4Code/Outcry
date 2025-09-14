@@ -18,8 +18,8 @@ public class PlayerMove : MonoBehaviour
     [field : Header("Movement Settings")] 
     [field : SerializeField] public float MoveSpeed { get; set; }
     private Vector2 curMoveInput;
-    private bool keyboardLeft = false;
-    private bool lookLeft = false;
+    [HideInInspector] public bool keyboardLeft = false;
+    [HideInInspector] public bool lookLeft = false;
     
     #endregion
     
@@ -27,17 +27,21 @@ public class PlayerMove : MonoBehaviour
     [field : Header("Jump Settings")]
     [field : SerializeField] public float JumpForce { get; set; }
     [field : SerializeField] public float WallJumpForce { get; set; }
-    [field : SerializeField] public float WallJumpBounceForce { get; set; }
-    public LayerMask groundMask; 
-    private float colliderHeightHalf;
-    private bool groundJump = false;
-    private int airJumpCount = 0;
-    private float wallCheckBoxX;
-    private float groundCheckBoxX;
-    private float groundCheckBoxY;
-    private Collider2D currentWall;
-    private bool isWallJumped = false;
-    private bool lastWallIsLeft = false;
+    [field : SerializeField] public float GroundThresholdForce { get; set; } // 땅으로 인식하는 법선 벡터 크기 조건
+    [field: SerializeField] public float GroundThresholdDistance { get; set; } // 땅으로 인식하는 거리 최소 조건
+    public LayerMask groundMask;
+    [HideInInspector] public bool isGroundJump = false; // 지상에서 첫 점프 했는지
+    [HideInInspector] public bool isDoubleJump = false; // 더블점프 했는지
+    [HideInInspector] public Collider2D curWall;
+    [HideInInspector] public bool isWallJumped = false; // 벽점 했는지
+    [HideInInspector] public bool lastWallIsLeft = false; // 마지막에 부딛힌 벽이 왼쪽에 있는지
+    [HideInInspector] public bool isGrounded = true;
+    [HideInInspector] public bool isWallTouched = false;
+    private Vector2 rightWallCheckPos;
+    private Vector2 leftWallCheckPos;
+    private Vector2 wallCheckBoxSize;
+    private float checkDistance;
+
     #endregion
 
     #region 시야 관련
@@ -48,288 +52,124 @@ public class PlayerMove : MonoBehaviour
     
     private Camera mainCam;
 
-    private Rigidbody2D rb;
+    [HideInInspector] public Rigidbody2D rb;
     
     private SpriteRenderer spriteRenderer;
-    public PlayerInputs Inputs { get; set; }
     private bool isDodged = false;
+    
+    public PlayerController Controller { get; set; }
     
 
 
     private void Awake()
     {
-        Inputs = new PlayerInputs();
         rb = GetComponent<Rigidbody2D>();
         if(boxCollider == null)
             boxCollider = GetComponent<BoxCollider2D>();
-        colliderHeightHalf = boxCollider.size.y / 2f;
+        Controller = GetComponent<PlayerController>();
+        curWall = null;
     }
 
     private void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        wallCheckBoxX = boxCollider.size.x * 0.1f;
-        groundCheckBoxX = boxCollider.size.x * 0.8f;
-        groundCheckBoxY = boxCollider.size.y * 0.1f;
+        checkDistance = boxCollider.size.x * 0.5f;
+
+        wallCheckBoxSize = new Vector2(boxCollider.size.x * 0.1f, boxCollider.size.y * 0.85f);
+        
     }
 
-    /// <summary>
-    /// 플레이어 입력 관련 이벤트 연결
-    /// </summary>
-    private void OnEnable()
-    {
-        // 시각화가 큰 장점
-        Inputs.Player.Move.performed += OnMove;
-        Inputs.Player.Move.canceled += OnMoveStop;
-        Inputs.Player.Jump.started += OnJump;
-        
-        
-        Inputs.Player.Dodge.started += OnDodge;
-        Inputs.Player.Pause.started += OnPause;
-
-        
-        
-        Inputs.Enable();
-    }
-
-    
-    /// <summary>
-    /// 플레이어 입력 관련 이벤트 연결 해제
-    /// </summary>
-    private void OnDisable()
-    {
-        Inputs.Player.Move.performed -= OnMove;
-        Inputs.Player.Move.canceled -= OnMoveStop;
-        Inputs.Player.Jump.started -= OnJump;
-        
-        Inputs.Player.Dodge.started -= OnDodge;
-        Inputs.Player.Pause.started -= OnPause;
-        
-        Inputs.Disable();
-    }
 
     /// <summary>
-    /// 이동, 점프 등 물리 관련 함수 실행
+    /// JumpState 진입 시 한 번 불림.
     /// </summary>
-    private void FixedUpdate()
+    public void Jump()
     {
-        if (isDodged)
-        {
-            Debug.Log("회피!");
-            isDodged = false;
-        }
-        
-        Move();
-        /*Debug.Log($"{isWallJumped}");*/
-        /*Debug.Log($"{rb.velocity}");*/
-        /*Debug.Log($"점프 카운트 {jumpCount}");
-        Debug.Log($"땅에 닿았는가 {IsGrounded()}");*/
-
-        //Debug.Log($"벽에 닿았는가?  {IsWallTouched()}");
-    }
-
-    /// <summary>
-    /// 물리 관련 함수 후 실행 되어야 하는 내용들 (마우스 움직임에 따른 좌우반전 등)
-    /// </summary>
-    private void LateUpdate()
-    {
-        Look();
-    }
-
-    /// <summary>
-    /// 이동 입력 시 자동 실행 됨
-    /// </summary>
-    /// <param name="context"></param>
-    private void OnMove(InputAction.CallbackContext context)
-    {
-        curMoveInput = context.ReadValue<Vector2>();
-        if(curMoveInput.x > 0) keyboardLeft = false;
-        else keyboardLeft = true;
-        
-        if (IsWallTouched(out bool isWallInLeft, out var hit))
-        {
-            if (isWallInLeft && !keyboardLeft)
-            {
-                rb.AddForce(Vector2.right * 0.1f, ForceMode2D.Impulse);
-            }
-            else if (!isWallInLeft && keyboardLeft)
-            {
-                rb.AddForce(Vector2.left * 0.1f, ForceMode2D.Impulse);
-            }
-        }
-    }
-
-    
-    /// <summary>
-    /// 이동 입력 멈추면 자동 실행 됨
-    /// </summary>
-    /// <param name="context"></param>
-    private void OnMoveStop(InputAction.CallbackContext context)
-    {
-        curMoveInput = Vector2.zero;
+        if (isGroundJump) return;
+        isGrounded = false;
+        Debug.Log("Jump!");
+        rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+        isGroundJump = true;
     }
     
     /// <summary>
-    /// 점프 키 입력 시 자동 실행 됨
+    /// DoubleJumpState 진입 시에 한 번 불림
     /// </summary>
-    /// <param name="context"></param>
-    private void OnJump(InputAction.CallbackContext context)
+    public void DoubleJump()
     {
-        Debug.Log($"점프 카운트 : {airJumpCount}");
-
-        if (IsWallTouched(out bool isWallInLeft, out Collider2D wallHit) && !IsGrounded())
-        {
-            if (currentWall != wallHit)
-            {
-                Debug.Log($"벽점!");
-                rb.velocity = Vector2.zero;
-                lastWallIsLeft = isWallInLeft;
-                currentWall = wallHit;
-                Vector2 jumpPower = ((isWallInLeft ? Vector2.right : Vector2.left) + Vector2.up).normalized *
-                                    WallJumpForce;
-                /*Vector2 jumpPower = (Vector2.up * WallJumpForce);*/
-                
-                rb.AddForce(jumpPower,ForceMode2D.Impulse);
-                isWallJumped = true;
-                
-                return;
-            }
-        }
-        
-        
-        // 2단 이상 점프 방지
-        if (!IsGrounded())
-        {
-            airJumpCount++;
-            if (airJumpCount > 1) return;
-            rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
-        }
-        else
-        {
-            if (!groundJump)
-            {
-                rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
-                groundJump = true;
-            }
-        }
-    }
-    
-    /// <summary>
-    /// 회피 키 입력 시 자동 실행 됨
-    /// </summary>
-    /// <param name="context"></param>
-    private void OnDodge(InputAction.CallbackContext context)
-    {
-        isDodged = true;
+        if (isDoubleJump) return;
+        rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+        isDoubleJump = true;
     }
 
-    
+    public bool CanWallJump()
+    {
+        // 벽점 당시에 왼쪽 벽인지 아닌지 확인한 다음에 벽 체크
+        rightWallCheckPos = (Vector2)transform.position + Vector2.right * checkDistance;
+        leftWallCheckPos = (Vector2)transform.position + Vector2.left * checkDistance;
+
+        Collider2D hit = Physics2D.OverlapBox(keyboardLeft? leftWallCheckPos : rightWallCheckPos, wallCheckBoxSize, 0f, groundMask);
+        if(hit != curWall)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void WallJump()
+    {
+        rightWallCheckPos = (Vector2)transform.position + Vector2.right * checkDistance;
+        leftWallCheckPos = (Vector2)transform.position + Vector2.left * checkDistance;
+
+        curWall = Physics2D.OverlapBox(keyboardLeft ? leftWallCheckPos : rightWallCheckPos, wallCheckBoxSize, 0f, groundMask);
+
+        Vector2 dir = ((lastWallIsLeft ? Vector2.right : Vector2.left) + Vector2.up).normalized * WallJumpForce;
+        rb.AddForce(dir, ForceMode2D.Impulse);
+
+    }   
+
+    public void ChangeGravity(bool holdWall)
+    {
+        if (holdWall) rb.gravityScale = 0.5f;
+        else rb.gravityScale = 1f;
+    }
+
     /// <summary>
     /// (임시용) 커서 보이게 하기 위함
     /// </summary>
     /// <param name="context"></param>
-    private void OnPause(InputAction.CallbackContext context)
+    public void OnPause(InputAction.CallbackContext context)
     {
         CursorManager.Instance.SetInGame(!CursorManager.Instance.IsInGame);
     }
 
+
+    public void Stop()
+    {
+        rb.velocity = new Vector2(0, rb.velocity.y);
+    }
+
+
     /// <summary>
     /// Input에 맞는 움직임
     /// </summary>
-    void Move()
+    public void Move()
     {
-        if (isWallJumped)
-        {
-            if (curMoveInput.x == 0) return;
-        }
-        Vector2 dir = transform.right * curMoveInput.x;
-        dir *= MoveSpeed;
-        
-        
-        // 벽에 붙고, 땅이 아니면서, 벽의 방향과 입력 방향이 같고, 입력이 0이 아닐 때
-        if (IsWallTouched(out var isWallInLeft, out var hit) 
-            && !IsGrounded() 
-            && isWallInLeft == keyboardLeft 
-            && curMoveInput.x != 0)
-        {
-            rb.gravityScale = 0.5f;
-        }
-        else
-        {
-            rb.gravityScale = 1f;
+        Vector2 moveInput = Controller.Inputs.Player.Move.ReadValue<Vector2>();
+        rb.velocity = new Vector2(moveInput.x * MoveSpeed, rb.velocity.y);
+        if (moveInput.x < 0) keyboardLeft = true;
+        else if (moveInput.x > 0) keyboardLeft = false;
 
-            dir.y = rb.velocity.y;
-            rb.velocity = dir;
-        }
     }
-    
-    
-    
-    /// <summary>
-    /// 땅에 닿았는지 체크
-    /// </summary>
-    /// <returns>닿았으면 true</returns>
-    bool IsGrounded()
+   
+
+    public void SetAnimation(string animName)
     {
-
-        Vector2 boxcenter = (Vector2)transform.position+ (Vector2.down)*(boxCollider.size.y / 2f);
-
-        Vector2 boxsize = new Vector2(groundCheckBoxX, groundCheckBoxY);
-
-        Collider2D hit = Physics2D.OverlapBox(boxcenter, boxsize, 0.0f, groundMask);
-        if (hit != null)
-        {
-            /*Debug.Log("바닥 터치");*/
-            airJumpCount = 0;
-            groundJump = false;
-            currentWall = null;
-            isWallJumped = false;
-            return true;
-        }
-
-        return false;
-        /*
-    if (Physics2D.Raycast(transform.position, Vector2.down, colliderHeightHalf + 0.01f, groundMask))
-    {
-         return true;
-    }
-
-    return false;*/
+        // Animator 호출
     }
 
 
-    /// <summary>
-    /// 벽에 닿았는지 체크. 
-    /// </summary>
-    /// <param name="isWallInLeft">왼쪽 벽이면 True</param>
-    /// <param name="wallHit">벽 정보</param>
-    /// <returns>벽에 닿았으면 True</returns>
-    bool IsWallTouched(out bool isWallInLeft, out Collider2D wallHit)
-    {
-
-        Vector2 boxcenter = (Vector2)transform.position
-            + ((keyboardLeft ? Vector2.left : Vector2.right)
-            * (boxCollider.size.x / 2f));
-
-        Vector2 boxsize = new Vector2(wallCheckBoxX, boxCollider.size.y);
-        
-        wallHit = Physics2D.OverlapBox(boxcenter, boxsize, 0.0f, groundMask);
-
-        isWallInLeft = keyboardLeft;
-        
-        if (wallHit != null)
-        {
-            /*Debug.Log("벽 터치");*/
-            if(wallHit != currentWall)
-                isWallJumped = false;
-            return true;
-        }
-
-        return false;
-    }
-
-
-    void Look()
+    public void Look()
     {
         // 플레이어는 오른쪽을 봐야함.
         if (CursorManager.Instance.mousePosition.x > transform.position.x)
@@ -345,25 +185,99 @@ public class PlayerMove : MonoBehaviour
         spriteRenderer.flipX = lookLeft;
     }
 
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Debug.Log("벽");
+            UpdateGrounded(collision);
+            UpdateWallTouched(collision);
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            UpdateGrounded(collision);
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                if (contact.normal.x != 0)
+                {
+                    isWallTouched = true;
+                    
+                }
+            }
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+            isWallTouched = false;
+        }
+            
+    }
+
+    private void UpdateGrounded(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            Debug.Log($"법선벡터 : {contact.normal}");
+            // 캐릭터가 아래로 향하는 충돌에서만 grounded
+            if (contact.normal.y > GroundThresholdForce)    
+            {
+
+                isGrounded = true;
+                isDoubleJump = false;
+                isGroundJump = false;
+                isWallJumped = false;
+                isWallTouched = false;
+                curWall = null;
+                return;
+            }
+        }
+
+        // 위쪽으로 부딪히거나 옆으로 부딪히면 grounded 안 됨
+        isGrounded = false;
+    }
+
+    private void UpdateWallTouched(Collision2D collision)
+    {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+
+            if (contact.normal.x != 0)
+            {
+                isWallTouched = true;
+                // 벽면에서 나오는 방향이 법선벡터이기 때문에, 왼쪽 벽으로 부딛혔다면 (1,0) 이 나옴.
+                lastWallIsLeft = contact.normal.x > 0; 
+                //if (curWall != collision.collider)
+                //{
+                //    Debug.Log("다른 벽 건드림");
+                //    prevWall = curWall;
+                //    curWall = collision.collider;
+                //    lastWallIsLeft = contact.normal.x > 0;
+                //}
+            }
+        }
+        isWallTouched = false;
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        // 디버깅용: Scene 뷰에 GroundCheck 원을 그려주는 코드
-        Gizmos.color = IsWallTouched(out bool isWallInLeft, out var hit) ? Color.green : Color.red;
-        //Gizmos.DrawWireSphere(transform.position, 5f);
+        Gizmos.color = isWallTouched ? Color.green : Color.red;
 
-        Vector2 boxcenter = (Vector2)transform.position + (Vector2.down) * (boxCollider.size.y / 2f);
-        Vector2 boxsize = new Vector2(groundCheckBoxX, groundCheckBoxY);
-
-        Gizmos.DrawWireCube(boxcenter, boxsize);
         
         Vector2 wallBoxcenter = (Vector2)transform.position
                             + ((keyboardLeft ? Vector2.left : Vector2.right)
                                * (boxCollider.size.x / 2f));
-
-        Vector2 wallBoxsize = new Vector2(wallCheckBoxX, boxCollider.size.y);
         
-        Gizmos.DrawWireCube(wallBoxcenter, wallBoxsize);
+        Gizmos.DrawWireCube(wallBoxcenter, wallCheckBoxSize);
     }
 #endif
 }
