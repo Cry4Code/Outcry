@@ -20,7 +20,10 @@ public class WaitActionNode : ActionNode
         {
             result = NodeState.Success;
         }
-        result = NodeState.Running;
+        else
+        {
+            {result = NodeState.Running;}
+        }
         
         Debug.Log($"WaitActionNode is called: {result} ({elapsedTime}/{waitTime})");
         return result;

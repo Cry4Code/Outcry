@@ -16,12 +16,12 @@ public class SelectorNode : CompositeNode
             }
             if (state == NodeState.Success)
             {
-                currentIndex = 0;
+                Reset();
                 return NodeState.Success;
             }
             currentIndex++;
         }
-        currentIndex = 0;
+        Reset();
         return NodeState.Failure;
     }
 }

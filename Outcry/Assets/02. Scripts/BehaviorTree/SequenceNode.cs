@@ -20,13 +20,13 @@ public class SequenceNode : CompositeNode
 
             if (state == NodeState.Failure)
             {
-                currentIndex = 0;
+                Reset();
                 return NodeState.Failure;
             }
 
             currentIndex++;
         }
-        currentIndex = 0;
+        Reset();
         return NodeState.Success;
     }
 }
