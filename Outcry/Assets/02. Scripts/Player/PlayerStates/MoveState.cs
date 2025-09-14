@@ -42,12 +42,13 @@ public class MoveState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
-        player.PlayerMove.Move();
         if (player.PlayerMove.rb.velocity.y < 0)
         {
             player.ChangeState<FallState>();
             return;
         }
+        player.PlayerMove.Move();
+        
         
     }
 
