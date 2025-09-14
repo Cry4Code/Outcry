@@ -14,27 +14,6 @@ public abstract class CompositeNode : Node
         this.currentIndex = 0;
     }
 
-    public override NodeState Tick()
-    {
-        for (; currentIndex < children.Count; currentIndex++)
-        {
-            NodeState state = children[currentIndex].Tick();
-            
-            if (state == NodeState.Running)
-            {
-                return NodeState.Running;
-            }
-
-            if (state == NodeState.Failure)
-            {
-                currentIndex = 0;
-                return NodeState.Failure;
-            }
-        }
-        currentIndex = 0;
-        return NodeState.Success;
-    }
-
     public virtual void AddChild(Node node)
     {
         children.Add(node);

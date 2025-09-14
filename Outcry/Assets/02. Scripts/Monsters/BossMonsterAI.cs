@@ -14,27 +14,39 @@ public class BossMonsterAI : MonsterAIBase
         // //isDead
         // ConditionNode isDeadNode = new ConditionNode(() => false); //임시
         // rootNode.AddChild(isDeadNode);
-        //
+        
         //AttackSequence
         SequenceNode attackSequenceNode = new SequenceNode();
         CanAttackConditionNode canAttackNode = new CanAttackConditionNode(
             monster.transform, target.transform, monster.MonsterData.attackRange);
         SelectorNode attackSelectorNode = new SelectorNode();
+        WaitActionNode waitActionNode = new WaitActionNode(3.0f); //대기 액션 노드 임시
         
-        WaitActionNode waitActionNode = new WaitActionNode(1.0f); //대기 액션 노드 임시
         attackSequenceNode.AddChild(canAttackNode);
         attackSequenceNode.AddChild(attackSelectorNode);
         attackSequenceNode.AddChild(waitActionNode);
         
         rootNode.AddChild(attackSequenceNode);
+
+        #region ForDebug
+
+        attackSelectorNode.AddChild(new ActionNode(() =>
+        {
+            Debug.Log("BossMonster Attack!");
+            return NodeState.Success;
+        })); //공격 액션 노드 임시
+
+        #endregion
         
-        // BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
-        // if (monsterModel == null)
-        // {
-        //     Debug.Log("monsterModel 이게 null이라서 짜증나겠지만 어쨋든 null인걸 어쩌라고.. 짜증나......");
-        // }
-        //
-        // //스페셜 스킬 셀럭터 노드 자식들 생성.
+        
+        //스킬은 보스몬스터로 형변환 후에 접근.
+        BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
+        if (monsterModel == null)
+        {
+            Debug.Log("monsterModel 이게 null이라서 짜증나겠지만 어쨋든 null인걸 어쩌라고.. 짜증나......");
+        }
+        
+        // // 스페셜 스킬 셀럭터 노드 자식들 생성.
         // SelectorNode specialSkillSelectorNode = new SelectorNode();
         // foreach (int id in monsterModel.specialSkillIds )
         // {

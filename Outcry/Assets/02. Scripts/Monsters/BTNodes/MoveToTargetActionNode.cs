@@ -15,13 +15,11 @@ public class MoveToTargetActionNode : ActionNode
         this.target = target;
         this.speed = speed;
         this.stoppingDistance = stoppingDistance;
-
-        this.action = action ?? MoveToTarget;
     }
 
-    private NodeState MoveToTarget()
+    protected override NodeState Act()
     {
-        // Debug.Log("MoveToTarget");
+        Debug.Log("MoveToTarget");
         if (target == null)
         {
             return NodeState.Failure;

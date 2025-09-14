@@ -16,9 +16,12 @@ public class CanAttackConditionNode : ConditionNode
     }
     protected override bool IsCondition()
     {
+        bool result;
         if (Vector2.Distance(me.position, target.position) <= attackRange)
-            return true;
+            result = true;
         else
-            return false;
+            result = false;
+        Debug.Log($"CanAttackConditionNode is called: {result}");
+        return result;
     }
 }

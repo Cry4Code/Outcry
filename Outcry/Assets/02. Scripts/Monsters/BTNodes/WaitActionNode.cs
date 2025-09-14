@@ -13,14 +13,17 @@ public class WaitActionNode : ActionNode
 
     protected override NodeState Act()
     {
+        NodeState result;
         elapsedTime += Time.deltaTime;
 
         if (elapsedTime >= waitTime)
         {
-            return NodeState.Success;
+            result = NodeState.Success;
         }
-
-        return NodeState.Running;
+        result = NodeState.Running;
+        
+        Debug.Log($"WaitActionNode is called: {result} ({elapsedTime}/{waitTime})");
+        return result;
     }
 
     public override void Reset()

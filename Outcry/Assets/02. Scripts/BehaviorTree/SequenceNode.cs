@@ -9,19 +9,24 @@ public class SequenceNode : CompositeNode
 {
     public override NodeState Tick()
     {
-        foreach (var child in children)
+        while(currentIndex < children.Count)
         {
-            switch (child.Tick())
-            {                
-                case NodeState.Running:
-                    return NodeState.Running;
-                case NodeState.Failure:
-                    return NodeState.Failure;
-                case NodeState.Success:
-                    continue;
+            NodeState state = children[currentIndex].Tick();
+            
+            if (state == NodeState.Running)
+            {
+                return NodeState.Running;
             }
-        }
 
+            if (state == NodeState.Failure)
+            {
+                currentIndex = 0;
+                return NodeState.Failure;
+            }
+
+            currentIndex++;
+        }
+        currentIndex = 0;
         return NodeState.Success;
     }
 }

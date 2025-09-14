@@ -7,19 +7,21 @@ public class SelectorNode : CompositeNode
 {
     public override NodeState Tick()
     {
-        foreach (var child in children)
+        while(currentIndex < children.Count)
         {
-            switch (child.Tick())
+            NodeState state = children[currentIndex].Tick();
+            if (state == NodeState.Running)
             {
-                case NodeState.Success:
-                    return NodeState.Success;
-                case NodeState.Running:
-                    return NodeState.Running;
-                case NodeState.Failure:
-                    continue;
+                return NodeState.Running;
             }
+            if (state == NodeState.Success)
+            {
+                currentIndex = 0;
+                return NodeState.Success;
+            }
+            currentIndex++;
         }
-
+        currentIndex = 0;
         return NodeState.Failure;
     }
 }
