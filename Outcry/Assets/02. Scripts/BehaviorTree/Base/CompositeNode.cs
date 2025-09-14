@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public abstract class CompositeNode : Node
 {
-    protected List<Node> children;
-    protected int currentIndex;
+    [SerializeReference] protected List<Node> children;
+    [SerializeField] protected int currentIndex;
 
     public CompositeNode(List<Node> children = null)
     {

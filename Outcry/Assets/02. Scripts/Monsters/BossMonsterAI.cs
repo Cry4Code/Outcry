@@ -25,9 +25,9 @@ public class BossMonsterAI : MonsterAIBase
         attackSequenceNode.AddChild(canAttackNode);
         attackSequenceNode.AddChild(attackSelectorNode);
         attackSequenceNode.AddChild(waitActionNode);
-        //
-        // rootNode.AddChild(attackSequenceNode);
-        //
+        
+        rootNode.AddChild(attackSequenceNode);
+        
         // BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
         // if (monsterModel == null)
         // {
@@ -78,6 +78,18 @@ public class BossMonsterAI : MonsterAIBase
         //todo. movetotargetActionNode는 테스트용으로 작성한 것이므로, 추후에 chase랑 patrol로 나누어서 작성해야됨.
         MoveToTargetActionNode moveToTargetActionNode = new MoveToTargetActionNode(monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.attackRange);
         rootNode.AddChild(moveToTargetActionNode);
+
+        #region NamingForDebug
+
+        rootNode.nodeName = "RootNode";
+        attackSequenceNode.nodeName = "AttackSequenceNode";
+        canAttackNode.nodeName = "CanAttackConditionNode";
+        attackSelectorNode.nodeName = "AttackSelectorNode";
+        waitActionNode.nodeName = "WaitActionNode";
+        moveToTargetActionNode.nodeName = "MoveToTargetActionNode";
+        
+        #endregion
+        
         this.rootNode = rootNode;
         Debug.Log("rootNode initialized");
     }

@@ -9,7 +9,7 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
     protected MonsterBase monster;  //model은 이걸 타고 접근하는 걸로.
     
     
-    protected Node rootNode;
+    [SerializeField] protected SelectorNode rootNode;
     [SerializeField] protected Player target;
     public bool IsAttacking { get; private set; }
 
