@@ -45,7 +45,6 @@ public class Skill1Sequence : SequenceNode
 // [RequireComponent(typeof(BossMonster))] //todo. think. 쓸까 말까?
 public class BossMonsterAI : MonsterAIBase
 {
-    public Transform player; //임시 테스트용
     protected override void InitializeBehaviorTree()
     {
         SelectorNode rootNode = new SelectorNode();
@@ -112,7 +111,7 @@ public class BossMonsterAI : MonsterAIBase
         // chaseSelectorNode.AddChild(chaseActionNode);
         //
         
-        MoveToTargetActionNode moveToTargetActionNode = new MoveToTargetActionNode(monster.transform,player, monster.MonsterData.chaseSpeed, monster.MonsterData.attackRange);
+        MoveToTargetActionNode moveToTargetActionNode = new MoveToTargetActionNode(monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.attackRange);
         rootNode.AddChild(moveToTargetActionNode);
         this.rootNode = rootNode;
         Debug.Log("rootNode initialized");
