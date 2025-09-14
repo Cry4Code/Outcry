@@ -17,23 +17,32 @@ public class BossMonsterAI : MonsterAIBase
         
         //AttackSequence
         SequenceNode attackSequenceNode = new SequenceNode();
-        IsInAttackRangeConditionNode isInAttackRangeNode = new IsInAttackRangeConditionNode(
-            monster.transform, target.transform, monster.MonsterData.attackRange);
         SelectorNode attackSelectorNode = new SelectorNode();
-        WaitActionNode waitActionNode = new WaitActionNode(3.0f); //대기 액션 노드 임시
+        // SelectorNode delaySelectorNode = new SelectorNode();    //공격 애니메이션이 끝나면 딜레이를 진행하도록 돕는 셀렉터
         
-        attackSequenceNode.AddChild(isInAttackRangeNode);
+        // InverterNode inverterNode = new InverterNode();
+        // IsAttackingConditionNode isAttackingConditionNode = new IsAttackingConditionNode(monster.Animator);
+        WaitActionNode waitActionNode = new WaitActionNode(3.0f); //대기 액션 노드 임시
+
         attackSequenceNode.AddChild(attackSelectorNode);
+        // attackSequenceNode.AddChild(delaySelectorNode);
+        
         attackSequenceNode.AddChild(waitActionNode);
         
+        
         rootNode.AddChild(attackSequenceNode);
+
+        // IsInAttackRangeConditionNode isInAttackRangeNode = new IsInAttackRangeConditionNode(
+        //     monster.transform, target.transform, monster.MonsterData.attackRange);
+        
+        // attackSequenceNode.AddChild(isInAttackRangeNode);
 
         #region ForDebug
 
         attackSelectorNode.AddChild(new ActionNode(() =>
         {
             Debug.Log("BossMonster Attack!");
-            monster.Animator.SetTrigger("Attack");
+            monster.Animator.Play("Attack");    //Trigger를 쓰니까 전환되는 동안 애니메이션 전환되는 프레임마다 BT가 한두번 찝져서 발동함.
             return NodeState.Success;
         })); //공격 액션 노드 임시
 
@@ -96,7 +105,9 @@ public class BossMonsterAI : MonsterAIBase
 
         rootNode.nodeName = "RootNode";
         attackSequenceNode.nodeName = "AttackSequenceNode";
-        isInAttackRangeNode.nodeName = "CanAttackConditionNode";
+        inverterNode.nodeName = "InverterNode";
+        isAttackingConditionNode.nodeName = "IsAttackingConditionNode";
+        // isInAttackRangeNode.nodeName = "CanAttackConditionNode";
         attackSelectorNode.nodeName = "AttackSelectorNode";
         waitActionNode.nodeName = "WaitActionNode";
         moveToTargetActionNode.nodeName = "MoveToTargetActionNode";

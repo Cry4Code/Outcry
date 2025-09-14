@@ -13,23 +13,14 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
     [SerializeField] protected Player target;
     public bool IsAttacking { get; private set; }
 
-    // protected void Awake()
-    // {
-    //     monster = GetComponent<MonsterBase>();
-    //     if (monster == null)
-    //     {
-    //         Debug.LogError("MonsterAI: MonsterBase component not found!");
-    //         return;
-    //     }
-    // }
     public void Initialize(MonsterBase monster) //외부에서 얘 호출되어야함.
     {
-        this.monster = monster;
         if (monster == null)
         {
             Debug.LogError("MonsterAI: MonsterBase component not found!");
             return;
         }
+        this.monster = monster;
         InitializeBehaviorTree();
     }
     protected abstract void InitializeBehaviorTree(); 
