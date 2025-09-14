@@ -1,7 +1,7 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
+[Serializable]
 public abstract class CompositeNode : Node
 {
     protected List<Node> children;

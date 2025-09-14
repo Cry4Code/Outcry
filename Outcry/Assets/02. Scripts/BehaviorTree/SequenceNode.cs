@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
+[Serializable]
 public class SequenceNode : CompositeNode
 {
     public override NodeState Tick()

@@ -4,44 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 
-
-#region 임시 클래스들
-
-//임시 클래스들
-public class SkillNode
-{
-    public int skillId;
-    public SequenceNode skillNode;
-}
-public static class BehaviorTreeNodeData
-{
-    public static List<SkillNode> skillNodes = new List<SkillNode>()
-    {
-        new SkillNode() { skillId = 1, skillNode = new Skill1Sequence("skillId: 1") },
-        new SkillNode() { skillId = 2, skillNode = new Skill1Sequence("skillId: 2") },
-        new SkillNode() { skillId = 3, skillNode = new Skill1Sequence("skillId: 3") },
-        new SkillNode() { skillId = 4, skillNode = new Skill1Sequence("skillId: 4") },
-        new SkillNode() { skillId = 5, skillNode = new Skill1Sequence("skillId: 5") }
-    };
-}
-
-public class Skill1Sequence : SequenceNode
-{
-    public Skill1Sequence(string nodeName)
-    {
-        this.nodeName = nodeName;
-    }
-
-    public override NodeState Tick()
-    {
-        Debug.Log(nodeName);
-        return base.Tick();
-    }
-}
-
-//이상 임시끝
-#endregion
-
 // [RequireComponent(typeof(BossMonster))] //todo. think. 쓸까 말까?
 public class BossMonsterAI : MonsterAIBase
 {
