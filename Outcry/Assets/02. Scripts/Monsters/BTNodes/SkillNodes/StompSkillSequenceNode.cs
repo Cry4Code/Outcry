@@ -6,7 +6,6 @@ public class StompSkillSequenceNode : SkillSequenceNode
 {
     private float elapsedTime = 0f;
     private bool skillTriggered = false;
-    private string animationName = AnimatorStrings.MonsterParameter.Stomp;
     
     protected override bool CanPerform()
     {
@@ -54,7 +53,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
 
         if (!skillTriggered)
         {
-            monster.Animator.SetTrigger(animationName);
+            monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Stomp);
             //todo. player damage 처리
             
             

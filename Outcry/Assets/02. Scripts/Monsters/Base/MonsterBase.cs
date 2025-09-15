@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class MonsterBase : MonoBehaviour
@@ -12,15 +13,17 @@ public abstract class MonsterBase : MonoBehaviour
     protected MonsterCondition condition;
     protected MonsterAIBase monsterAI;
     protected Animator animator;
+    protected MonsterAttackController attackController;
 
-    [Header("Hitbox")] 
+    [Header("Hitbox")]
     [SerializeField] protected BoxCollider2D hitbox;
     
     public MonsterModelBase MonsterData => monsterData;
     public MonsterCondition Condition => condition;
     public MonsterAIBase MonsterAI => monsterAI;
     public Animator Animator => animator;
-    public BoxCollider2D Hitbox => hitbox;
+    public MonsterAttackController AttackController => attackController;
+    public BoxCollider2D Hitbox => hitbox;  //attackController가 있으면.. hitBox도 갖고 있을 필요가 없을텐데...?
     
     protected void Awake()
     {
@@ -29,21 +32,31 @@ public abstract class MonsterBase : MonoBehaviour
             Debug.LogError("MonsterData is null");
             return;
         }
+        
         condition = GetComponent<MonsterCondition>();
         if (condition == null)
         {
             condition = this.gameObject.AddComponent<MonsterCondition>();
         }
+        
         monsterAI = GetComponent<MonsterAIBase>();
         if (monsterAI == null)
         {
             Debug.LogError(this.monsterData.monsterId + ": monsterAI is missing");
         }
+        
         animator = GetComponentInChildren<Animator>();
         if (animator == null)
         {
             Debug.LogError(this.monsterData.monsterId + ": animator is missing");
         }
+        
+        attackController = GetComponentInChildren<MonsterAttackController>();
+        if (attackController == null)
+        {
+            animator.AddComponent<MonsterAttackController>();
+        }
+        
         if (hitbox == null)
         {
             Debug.LogError(this.monsterData.monsterId + ": hitBox is missing");
@@ -78,7 +91,7 @@ public abstract class MonsterBase : MonoBehaviour
     {
         Gizmos.color = Color.red;
 
-        if (hitbox != null)
+        if (hitbox != null && hitbox.enabled)
         {
             Gizmos.DrawWireCube(transform.position + (Vector3)hitbox.offset, hitbox.size);
         }
