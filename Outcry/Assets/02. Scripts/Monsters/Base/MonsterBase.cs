@@ -86,7 +86,7 @@ public abstract class MonsterBase : MonoBehaviour
         InitializeSkills();
     }
     protected abstract void InitializeSkills();
-    
+#if UNITY_EDITOR
     void OnDrawGizmos() //히트박스 색상 변경
     {
         Gizmos.color = Color.red;
@@ -103,4 +103,5 @@ public abstract class MonsterBase : MonoBehaviour
             Gizmos.DrawWireCube(transform.position + (Vector3)hurtBox.offset, hurtBox.size);
         }
     }
+#endif
 }
