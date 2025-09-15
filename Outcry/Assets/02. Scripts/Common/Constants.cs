@@ -13,5 +13,13 @@ public static class AnimatorStrings
     {
         public const string Running = "Running";
         public const string NormalAttack = "NormalAttack";
+        public const string Stomp = "Stomp";
+    }
+
+    public static class MonsterAnimation
+    {
+        public const string Idle = "Idle";
+        public const string Run = "Run";
+        public const string Stomp = "Stomp";
     }
 }
