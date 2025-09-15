@@ -17,6 +17,7 @@ public class WallJumpState : IPlayerState
         player.PlayerAnimator.ClearBool(); // WallHold 끄려고
         player.PlayerMove.isWallTouched = false;
         player.SetAnimation(PlayerAnimID.WallJump, true);
+        
         wallJumpStartTime = Time.time;
         player.PlayerMove.WallJump();
     }
@@ -46,6 +47,22 @@ public class WallJumpState : IPlayerState
         {
             player.PlayerMove.isWallTouched = false;
         }
+        
+        if (player.Inputs.Player.NormalAttack.triggered && moveInputs.y < 0)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<DownAttackState>();
+            return;
+        }
+        
+        if (player.Inputs.Player.NormalAttack.triggered && !player.PlayerAttack.HasJumpAttack)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<NormalJumpAttackState>();
+            return;
+        }
+        
+        
 
     }
 

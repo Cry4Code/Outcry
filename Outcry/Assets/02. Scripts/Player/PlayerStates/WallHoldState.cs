@@ -7,6 +7,7 @@ public class WallHoldState : IPlayerState
     public void Enter(PlayerController player)
     {
         player.PlayerMove.ForceLook(!player.PlayerMove.lastWallIsLeft);
+        player.PlayerAttack.ClearAttackCount();
         player.SetAnimation(PlayerAnimID.WallHold);
         player.isLookLocked = true;
     }

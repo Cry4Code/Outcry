@@ -14,7 +14,6 @@ public class IdleState : IPlayerState
         player.PlayerAttack.ClearAttackCount();
         player.PlayerAnimator.ClearTrigger();
         player.PlayerAnimator.ClearInt();
-        player.isLookLocked = false;
         
         player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Idle);
         player.Inputs.Player.Move.Enable();
@@ -47,6 +46,12 @@ public class IdleState : IPlayerState
 
     public void LogicUpdate(PlayerController player) 
     {
+        AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+        if (curAnimInfo.IsName("Idle"))
+        {
+            player.isLookLocked = false;
+        }
+        
         if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
     }
     public void Exit(PlayerController player) { }

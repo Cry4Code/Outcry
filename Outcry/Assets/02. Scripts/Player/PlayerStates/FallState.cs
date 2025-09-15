@@ -8,11 +8,12 @@ public class FallState : IPlayerState
     {
         player.isLookLocked = true; 
         player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Fall);
-        player.PlayerMove.ChangeGravity(false);
+        player.PlayerMove.rb.gravityScale = 2.5f;
     }
 
     public void Exit(PlayerController player)
     {
+        player.PlayerMove.rb.gravityScale = 1f;
         player.isLookLocked = false; 
     }
 
@@ -42,6 +43,23 @@ public class FallState : IPlayerState
                 return;
             }
         }
+        
+        if (player.Inputs.Player.NormalAttack.triggered && moveInputs.y < 0)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<DownAttackState>();
+            return;
+        }
+        
+        
+        if (player.Inputs.Player.NormalAttack.triggered && !player.PlayerAttack.HasJumpAttack)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<NormalJumpAttackState>();
+            return;
+        }
+        
+        
     }
 
     public void LogicUpdate(PlayerController player)

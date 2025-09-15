@@ -6,8 +6,6 @@ public class NormalAttackState : IPlayerState
 {
     private float startStateTime;
     private float startAttackTime = 0.01f;
-    private float startColliderTime; // 콜라이더 키기 시작 하는 순간
-    private float endColliderTime; // 콜라이더 꺼지는 순간
     private float comboTime = 0.5f; // 콤보타임 지나서 누르면 의미없음.
     private bool isComboInput = false;
     
@@ -46,7 +44,7 @@ public class NormalAttackState : IPlayerState
         if (Time.time - startStateTime > startAttackTime)
         {
             AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
-            
+
             if (curAnimInfo.IsName($"NormalAttack_{player.PlayerAttack.AttackCount+1}"))
             { 
                 float animTime = curAnimInfo.normalizedTime;
@@ -62,7 +60,6 @@ public class NormalAttackState : IPlayerState
                     // 애니메이션 끝났음.
                     if (isComboInput)
                     {
-                    
                         player.PlayerAttack.AttackCount++;
                         player.PlayerAnimator.SetIntAniamtion(PlayerAnimID.NormalAttackCount, player.PlayerAttack.AttackCount);
                         player.ChangeState<NormalAttackState>();

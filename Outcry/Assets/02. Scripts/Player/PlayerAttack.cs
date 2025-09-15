@@ -10,9 +10,10 @@ public class PlayerAttack : MonoBehaviour
     [field: Header("Normal Attack")] 
     public int AttackCount = 0;
 
+    public bool HasJumpAttack = false;
     public int MaxAttackCount = 2;
 
-
+    
     #endregion
 
 
@@ -29,5 +30,6 @@ public class PlayerAttack : MonoBehaviour
     public void ClearAttackCount()
     {
         AttackCount = 0;
+        HasJumpAttack = false;
     }
 }

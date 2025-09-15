@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
             { typeof(WallHoldState), new WallHoldState() },
             { typeof(FallState), new FallState() },
             { typeof(NormalAttackState), new NormalAttackState() },
+            { typeof(NormalJumpAttackState), new NormalJumpAttackState()},
+            { typeof(DownAttackState), new DownAttackState()},
         };
     }
 
