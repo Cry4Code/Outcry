@@ -103,15 +103,25 @@ public class GoogleSheetsToJsonConverter : EditorWindow
     // Step 1 버튼 로직
     private void GenerateAllClasses()
     {
-        if (!ValidateInputs()) return;
+        if (!ValidateInputs())
+        {
+            return;
+        }
+
         EditorPrefs.SetString(SpreadSheetIdKey, spreadSheetId);
         EditorPrefs.SetString(CredentialPathKey, credentialPath);
 
         var service = Authenticate();
-        if (service == null) return;
+        if (service == null)
+        {
+            return;
+        }
 
         var tables = FetchAllTables(service);
-        if (tables == null) return;
+        if (tables == null)
+        {
+            return;
+        }
 
         foreach (var pair in tables)
         {
@@ -166,6 +176,7 @@ public class GoogleSheetsToJsonConverter : EditorWindow
                         allSucceeded = false;
                         continue;
                     }
+
                     ConvertSheetToJson(table, sheetName, jsonOutputPath);
                 }
             }
@@ -304,7 +315,7 @@ public class GoogleSheetsToJsonConverter : EditorWindow
     // Google Sheets API의 응답(ValueRange)을 DataTable로 변환
     private DataTable ParseValueRangeToDataTable(IList<IList<object>> values, string tableName)
     {
-        // 헤더가 3행에 있으므로 최소 3줄이 있어야 유효한 데이터로 간주
+        // 헤더가 3행에 있으므로 최소 3줄이 있어야 유효한 데이터로 간주(1행(설명), 2행(타입), 3행(헤더))
         if (values.Count < 3)
         {
             return null;
@@ -318,6 +329,22 @@ public class GoogleSheetsToJsonConverter : EditorWindow
         {
             table.Columns.Add(header.ToString());
         }
+
+        // 타입 선언 행(2행)을 DataTable의 첫 번째 행으로 먼저 추가합니다.
+        DataRow typeRow = table.NewRow();
+        var typeData = values[1]; // 데이터 테이블의 2행이 타입 선언
+        for (int j = 0; j < headers.Count; j++)
+        {
+            if (j < typeData.Count)
+            {
+                typeRow[j] = typeData[j];
+            }
+            else
+            {
+                typeRow[j] = "string"; // 타입 선언이 없으면 기본 string
+            }
+        }
+        table.Rows.Add(typeRow);
 
         // 데이터 행은 4행부터 추가
         for (int i = 3; i < values.Count; i++)
@@ -340,6 +367,7 @@ public class GoogleSheetsToJsonConverter : EditorWindow
 
         // C# 클래스 생성을 위해 DataTable의 첫 행을 헤더 정보로 재구성
         // 헬퍼 메서드들은 헤더가 항상 첫 번째 행에 있다고 가정
+        // DataTable 구조: [0]헤더, [1]타입선언, [2]실제데이터
         DataRow headerRow = table.NewRow();
         for (int i = 0; i < table.Columns.Count; i++)
         {
@@ -408,17 +436,17 @@ public class GoogleSheetsToJsonConverter : EditorWindow
 
     public static void GenerateCSharpClassFile(DataTable table, string className, string outPathCs, string outPathSchema)
     {
-        if (table.Rows.Count == 0)
+        if (table.Rows.Count < 2) // 최소 2행(헤더+타입선언)이 있어야 함
         {
             Debug.LogWarning($"Table '{className}' is empty. Skipping class generation.");
             return;
         }
 
-        // headerRow: 변수명으로 사용할 3번째 행(DataTable에서는 첫 번째 행) 가져옴
+        // headerRow: 변수명으로 사용할 구글 시트의 3번째 행
         DataRow headerRow = table.Rows[0];
-        // dataRowForTypeInference: 변수의 타입을 추론하기 위한 데이터 샘플(4번째 행) 가져옴
-        // 만약 데이터가 하나도 없다면(Rows.Count가 1) 헤더 행을 샘플로 사용
-        DataRow dataRowForTypeInference = table.Rows.Count > 1 ? table.Rows[1] : headerRow;
+        DataRow typeRow = table.Rows[1];   // 타입 선언 행
+        // isCollection 판별을 위한 첫 데이터 행 (없으면 헤더 행으로 대체)
+        DataRow dataRowForCheck = table.Rows.Count > 2 ? table.Rows[2] : headerRow;
 
         // idFieldName: 첫 번째 열의 헤더 이름 가져옴
         string idFieldName = headerRow[0]?.ToString();
@@ -436,9 +464,10 @@ public class GoogleSheetsToJsonConverter : EditorWindow
         if (isCollection)
         {
             // 목록형 데이터인데 첫 열이 정수(int)가 아니면 중단
-            if (InferTypeOfValue(dataRowForTypeInference[0]) != typeof(int))
+            string firstColumnType = typeRow[0]?.ToString();
+            if (GetTypeFromString(firstColumnType) != typeof(int))
             {
-                Debug.LogError($"'{className}' is detected as Collection Data, but its first column '{idFieldName}' is not an integer. Aborting class generation.");
+                Debug.LogError($"'{className}' is detected as Collection Data, but its first column '{idFieldName}' is not declared as 'int'. Aborting class generation.");
                 return;
             }
             sb.AppendLine($"    public int ID => {idFieldName};");
@@ -454,7 +483,11 @@ public class GoogleSheetsToJsonConverter : EditorWindow
                 Debug.LogWarning($"Invalid or empty field name in '{className}' at column {i + 1}. Skipping.");
                 continue;
             }
-            Type fieldType = InferTypeOfValue(dataRowForTypeInference[i]);
+
+            // 타입을 데이터 테이블에서 명시적으로 가져옴
+            string typeNameString = typeRow[i]?.ToString();
+            Type fieldType = GetTypeFromString(typeNameString);
+
             sb.AppendLine($"    public {GetTypeName(fieldType)} {fieldName};");
         }
         sb.AppendLine("}");
@@ -470,8 +503,7 @@ public class GoogleSheetsToJsonConverter : EditorWindow
 
         File.WriteAllText(Path.Combine(outPathCs, $"{className}.cs"), sb.ToString(), Encoding.UTF8);
 
-        // 스키마 파일 저장(이전 자동화 기능 유산)
-        // 현재는 사용되지 않지만 데이터 구조를 확인하는 용도로 남겨둘 수 있음
+        // 스키마 파일 저장
         // 헤더 목록을 List<string>으로 만든 뒤 간단한 JSON 형태로 저장
         List<string> headers = new List<string>();
         for (int i = 0; i < table.Columns.Count; i++)
@@ -497,6 +529,7 @@ public class GoogleSheetsToJsonConverter : EditorWindow
             return;
         }
 
+        // DataTable 구조: [0]헤더, [1]타입선언, [2...]실제데이터
         DataRow headerRow = table.Rows[0];
         // typeof(IData).IsAssignableFrom(dataType) : dataType이라는 클래스가 IData 인터페이스 규칙을 따르는지 확인
         bool isCollection = typeof(IData).IsAssignableFrom(dataType);
@@ -537,7 +570,8 @@ public class GoogleSheetsToJsonConverter : EditorWindow
             MethodInfo listAddMethod = dataList.GetType().GetMethod("Add");
 
             // 리플렉션 데이터 채우기
-            for (int i = 1; i < table.Rows.Count; i++)
+            // 실제 데이터가 시작되는 2번 인덱스부터 루프 시작
+            for (int i = 2; i < table.Rows.Count; i++)
             {
                 DataRow dataRow = table.Rows[i];
                 if (dataRow[0] == null || string.IsNullOrWhiteSpace(dataRow[0].ToString()))
@@ -575,13 +609,14 @@ public class GoogleSheetsToJsonConverter : EditorWindow
         }
         else // 단일 객체 데이터
         {
+            // 단일 데이터는 2번 인덱스에 있음(헤더(0번 인덱스), 타입(1번 인덱스))
             // 리플렉션을 이용해 객체를 만들고 변수에 값을 채워넣음
-            if (table.Rows.Count < 2)
+            if (table.Rows.Count < 3)
             {
                 Debug.LogWarning($"Single data sheet '{className}' has no data row. Skipping JSON conversion.");
                 return;
             }
-            DataRow dataRow = table.Rows[1];
+            DataRow dataRow = table.Rows[2];
             object dataInstance = Activator.CreateInstance(dataType);
             for (int j = 0; j < table.Columns.Count; j++)
             {
@@ -603,6 +638,50 @@ public class GoogleSheetsToJsonConverter : EditorWindow
         File.WriteAllText(Path.Combine(outJsonPath, $"{className}.json"), json, Encoding.UTF8);
     }
 
+    // 데이터 테이블 2행의 타입 문자열을 C# Type으로 변환
+    public static Type GetTypeFromString(string typeName)
+    {
+        if (string.IsNullOrEmpty(typeName))
+        {
+            return typeof(string);
+        }
+
+        string processedTypeName = typeName.ToLower().Trim();
+
+        // 배열 타입인지 먼저 확인
+        if (processedTypeName.EndsWith("[]"))
+        {
+            // 예) int[] -> int 부분만 추출
+            string elementTypeString = processedTypeName.Replace("[]", "");
+            // 기본 타입(int)의 Type을 가져옴
+            Type elementType = GetTypeFromString(elementTypeString);
+            if (elementType != null)
+            {
+                // Type.MakeArrayType()을 사용하여 배열 타입(int[])을 만듦
+                return elementType.MakeArrayType();
+            }
+        }
+
+        // 기본 타입 매핑
+        switch (typeName.ToLower().Trim())
+        {
+            case "int":
+                return typeof(int);
+            case "float":
+                return typeof(float);
+            case "double":
+                return typeof(double);
+            case "bool":
+                return typeof(bool);
+            case "string":
+                return typeof(string);
+            default:
+                Debug.LogWarning($"Unknown type '{typeName}'. Defaulting to 'string'.");
+                return typeof(string);
+        }
+    }
+
+    // 셀 값의 내용을 보고 적절한 C# 타입 추론(구 버전)
     public static Type InferTypeOfValue(object cellValue)
     {
         // 셀 값이 null(아예 비어있음)이면 기본적으로 문자열(string) 타입으로 취급
@@ -645,6 +724,15 @@ public class GoogleSheetsToJsonConverter : EditorWindow
 
     public static string GetTypeName(Type type)
     {
+        // 해당 타입이 배열인지 확인
+        if (type.IsArray)
+        {
+            // 배열의 요소 타입(예: int[] -> int) 가져옴
+            Type elementType = type.GetElementType();
+            // 요소 타입의 이름을 가져온 뒤 []를 붙여 반환(예: int[])
+            return $"{GetTypeName(elementType)}[]";
+        }
+
         // C#의 Type 객체와 코드에서 사용하는 키워드를 1:1로 대응
         if (type == typeof(int))
         {
@@ -683,6 +771,42 @@ public class GoogleSheetsToJsonConverter : EditorWindow
 
     public static object SafeChangeType(object value, Type conversionType)
     {
+        // 변환할 목표 타입이 배열인지 확인
+        if (conversionType.IsArray)
+        {
+            // 셀의 문자열 값을 가져옴 (예: "1001, 1002, 1005")
+            string arrayString = value?.ToString();
+            if (string.IsNullOrEmpty(arrayString))
+            {
+                // 빈 문자열이면 빈 배열을 생성하여 반환
+                return Array.CreateInstance(conversionType.GetElementType(), 0);
+            }
+
+            // 쉼표(,)를 기준으로 문자열을 자름. 각 조각의 앞뒤 공백 제거
+            string[] elements = arrayString.Split(',').Select(s => s.Trim()).ToArray();
+            // 배열의 기본 요소 타입을 가져옴 (예: int[] -> int)
+            Type elementType = conversionType.GetElementType();
+            // 변환된 요소들을 담을 리스트 생성
+            var convertedList = new System.Collections.ArrayList();
+
+            foreach (var element in elements)
+            {
+                try
+                {
+                    // 각 조각을 재귀적으로 변환
+                    convertedList.Add(SafeChangeType(element, elementType));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to parse array element '{element}' for type '{elementType.Name}'. Error: {e.Message}");
+                }
+            }
+
+            // 최종적으로 리스트를 실제 배열로 변환하여 반환(예: int[] { 1001, 1002, 1005 })
+            return convertedList.ToArray(elementType);
+        }
+
+        // 기본 타입 변환 처리
         // 셀 값이 비어있는 경우(null) 또는 DBNull(데이터베이스에서 온 빈 값)인 경우 처리
         if (value == null || value is DBNull || string.IsNullOrWhiteSpace(value.ToString()))
         {
