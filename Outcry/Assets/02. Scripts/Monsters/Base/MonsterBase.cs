@@ -78,7 +78,7 @@ public abstract class MonsterBase : MonoBehaviour
     {
         Gizmos.color = Color.red;
 
-        if (hitbox != null)
+        if (hitbox != null && hitbox.enabled)
         {
             Gizmos.DrawWireCube(transform.position + (Vector3)hitbox.offset, hitbox.size);
         }
