@@ -55,8 +55,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         {
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Stomp);
             //todo. player damage 처리
-            
-            
+            monster.AttackController.SetDamage(skillData.damage);
             
             skillTriggered = true;
         }
@@ -76,6 +75,8 @@ public class StompSkillSequenceNode : SkillSequenceNode
         else
         {
             Debug.Log($"Skill End: {skillData.skillName} (ID: {skillData.skillId})");
+            
+            monster.AttackController.SetDamage(0); //데미지 초기화.
             skillTriggered = false;
             state = NodeState.Success;
         }
