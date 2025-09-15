@@ -19,7 +19,7 @@ public class BossMonsterAI : MonsterAIBase
         SequenceNode attackSequenceNode = new SequenceNode();
         CanAttackConditionNode canAttackConditionNode = new CanAttackConditionNode(this);
         SelectorNode attackSelectorNode = new SelectorNode();
-        WaitActionNode waitActionNode = new WaitActionNode(3.0f); //대기 액션 노드 임시
+        WaitActionNode waitActionNode = new WaitActionNode(2.0f);
 
         attackSequenceNode.AddChild(canAttackConditionNode);
         attackSequenceNode.AddChild(attackSelectorNode);
@@ -48,7 +48,7 @@ public class BossMonsterAI : MonsterAIBase
         }
         
         // 스페셜 스킬 셀럭터 노드 자식들 생성.
-        SelectorNode specialSkillSelectorNode = new SelectorNode();
+        SkillSelectorNode specialSkillSelectorNode = new SkillSelectorNode();
         specialSkillSelectorNode.nodeName = "SpecialSkillSelectorNode"; //디버깅용 노드 이름 설정.
         foreach (int id in monsterModel.specialSkillIds )
         {

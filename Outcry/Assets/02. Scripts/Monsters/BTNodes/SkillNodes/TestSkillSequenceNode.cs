@@ -39,18 +39,26 @@ public class TestSkillSequenceNode : SkillSequenceNode
             skillTriggered = true;
         }
         
-        //스킬 애니메이션이 끝났는지 확인.
-        if (elapsedTime < 0.1f && !monster.Animator.GetCurrentAnimatorStateInfo(0).IsName("Skill"))
+        elapsedTime += Time.deltaTime;
+        
+        if (elapsedTime < 0.1f) //시작 직후는 무조건 Running
         {
-            // 스킬 애니메이션이 끝난 후 //0.1f는 애니메이션이 트리거되는 짧은 프레임 방지. 
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
-            skillTriggered = false;
-            state = NodeState.Success;
+            return NodeState.Running;
         }
-        else
+        
+        //스킬 애니메이션이 끝났는지 확인.
+        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName("Skill");
+        
+        if (isSkillAnimationPlaying)
         {
             Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
             state = NodeState.Running;
+        }
+        else
+        {
+            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
+            skillTriggered = false;
+            state = NodeState.Success;
         }
         
         return state;
