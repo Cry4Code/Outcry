@@ -36,6 +36,7 @@ public class MonsterAttackController : MonoBehaviour
             Player damagable = other.gameObject.GetComponentInParent<Player>();
             if (damagable != null && damage > 0)
             {
+                //todo. Player IDamagable 구현 후 데미지 주기
                 // damagable.TakeDamage(damage);
                 Debug.Log("Player took " + damage + " damage from " + monster.MonsterData.monsterId);
             }
