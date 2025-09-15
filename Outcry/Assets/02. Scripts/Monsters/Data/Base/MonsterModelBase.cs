@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Abstract 클래스라고 생각하고 new로 생성하지 말 것.
+/// </summary>
 [Serializable]
 public class MonsterModelBase
 {

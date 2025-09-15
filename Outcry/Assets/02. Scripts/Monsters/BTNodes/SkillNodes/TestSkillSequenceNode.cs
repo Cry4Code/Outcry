@@ -10,7 +10,7 @@ public class TestSkillSequenceNode : SkillSequenceNode
     private float elapsedTime = 0f;
     private bool skillTriggered = false;
 
-    protected override bool SkillConditionCheck()
+    protected override bool CanPerform()
     {
         elapsedTime += Time.deltaTime;
         if (elapsedTime >= skillData.cooldown)
@@ -23,7 +23,7 @@ public class TestSkillSequenceNode : SkillSequenceNode
         return false;
     }
 
-    protected override NodeState SkillUse()
+    protected override NodeState SkillAction()
     {
         NodeState state;
 
@@ -35,7 +35,7 @@ public class TestSkillSequenceNode : SkillSequenceNode
         //todo. 스킬 사용 로직 구현.
         if (!skillTriggered)
         {
-            monster.Animator.SetTrigger("Skill");
+            monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.NormalAttack);
             skillTriggered = true;
         }
         
@@ -47,7 +47,7 @@ public class TestSkillSequenceNode : SkillSequenceNode
         }
         
         //스킬 애니메이션이 끝났는지 확인.
-        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName("Skill");
+        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(AnimatorStrings.MonsterParameter.NormalAttack);
         
         if (isSkillAnimationPlaying)
         {

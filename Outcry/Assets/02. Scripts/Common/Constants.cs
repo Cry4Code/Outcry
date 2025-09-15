@@ -6,3 +6,12 @@ public static class Paths
 {
     public static class Prefabs { public const string UI = "Prefabs/UI/";}
 }
+
+public static class AnimatorStrings
+{
+    public static class MonsterParameter
+    {
+        public const string Running = "Running";
+        public const string NormalAttack = "NormalAttack";
+    }
+}

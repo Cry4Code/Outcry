@@ -27,18 +27,6 @@ public class BossMonsterAI : MonsterAIBase
         
         rootNode.AddChild(attackSequenceNode);
         
-        // #region ForDebug
-        //
-        // attackSelectorNode.AddChild(new ActionNode(() =>
-        // {
-        //     Debug.Log("BossMonster Attack!");
-        //     monster.Animator.SetTrigger("Attack");
-        //     IsAttacking = true;
-        //     return NodeState.Success;
-        // })); //공격 액션 노드 임시
-        //
-        // #endregion
-        
         
         //스킬은 보스몬스터로 형변환 후에 접근.
         BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
@@ -91,8 +79,6 @@ public class BossMonsterAI : MonsterAIBase
 
         rootNode.nodeName = "RootNode";
         attackSequenceNode.nodeName = "AttackSequenceNode";
-        // inverterNode.nodeName = "InverterNode";
-        // isAttackingConditionNode.nodeName = "IsAttackingConditionNode";
         canAttackConditionNode.nodeName = "CanAttackConditionNode";
         attackSelectorNode.nodeName = "AttackSelectorNode";
         waitActionNode.nodeName = "WaitActionNode";

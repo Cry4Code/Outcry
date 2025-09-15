@@ -21,21 +21,21 @@ public abstract class SkillSequenceNode : SequenceNode
         this.target = target;
         this.skillData = skillData;
         
-        ConditionNode canUseSkillConditionNode = new ConditionNode(SkillConditionCheck);
-        ActionNode useSkillActionNode = new ActionNode(SkillUse);
+        ConditionNode canPerform = new ConditionNode(CanPerform);
+        ActionNode skillAction = new ActionNode(SkillAction);
         
         
         //노드 이름 설정 (디버깅용)
-        canUseSkillConditionNode.nodeName = "CanUseSkillConditionNode";
-        useSkillActionNode.nodeName = "UseSkillActionNode";
+        canPerform.nodeName = "CanPerform";
+        skillAction.nodeName = "SkillAction";
         
         children.Clear();
-        AddChild(canUseSkillConditionNode);
-        AddChild(useSkillActionNode);
+        AddChild(canPerform);
+        AddChild(skillAction);
     }
-    protected abstract bool SkillConditionCheck();
+    protected abstract bool CanPerform();
 
-    protected abstract NodeState SkillUse();
+    protected abstract NodeState SkillAction();
 
 
 }

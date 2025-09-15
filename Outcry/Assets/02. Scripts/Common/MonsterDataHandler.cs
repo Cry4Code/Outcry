@@ -37,4 +37,5 @@ public class MonsterDataHandler
 
         return newBossMonsterModel;
     }
+    //todo. 몬스터스킬데이터를 기획테이블에서 가져와서 맵핑하는 메서드 추가하기.
 }
