@@ -51,6 +51,10 @@ public class FallState : IPlayerState
         var input = player.Inputs.Player.Move.ReadValue<Vector2>();
         if (input != null)
         {
+            if (input.x != 0)
+            {
+                player.PlayerMove.ForceLook(input.x < 0);
+            }
             player.PlayerMove.Move();
         }
 
