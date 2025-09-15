@@ -14,4 +14,8 @@ public static class PlayerAnimID
     public static readonly int Jump = Animator.StringToHash("Jump");
     public static readonly int DoubleJump = Animator.StringToHash("DoubleJump");
     public static readonly int WallJump = Animator.StringToHash("WallJump");
+    public static readonly int NormalAttack = Animator.StringToHash("NormalAttack");
+    
+    // Int 파라미터
+    public static readonly int NormalAttackCount = Animator.StringToHash("NormalAttackCount");
 }

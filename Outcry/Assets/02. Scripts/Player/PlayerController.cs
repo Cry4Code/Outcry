@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private Dictionary<System.Type, IPlayerState> states; // 상태 저장용
     public PlayerInputs Inputs { get; private set; }
     public PlayerMove PlayerMove { get; private set; }
+    public PlayerAttack PlayerAttack { get; private set; }
     private IPlayerState currentState;
     [HideInInspector] public bool isLookLocked = false;
     
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
         Inputs = new PlayerInputs();
         Inputs.Enable();
         PlayerMove = GetComponent<PlayerMove>();
+        PlayerAttack = GetComponent<PlayerAttack>();
 
         states = new Dictionary<System.Type, IPlayerState>
         {

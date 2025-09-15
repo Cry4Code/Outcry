@@ -11,8 +11,13 @@ public class IdleState : IPlayerState
 
         player.PlayerMove.Stop();
         player.PlayerMove.ChangeGravity(false);
+        player.PlayerAttack.ClearAttackCount();
         player.PlayerAnimator.ClearTrigger();
+        player.PlayerAnimator.ClearInt();
+        player.isLookLocked = false;
+        
         player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Idle);
+        player.Inputs.Player.Move.Enable();
     }
 
     public void HandleInput(PlayerController player)
@@ -22,15 +27,22 @@ public class IdleState : IPlayerState
         {
             // Debug.Log("Jump Key Input");
             player.ChangeState<JumpState>();
+            return;
         }
-        else if (input.x != 0)
+        if (input.x != 0)
         {
             player.PlayerMove.ForceLook(input.x < 0);
             player.isLookLocked = true;
             player.ChangeState<MoveState>();
+            return;
+        }
 
-        }// 이동이 있으면 MoveState로 이동
-        // else if (player.Inputs.Player.Dodge.triggered) player.ChangeState(new DodgeState());
+        if (player.Inputs.Player.NormalAttack.triggered)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<NormalAttackState>();
+            return;
+        }
     }
 
     public void LogicUpdate(PlayerController player) 

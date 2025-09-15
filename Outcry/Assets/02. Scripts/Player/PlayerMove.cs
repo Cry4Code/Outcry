@@ -183,13 +183,13 @@ public class PlayerMove : MonoBehaviour
             lookLeft = true;
         }
 
-        SpriteRenderer.flipX = lookLeft;
+        transform.localScale = new Vector3(lookLeft? -1 : 1, transform.localScale.y, transform.localScale.z);
     }
 
     public void ForceLook(bool isLeft)
     {
         lookLeft = isLeft;
-        SpriteRenderer.flipX = lookLeft;
+        transform.localScale = new Vector3(lookLeft? -1 : 1, transform.localScale.y, transform.localScale.z);
     }
 
 

@@ -30,6 +30,16 @@ public class PlayerAnimator : MonoBehaviour
 
         animator.SetTrigger(animHash);
     }
+
+    /// <summary>
+    /// Int 값 수정
+    /// </summary>
+    /// <param name="animHash"></param>
+    /// <param name="value"></param>
+    public void SetIntAniamtion(int animHash, int value)
+    {
+        animator.SetInteger(animHash, value);
+    }
     public void ClearBool()
     {
         animator.SetBool(PlayerAnimID.Idle, false);
@@ -43,6 +53,12 @@ public class PlayerAnimator : MonoBehaviour
         animator.ResetTrigger(PlayerAnimID.Jump);
         animator.ResetTrigger(PlayerAnimID.DoubleJump);
         animator.ResetTrigger(PlayerAnimID.WallJump);
+        animator.ResetTrigger(PlayerAnimID.NormalAttack);
+    }
+
+    public void ClearInt()
+    {
+        animator.SetInteger(PlayerAnimID.NormalAttackCount, 0);
     }
 
 }
