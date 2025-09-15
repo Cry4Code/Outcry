@@ -73,4 +73,21 @@ public abstract class MonsterBase : MonoBehaviour
         InitializeSkills();
     }
     protected abstract void InitializeSkills();
+    
+    void OnDrawGizmos() //히트박스 색상 변경
+    {
+        Gizmos.color = Color.red;
+
+        if (hitbox != null)
+        {
+            Gizmos.DrawWireCube(transform.position + (Vector3)hitbox.offset, hitbox.size);
+        }
+        
+        Gizmos.color = Color.yellow;
+        BoxCollider2D hurtBox = GetComponent<BoxCollider2D>();
+        if (hurtBox != null)
+        {
+            Gizmos.DrawWireCube(transform.position + (Vector3)hurtBox.offset, hurtBox.size);
+        }
+    }
 }
