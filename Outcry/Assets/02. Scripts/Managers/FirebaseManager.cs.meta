@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Outcry/Assets/02. Scripts/Managers/FirebaseManager.cs.meta
+guid: 9bfbcfab76bbd0044916d9da4f31195e
+========
+guid: ff65790402187094fa87e7f551051dac
+>>>>>>>> develop:Outcry/Assets/02. Scripts/Player/Base/IPlayerState.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
