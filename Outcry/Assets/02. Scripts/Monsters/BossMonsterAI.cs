@@ -28,30 +28,38 @@ public class BossMonsterAI : MonsterAIBase
         rootNode.AddChild(attackSequenceNode);
         
         
-        //스킬은 보스몬스터로 형변환 후에 접근.
-        BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
-        if (monsterModel == null)
-        {
-            Debug.Log("monsterModel 이게 null이라서 짜증나겠지만 어쨋든 null인걸 어쩌라고.. 짜증나......");
-        }
+        //각 스킬 노드 테스트용
+        MonsterSkillModel skillData = new MonsterSkillModel(1, "TestSkill", 1, 0.5f, "설명");
+        //TestSkillSequenceNode 대신에 본인이 제작한 SkillSequenceNode 상속 노드로 교체해서 테스트하세요.
+        TestSkillSequenceNode testSkillSeuqnceNode = new TestSkillSequenceNode();
+        testSkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
         
-        // 스페셜 스킬 셀럭터 노드 자식들 생성.
-        SkillSelectorNode specialSkillSelectorNode = new SkillSelectorNode();
-        specialSkillSelectorNode.nodeName = "SpecialSkillSelectorNode"; //디버깅용 노드 이름 설정.
-        foreach (int id in monsterModel.specialSkillIds )
-        {
-            SkillSequenceNode skillNode = SkillNodeDatabase.GetSkillNode(id);
-            MonsterSkillModel skillData = Temp_DataBase.GetMonsterSkillById(id);
-            if (skillNode != null)
-            {
-                skillNode.InitializeSkillSequenceNode(monster, target, skillData);
-                skillNode.nodeName = "SkillNode_" + skillData.skillName; //디버깅용 노드 이름 설정.
-                specialSkillSelectorNode.AddChild(skillNode);
-            }
-        }
-        specialSkillSelectorNode.ShuffleChildren();
+        attackSelectorNode.AddChild(testSkillSeuqnceNode);
+            
+        // //스킬은 보스몬스터로 형변환 후에 접근.
+        // BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
+        // if (monsterModel == null)
+        // {
+        //     Debug.Log("monsterModel 이게 null이라서 짜증나겠지만 어쨋든 null인걸 어쩌라고.. 짜증나......");
+        // }
+        //
+        // // 스페셜 스킬 셀럭터 노드 자식들 생성.
+        // SkillSelectorNode specialSkillSelectorNode = new SkillSelectorNode();
+        // specialSkillSelectorNode.nodeName = "SpecialSkillSelectorNode"; //디버깅용 노드 이름 설정.
+        // foreach (int id in monsterModel.specialSkillIds )
+        // {
+        //     SkillSequenceNode skillNode = SkillNodeDatabase.GetSkillNode(id);
+        //     MonsterSkillModel skillData = Temp_DataBase.GetMonsterSkillById(id);
+        //     if (skillNode != null)
+        //     {
+        //         skillNode.InitializeSkillSequenceNode(monster, target, skillData);
+        //         skillNode.nodeName = "SkillNode_" + skillData.skillName; //디버깅용 노드 이름 설정.
+        //         specialSkillSelectorNode.AddChild(skillNode);
+        //     }
+        // }
+        // specialSkillSelectorNode.ShuffleChildren();
         
-        attackSelectorNode.AddChild(specialSkillSelectorNode);
+        // attackSelectorNode.AddChild(specialSkillSelectorNode);
         //
         // //일반 스킬 셀럭터 노드 자식들 생성.
         // SelectorNode commonSkillSelectorNode = new SelectorNode();
