@@ -7,6 +7,7 @@ public class JumpState : IPlayerState
     public void Enter(PlayerController player)
     {
         player.SetAnimation(PlayerAnimID.Jump, true);
+        player.isLookLocked = true; 
         player.PlayerMove.Jump();
         if (!player.PlayerMove.isGroundJump) player.PlayerMove.isGroundJump = true;
     }
@@ -43,5 +44,8 @@ public class JumpState : IPlayerState
         }
     }
 
-    public void Exit(PlayerController player) { }
+    public void Exit(PlayerController player)
+    {
+        player.isLookLocked = false;
+    }
 }

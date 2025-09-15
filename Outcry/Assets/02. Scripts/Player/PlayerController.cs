@@ -29,14 +29,14 @@ public class PlayerController : MonoBehaviour
             { typeof(WallJumpState), new WallJumpState() },
             { typeof(WallHoldState), new WallHoldState() },
             { typeof(FallState), new FallState() },
+            { typeof(NormalAttackState), new NormalAttackState() },
         };
     }
 
     private void Start()
     {
         PlayerAnimator = GetComponentInChildren<PlayerAnimator>();
-        currentState = new IdleState();
-        currentState.Enter(this);
+        ChangeState<IdleState>();
     }
 
     private void OnEnable()
@@ -77,5 +77,10 @@ public class PlayerController : MonoBehaviour
     {
         if (isTrigger) PlayerAnimator.SetTriggerAnimation(animHash);
         else  PlayerAnimator.SetBoolAnimation(animHash);
+    }
+
+    public void OnMove()
+    {
+        PlayerAnimator.animator.SetBool(PlayerAnimID.Move, true);
     }
 }

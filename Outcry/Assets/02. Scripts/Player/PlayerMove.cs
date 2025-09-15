@@ -26,6 +26,7 @@ public class PlayerMove : MonoBehaviour
     #region 점프 관련
     [field : Header("Jump Settings")]
     [field : SerializeField] public float JumpForce { get; set; }
+    [field : SerializeField] public float DoubleJumpForce { get; set; }
     [field : SerializeField] public float WallJumpForce { get; set; }
     [field : SerializeField] public float GroundThresholdForce { get; set; } // 땅으로 인식하는 법선 벡터 크기 조건
     public LayerMask groundMask;
@@ -97,7 +98,7 @@ public class PlayerMove : MonoBehaviour
     public void DoubleJump()
     {
         if (isDoubleJump) return;
-        rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * DoubleJumpForce, ForceMode2D.Impulse);
         isDoubleJump = true;
     }
 
@@ -159,6 +160,7 @@ public class PlayerMove : MonoBehaviour
         if (moveInput.x < 0) keyboardLeft = true;
         else if (moveInput.x > 0) keyboardLeft = false;
 
+        if (moveInput.x != 0) Controller.OnMove();
     }
    
 

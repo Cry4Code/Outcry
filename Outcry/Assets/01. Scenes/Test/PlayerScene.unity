@@ -638,7 +638,7 @@ Transform:
   m_GameObject: {fileID: 897346703}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.7, y: 0.7887, z: 0}
+  m_LocalPosition: {x: 8.26, y: 0.7887, z: 0}
   m_LocalScale: {x: 0.5538091, y: 9.516201, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -768,11 +768,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 983397179}
-  <MoveSpeed>k__BackingField: 5
+  <MoveSpeed>k__BackingField: 7.5
   keyboardLeft: 0
   lookLeft: 0
-  <JumpForce>k__BackingField: 5
-  <WallJumpForce>k__BackingField: 8
+  <JumpForce>k__BackingField: 6
+  <DoubleJumpForce>k__BackingField: 10
+  <WallJumpForce>k__BackingField: 12
   <GroundThresholdForce>k__BackingField: 0.5
   groundMask:
     serializedVersion: 2
@@ -911,7 +912,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 983397180}
@@ -1125,7 +1126,7 @@ Transform:
   m_GameObject: {fileID: 1432518975}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.58, y: -0.8819, z: 0}
+  m_LocalPosition: {x: -8.01, y: -0.8819, z: 0}
   m_LocalScale: {x: 0.6575581, y: 6.1752872, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -6,13 +6,14 @@ public class FallState : IPlayerState
 {
     public void Enter(PlayerController player)
     {
+        player.isLookLocked = true; 
         player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Fall);
         player.PlayerMove.ChangeGravity(false);
     }
 
     public void Exit(PlayerController player)
     {
-        
+        player.isLookLocked = false; 
     }
 
     public void HandleInput(PlayerController player)
@@ -30,11 +31,11 @@ public class FallState : IPlayerState
 
         if (player.Inputs.Player.Jump.triggered)
         {
-            if(!player.PlayerMove.isGroundJump)
+            /*if(!player.PlayerMove.isGroundJump)
             {
                 player.ChangeState<JumpState>();
                 return;
-            }
+            }*/
             if (!player.PlayerMove.isDoubleJump)
             {
                 player.ChangeState<DoubleJumpState>();
