@@ -14,6 +14,7 @@ public class FallState : IPlayerState
     public void Exit(PlayerController player)
     {
         player.PlayerMove.rb.gravityScale = 1f;
+        player.PlayerAttack.HasJumpAttack = false;
         player.isLookLocked = false; 
     }
 
