@@ -12,11 +12,15 @@ public abstract class MonsterBase : MonoBehaviour
     protected MonsterCondition condition;
     protected MonsterAIBase monsterAI;
     protected Animator animator;
+
+    [Header("Hitbox")] 
+    [SerializeField] protected BoxCollider2D hitbox;
     
     public MonsterModelBase MonsterData => monsterData;
     public MonsterCondition Condition => condition;
     public MonsterAIBase MonsterAI => monsterAI;
     public Animator Animator => animator;
+    public BoxCollider2D Hitbox => hitbox;
     
     protected void Awake()
     {
@@ -39,6 +43,10 @@ public abstract class MonsterBase : MonoBehaviour
         if (animator == null)
         {
             Debug.LogError(this.monsterData.monsterId + ": animator is missing");
+        }
+        if (hitbox == null)
+        {
+            Debug.LogError(this.monsterData.monsterId + ": hitBox is missing");
         }
         
         Initialize();
