@@ -1046,7 +1046,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4271897825629240966, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: <AirMoveThresholdTime>k__BackingField
-      value: 0.7
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 5686419021135991782, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: m_LocalPosition.x
