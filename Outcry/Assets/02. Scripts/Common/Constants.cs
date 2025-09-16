@@ -20,6 +20,7 @@ public static class AnimatorStrings
         public const string Running = "Running";
         public const string NormalAttack = "NormalAttack";
         public const string Stomp = "Stomp";
+        public static readonly int MetalBladeHash = Animator.StringToHash("MetalBlade");
     }
 
     public static class MonsterAnimation
