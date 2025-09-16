@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class MoveState : IPlayerState
 {
-    public void Enter(PlayerController player) => player.SetAnimation("Move");
+    public void Enter(PlayerController player)
+    {
+        player.SetAnimation(PlayerAnimID.Move);
+
+    }
 
     public void HandleInput(PlayerController player)
     {
@@ -38,14 +42,18 @@ public class MoveState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
-        player.PlayerMove.Move();
         if (player.PlayerMove.rb.velocity.y < 0)
         {
             player.ChangeState<FallState>();
             return;
         }
+        player.PlayerMove.Move();
+        
         
     }
 
-    public void Exit(PlayerController player) { }
+    public void Exit(PlayerController player) 
+    {
+        player.isLookLocked = false;
+    }
 }

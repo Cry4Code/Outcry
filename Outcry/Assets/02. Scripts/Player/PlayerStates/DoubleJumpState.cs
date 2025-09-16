@@ -6,7 +6,7 @@ public class DoubleJumpState : IPlayerState
 {
     public void Enter(PlayerController player)
     {
-        player.SetAnimation("DoubleJump");
+        player.SetAnimation(PlayerAnimID.DoubleJump, true);
         player.PlayerMove.DoubleJump();
     }
 
@@ -35,6 +35,22 @@ public class DoubleJumpState : IPlayerState
             player.ChangeState<IdleState>();
             return;
         }
+        
+        if (player.Inputs.Player.NormalAttack.triggered && moveInput.y < 0)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<DownAttackState>();
+            return;
+        }
+        
+        if (player.Inputs.Player.NormalAttack.triggered && !player.PlayerAttack.HasJumpAttack)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<NormalJumpAttackState>();
+            return;
+        }
+        
+        
     }
 
     public void Exit(PlayerController player) { }
