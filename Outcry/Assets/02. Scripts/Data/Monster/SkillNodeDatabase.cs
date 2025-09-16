@@ -25,12 +25,6 @@ public static class Temp_DataBase
 #endregion
 
 
-[Serializable]
-public class SkillNode
-{
-    public int skillId;
-    public SkillSequenceNode skillNode;
-}
 public static class SkillNodeDatabase   //todo. think. 데이터베이스 진짜 관리 어케할거임...?
 {    
     //초기화및인스펙터용 List와 런타임용 Dictionary를 분리하였으므로, 동기화에 주의할것.
