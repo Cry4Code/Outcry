@@ -73,6 +73,7 @@ public class MetalBladeSkillSequenceNode : SkillSequenceNode
             );
 
             animator.SetTrigger(AnimatorStrings.MonsterParameter.MetalBladeHash);
+            monster.AttackController.SetDamage(skillData.damage1);
 
             // 상태 초기화 및 애니메이션 시작 시간 기록
             skillTriggered = true;
