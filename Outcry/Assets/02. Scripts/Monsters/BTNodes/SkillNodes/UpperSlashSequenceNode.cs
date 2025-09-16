@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UpperSlashSequenceNode : SkillSequenceNode
 {
-    private float elapsedTime = 0f;
+    [SerializeField] private float elapsedTime = 0f;
     private bool skillTriggered = false;
     // MonsterParameter에 UpperSlash 추가 후 수정
     private int animationHash = AnimatorStrings.MonsterParameter.UpperSlash;  
@@ -17,7 +17,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
 
         // 플레이어와 거리 2m 이내에 있을때
         // MonsterSkillModel 수정 필요 (Stomp 스킬 참조)
-        if (Vector2.Distance(monster.transform.position, target.transform.position) <= 2f)
+        if (Vector2.Distance(monster.transform.position, target.transform.position) <= skillData.range)
         {
             isInRange = true;
         }

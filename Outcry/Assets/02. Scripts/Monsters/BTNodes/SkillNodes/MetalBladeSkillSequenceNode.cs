@@ -3,7 +3,7 @@ using UnityEngine;
 public class MetalBladeSkillSequenceNode : SkillSequenceNode
 {
     private float stateEnterTime; // 스킬(상태)에 진입한 시간
-    private float cooldownTimer = 0f; // 쿨다운 계산을 위한 타이머
+    [SerializeField] private float cooldownTimer = 0f; // 쿨다운 계산을 위한 타이머
     private bool skillTriggered = false;
 
     // 컴포넌트 참조

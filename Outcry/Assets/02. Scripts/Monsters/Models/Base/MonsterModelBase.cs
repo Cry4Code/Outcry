@@ -13,17 +13,17 @@ public class MonsterModelBase
     public string monsterName;
     public int health;
     public float chaseSpeed;
-    public float attackRange;
+    public float detectRange;
     public float attackCooldown;
     
     public MonsterModelBase(
-        int monsterId, string monsterName, int health, float chaseSpeed, float attackRange, float attackCooldown)
+        int monsterId, string monsterName, int health, float chaseSpeed, float detectRange, float attackCooldown)
     {
         this.monsterId = monsterId;
         this.monsterName = monsterName;
         this.health = health;
         this.chaseSpeed = chaseSpeed;
-        this.attackRange = attackRange;
+        this.detectRange = detectRange;
         this.attackCooldown = attackCooldown;
     }
 }

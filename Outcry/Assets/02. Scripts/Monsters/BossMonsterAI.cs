@@ -29,14 +29,18 @@ public class BossMonsterAI : MonsterAIBase
         
         
         //각 스킬 노드 테스트용
-        MonsterSkillModel skillData = new MonsterSkillModel(1, "Stomp", 1, 0,0,0, 1f,10f, "설명");
+        MonsterSkillModel skillData = new MonsterSkillModel(1, "Stomp", 1, 0,0,0, 4f,10f, "설명");
         //TestSkillSequenceNode 대신에 본인이 제작한 SkillSequenceNode 상속 노드로 교체해서 테스트하세요.
-        //MetalBladeSkillSequenceNode testSkillSeuqnceNode = new MetalBladeSkillSequenceNode();
-        //StompSkillSequenceNode testSkillSeuqnceNode = new StompSkillSequenceNode();
-        UpperSlashSequenceNode testSkillSeuqnceNode = new UpperSlashSequenceNode();
-        testSkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
+        MetalBladeSkillSequenceNode test1SkillSeuqnceNode = new MetalBladeSkillSequenceNode();
+        StompSkillSequenceNode test2SkillSeuqnceNode = new StompSkillSequenceNode();
+        UpperSlashSequenceNode test3SkillSeuqnceNode = new UpperSlashSequenceNode();
+        test1SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
+        test2SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
+        test3SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
         
-        attackSelectorNode.AddChild(testSkillSeuqnceNode);
+        attackSelectorNode.AddChild(test1SkillSeuqnceNode);
+        attackSelectorNode.AddChild(test2SkillSeuqnceNode);
+        attackSelectorNode.AddChild(test3SkillSeuqnceNode);
             
         // //스킬은 보스몬스터로 형변환 후에 접근.
         // BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
@@ -79,7 +83,7 @@ public class BossMonsterAI : MonsterAIBase
         SelectorNode chaseSelectorNode = new SelectorNode();
         //todo. 추후 DashSequenceNode및, ActionNode 추가할 것.
         ChaseActionNode chaseActionNode = new ChaseActionNode(
-            monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.attackRange,
+            monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.detectRange,
             monster.Animator);
         chaseSelectorNode.AddChild(chaseActionNode);
         

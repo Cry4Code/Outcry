@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StompSkillSequenceNode : SkillSequenceNode
 {
-    private float elapsedTime = 0f;
+    [SerializeField] private float elapsedTime = 0f;
     private bool skillTriggered = false;
     
     protected override bool CanPerform()
@@ -15,7 +15,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         
         //플레이어와의 거리 2m 이내에 있을때
         //todo. 2f는 2m 이내. MonsterSkillModel에서 이걸 받아올 수 있도록 변경해야함
-        if (Vector2.Distance(monster.transform.position, target.transform.position) <= 2f)
+        if (Vector2.Distance(monster.transform.position, target.transform.position) <= skillData.range)
         {
             isInRange = true;
         }
