@@ -56,7 +56,7 @@ public class TestSkillSequenceNode : SkillSequenceNode
         }
         else
         {
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
+            Debug.Log($"Skill End: {skillData.skillName} (ID: {skillData.skillId})");
             skillTriggered = false;
             state = NodeState.Success;
         }
