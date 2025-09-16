@@ -21,6 +21,7 @@ public static class AnimatorStrings
         public const string NormalAttack = "NormalAttack";
         public const string Stomp = "Stomp";
         public static readonly int MetalBladeHash = Animator.StringToHash("MetalBlade");
+        public static readonly int UpperSlash = Animator.StringToHash("UpperSlash");
     }
 
     public static class MonsterAnimation
@@ -28,5 +29,6 @@ public static class AnimatorStrings
         public const string Idle = "Idle";
         public const string Run = "Run";
         public const string Stomp = "Stomp";
+        public const string UpperSlash = "UpperSlash";
     }
 }
