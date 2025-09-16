@@ -11,6 +11,10 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     public Condition stamina;
     public float recoveryStaminaTime; // 스태미나 회복 주기 (일단은 1초)
 
+    [Header("Invisible Settings")] 
+    private bool isInvinsible;
+    public float invisibleTime; // 한 대 맞았을 때 무적 초 (일단은 1초)
+    private WaitForSecondsRealtime waitInvisible;
     public event Action onTakeDamage;
 
     private float lastRecoveryStamina;
@@ -21,6 +25,8 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         health.Init(EventBusKey.ChangeHealth);
         stamina.Init(EventBusKey.ChangeStamina);
         lastRecoveryStamina = Time.time;
+        invisibleTime = 1f;
+        waitInvisible = new WaitForSecondsRealtime(invisibleTime);
     }
 
     void Update()
@@ -42,8 +48,19 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("플레이어 데미지 받음");
-        onTakeDamage?.Invoke();
+        if (!isInvinsible)
+        {
+            Debug.Log("플레이어 데미지 받음");
+            onTakeDamage?.Invoke();
+            StartCoroutine(Invinsible());
+        }
+    }
+
+    IEnumerator Invinsible()
+    {
+        isInvinsible = true;
+        yield return waitInvisible;
+        isInvinsible = false;
     }
 
     public void Die()

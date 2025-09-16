@@ -1,33 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class NormalJumpAttackState : IPlayerState
+public class NormalJumpAttackState : NormalJumpAttackSubState
 {
     private float startStateTime;
     private float startAttackTime = 0.01f;
+    private float jumpAnimationLength;
+
+    private float animRunningTime = 0f;
     /*private float inAirTime = 0.1f;*/
     
-    public void Enter(PlayerController player)
+    public override void Enter(PlayerController player)
     {
+        base.Enter(player);
         startStateTime = Time.time;
         player.PlayerAnimator.ClearBool();
         player.PlayerAttack.HasJumpAttack = true;
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.NormalAttack);
         player.Inputs.Player.Move.Disable();
         player.PlayerMove.rb.gravityScale = 0;
+        animRunningTime = 0f;
+        jumpAnimationLength = 
+            player.PlayerAnimator.animator.runtimeAnimatorController
+            .animationClips.First(c => c.name == "NormalJumpAttack").length;
     }
 
-    public void HandleInput(PlayerController player)
+    public override void HandleInput(PlayerController player)
     {
         
     }
 
-    public void LogicUpdate(PlayerController player)
+    public override void LogicUpdate(PlayerController player)
     {
         /*player.PlayerMove.rb.velocity = new Vector2(player.PlayerMove.rb.velocity.x, 0);*/
         
         player.PlayerMove.rb.velocity = Vector2.zero;
+        animRunningTime += Time.deltaTime;
         
         if (Time.time - startStateTime > startAttackTime)
         {
@@ -43,11 +53,19 @@ public class NormalJumpAttackState : IPlayerState
                     return;
                 }
             }
+
+            if (animRunningTime >= jumpAnimationLength)
+            {
+                player.ChangeState<IdleState>();
+                return;
+            }
+                
         }
     }
 
-    public void Exit(PlayerController player)
+    public override void Exit(PlayerController player)
     {
+        base.Exit(player);
         player.PlayerMove.rb.gravityScale = 1;
     }
 }

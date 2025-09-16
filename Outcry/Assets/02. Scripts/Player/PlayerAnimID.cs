@@ -4,6 +4,13 @@ using UnityEngine;
 
 public static class PlayerAnimID
 {
+    // SubState 파라미터
+    public static readonly int SubGround = Animator.StringToHash("@Ground");
+    public static readonly int SubAir = Animator.StringToHash("@Air");
+    public static readonly int SubNormalAttack = Animator.StringToHash("@NormalAttack");
+    public static readonly int SubNormalJumpAttack = Animator.StringToHash("@NormalJumpAttack");
+    public static readonly int SubDownAttack = Animator.StringToHash("@DownAttack");
+    
     // Bool 파라미터
     public static readonly int Idle = Animator.StringToHash("Idle");
     public static readonly int Move = Animator.StringToHash("Move");

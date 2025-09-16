@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpState : IPlayerState
+public class JumpState : AirSubState
 {
-    public void Enter(PlayerController player)
+    public override void Enter(PlayerController player)
     {
-        player.SetAnimation(PlayerAnimID.Jump, true);
+        base.Enter(player);
+        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Jump);
         player.isLookLocked = true; 
         player.PlayerMove.Jump();
         if (!player.PlayerMove.isGroundJump) player.PlayerMove.isGroundJump = true;
     }
 
-    public void HandleInput(PlayerController player)
+    public override void HandleInput(PlayerController player)
     {
         var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
         
@@ -42,11 +43,9 @@ public class JumpState : IPlayerState
             player.ChangeState<NormalJumpAttackState>();
             return;
         }
-
-        
     }
 
-    public void LogicUpdate(PlayerController player)
+    public override void LogicUpdate(PlayerController player)
     {
         if (!player.PlayerMove.isGroundJump)
         {
@@ -61,8 +60,9 @@ public class JumpState : IPlayerState
         }
     }
 
-    public void Exit(PlayerController player)
+    public override void Exit(PlayerController player)
     {
+        base.Exit(player);
         player.isLookLocked = false;
     }
 }

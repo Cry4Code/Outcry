@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveState : IPlayerState
+public class MoveState : GroundSubState
 {
-    public void Enter(PlayerController player)
+    public override void Enter(PlayerController player)
     {
-        player.SetAnimation(PlayerAnimID.Move);
+        base.Enter(player);
+        player.PlayerAnimator.OnBoolParam(PlayerAnimID.Move);
 
     }
 
-    public void HandleInput(PlayerController player)
+    public override void HandleInput(PlayerController player)
     {
         var input = player.Inputs.Player.Move.ReadValue<Vector2>();
         if (player.Inputs.Player.Jump.triggered
@@ -35,12 +36,19 @@ public class MoveState : IPlayerState
             player.ChangeState<WallHoldState>();
             return;
         }
+        
+        if (player.Inputs.Player.NormalAttack.triggered)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<NormalAttackState>();
+            return;
+        }
 
 
     }
 
 
-    public void LogicUpdate(PlayerController player)
+    public override void LogicUpdate(PlayerController player)
     {
         if (player.PlayerMove.rb.velocity.y < 0)
         {
@@ -52,8 +60,9 @@ public class MoveState : IPlayerState
         
     }
 
-    public void Exit(PlayerController player) 
+    public override void Exit(PlayerController player) 
     {
-        player.isLookLocked = false;
+        base.Exit(player);
+        player.PlayerAnimator.OffBoolParam(PlayerAnimID.Move);
     }
 }

@@ -208,17 +208,18 @@ public class PlayerMove : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             UpdateGrounded(collision);
-            if(!isGrounded)
+            UpdateWallTouched(collision);
+            /*if(!isGrounded)
             {
                 foreach (ContactPoint2D contact in collision.contacts)
                 {
                     if (contact.normal.x != 0)
                     {
                         isWallTouched = true;
-                    
+
                     }
                 }
-            }
+            }*/
         }
     }
 
