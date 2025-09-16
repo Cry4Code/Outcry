@@ -11,12 +11,13 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
     
     [SerializeField] protected SelectorNode rootNode;
     [SerializeField] protected Player target;
-    
+
     private bool isAvailableToAct = true;
     public bool IsAttacking { get; protected set; } //추후 Stun이나 다른 상태이상 추가.
 
     public void Initialize(MonsterBase monster) //외부에서 얘 호출되어야함.
     {
+        target = PlayerManager.Instance.player;
         if (monster == null)
         {
             Debug.LogError("MonsterAI: MonsterBase component not found!");

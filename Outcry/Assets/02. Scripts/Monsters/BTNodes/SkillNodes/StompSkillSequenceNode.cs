@@ -55,7 +55,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         {
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Stomp);
             //todo. player damage 처리
-            monster.AttackController.SetDamage(skillData.damage);
+            monster.AttackController.SetDamage(skillData.damage1);
             
             skillTriggered = true;
         }

@@ -1,0 +1,31 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[Serializable]
+public class MonsterSkillModel
+{
+    public int skillId;
+    public string skillName;
+    public int damage1;
+    public int damage2;
+    public int damage3;
+    public int healAmount;
+    public float cooldown;
+    public float range;
+    public string description;
+    
+    public MonsterSkillModel(int skillId, string skillName, int damage1, int damage2, int damage3, int healAmount, float cooldown, float range, string description)
+    {
+        this.skillId = skillId;
+        this.skillName = skillName;
+        this.damage1 = damage1;
+        this.damage2 = damage2;
+        this.damage3 = damage3;
+        this.healAmount = healAmount;
+        this.cooldown = cooldown;
+        this.range = range;
+        this.description = description;
+    }
+}
