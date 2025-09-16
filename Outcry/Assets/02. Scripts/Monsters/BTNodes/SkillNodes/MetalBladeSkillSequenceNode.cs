@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class MetalBladeSkillSequenceNode : SkillSequenceNode
@@ -101,6 +98,7 @@ public class MetalBladeSkillSequenceNode : SkillSequenceNode
         if (elapsedTime >= ANIMATION_TOTAL_DURATION)
         {
             skillTriggered = false; // 다음 스킬 사용을 위해 플래그 리셋
+            monster.AttackController.SetDamage(0); //데미지 초기화
             return NodeState.Success;
         }
 
