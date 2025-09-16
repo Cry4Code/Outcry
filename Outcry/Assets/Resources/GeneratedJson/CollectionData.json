@@ -1,0 +1,34 @@
+﻿{
+    "collectiondata": [
+        {
+            "item_id": 105000,
+            "Name": "Boss1Soul",
+            "MaxStack": 1,
+            "zeroInt": 0,
+            "zeroFloat": 0.0,
+            "sampleString": "Sample",
+            "Desc": "스킬 102001,102002 를 습득 할 수 있는 아이템",
+            "sampleBool": true
+        },
+        {
+            "item_id": 105001,
+            "Name": "Boss2Soul",
+            "MaxStack": 1,
+            "zeroInt": 0,
+            "zeroFloat": 0.0,
+            "sampleString": "Sample",
+            "Desc": "스킬 102003,102004 를 습득 할 수 있는 아이템",
+            "sampleBool": true
+        },
+        {
+            "item_id": 105002,
+            "Name": "Boss3Soul",
+            "MaxStack": 1,
+            "zeroInt": 0,
+            "zeroFloat": 0.0,
+            "sampleString": "Sample",
+            "Desc": "스킬 102005,102006 를 습득 할 수 있는 아이템",
+            "sampleBool": true
+        }
+    ]
+}

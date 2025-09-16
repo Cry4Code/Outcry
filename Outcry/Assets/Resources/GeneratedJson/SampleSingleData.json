@@ -1,0 +1,33 @@
+﻿{
+    "sampleInt": 10,
+    "sampleFloat": 1.0,
+    "zeroInt": 0,
+    "zeroFloat": 0.0,
+    "sampleString": "Sample",
+    "zeroString": "",
+    "sampleBool": true,
+    "intArray": [
+        1,
+        2,
+        3,
+        4,
+        5
+    ],
+    "stringArray": [
+        "fire",
+        "water",
+        "leaf"
+    ],
+    "floatArray": [
+        0.5,
+        1.2000000476837159,
+        2.5,
+        3.299999952316284
+    ],
+    "boolArray": [
+        true,
+        false,
+        false,
+        true
+    ]
+}

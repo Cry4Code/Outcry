@@ -6,13 +6,16 @@ public class JumpState : IPlayerState
 {
     public void Enter(PlayerController player)
     {
-        player.SetAnimation("Jump");
+        player.SetAnimation(PlayerAnimID.Jump, true);
+        player.isLookLocked = true; 
         player.PlayerMove.Jump();
         if (!player.PlayerMove.isGroundJump) player.PlayerMove.isGroundJump = true;
     }
 
     public void HandleInput(PlayerController player)
     {
+        var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
+        
         if (player.Inputs.Player.Jump.triggered)
         {
             if(!player.PlayerMove.isDoubleJump)
@@ -26,6 +29,21 @@ public class JumpState : IPlayerState
             player.ChangeState<WallHoldState>();
             return;
         }
+        
+        if (player.Inputs.Player.NormalAttack.triggered && moveInput.y < 0)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<DownAttackState>();
+            return;
+        }
+        if (player.Inputs.Player.NormalAttack.triggered && !player.PlayerAttack.HasJumpAttack)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<NormalJumpAttackState>();
+            return;
+        }
+
+        
     }
 
     public void LogicUpdate(PlayerController player)
@@ -43,5 +61,8 @@ public class JumpState : IPlayerState
         }
     }
 
-    public void Exit(PlayerController player) { }
+    public void Exit(PlayerController player)
+    {
+        player.isLookLocked = false;
+    }
 }
