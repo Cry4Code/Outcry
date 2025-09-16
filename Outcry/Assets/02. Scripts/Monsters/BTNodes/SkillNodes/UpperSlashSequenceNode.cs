@@ -7,7 +7,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
     private float elapsedTime = 0f;
     private bool skillTriggered = false;
     // MonsterParameter에 UpperSlash 추가 후 수정
-    private string animationName = AnimatorStrings.MonsterParameter.Stomp;  
+    private int animationHash = AnimatorStrings.MonsterParameter.UpperSlash;  
     
     protected override bool CanPerform()
     {
@@ -53,7 +53,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
 
         if (!skillTriggered)
         {
-            monster.Animator.SetTrigger(animationName);
+            monster.Animator.SetTrigger(animationHash);
             // todo. 플레이어 데미지 처리
 
             skillTriggered = true;
@@ -66,7 +66,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
             return NodeState.Running;
         }
 
-        bool isSkillAnimationPlaying = IsSkillAnimationPlaying(AnimatorStrings.MonsterAnimation.Stomp); // MonsterAnimation에 UpperSlash 추가 후 수정
+        bool isSkillAnimationPlaying = IsSkillAnimationPlaying(AnimatorStrings.MonsterAnimation.UpperSlash); // MonsterAnimation에 UpperSlash 추가 후 수정
         if (isSkillAnimationPlaying)
         {
             Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
