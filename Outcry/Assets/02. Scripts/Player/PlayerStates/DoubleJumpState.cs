@@ -10,10 +10,13 @@ public class DoubleJumpState : AirSubState
         player.SetAnimation(PlayerAnimID.DoubleJump, true);
         player.PlayerMove.DoubleJump();
     }
-
+    
     public override void HandleInput(PlayerController player) 
     {
-        if(player.PlayerMove.isWallTouched)
+        var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
+        
+        if(player.PlayerMove.isWallTouched 
+           && ((moveInput.x < 0 && player.PlayerMove.lastWallIsLeft) || (moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft)))
         {
             player.ChangeState<WallHoldState>();
             return;

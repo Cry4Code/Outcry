@@ -30,8 +30,8 @@ public class WallHoldState : AirSubState
         }
 
         // 벽이 있는 방향으로 입력이 들어왔을 때
-        if ((((moveInput.x < 0 && player.PlayerMove.lastWallIsLeft) 
-            || moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft)) )
+        if (((moveInput.x < 0 && player.PlayerMove.lastWallIsLeft) 
+            || moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft) )
         {
             // 점프 키가 눌림 and 벽점 가능함
             if(player.Inputs.Player.Jump.triggered && player.PlayerMove.CanWallJump())

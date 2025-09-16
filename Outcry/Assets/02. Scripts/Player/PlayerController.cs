@@ -82,9 +82,4 @@ public class PlayerController : MonoBehaviour
         if (isTrigger) PlayerAnimator.SetTriggerAnimation(animHash);
         else  PlayerAnimator.SetBoolAnimation(animHash);
     }
-
-    public void OnMove()
-    {
-        PlayerAnimator.animator.SetBool(PlayerAnimID.Move, true);
-    }
 }

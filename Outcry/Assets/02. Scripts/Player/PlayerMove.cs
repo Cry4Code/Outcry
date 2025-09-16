@@ -29,6 +29,7 @@ public class PlayerMove : MonoBehaviour
     [field : SerializeField] public float DoubleJumpForce { get; set; }
     [field : SerializeField] public float WallJumpForce { get; set; }
     [field : SerializeField] public float GroundThresholdForce { get; set; } // 땅으로 인식하는 법선 벡터 크기 조건
+    [field : SerializeField] public float AirMoveThresholdTime { get; set; } // 이 초 이상 체공한 후에 움직이면 RunJump 모션 출력
     public LayerMask groundMask;
     [HideInInspector] public bool isGroundJump = false; // 지상에서 첫 점프 했는지
     [HideInInspector] public bool isDoubleJump = false; // 더블점프 했는지
@@ -37,6 +38,7 @@ public class PlayerMove : MonoBehaviour
     [HideInInspector] public bool lastWallIsLeft = false; // 마지막에 부딛힌 벽이 왼쪽에 있는지
     [HideInInspector] public bool isGrounded = true;
     [HideInInspector] public bool isWallTouched = false;
+    [HideInInspector] public float inAirTime = 0f;
     private Vector2 rightWallCheckPos;
     private Vector2 leftWallCheckPos;
     private Vector2 wallCheckBoxSize;
@@ -76,7 +78,18 @@ public class PlayerMove : MonoBehaviour
         checkDistance = boxCollider.size.x * 0.5f;
 
         wallCheckBoxSize = new Vector2(boxCollider.size.x * 0.1f, boxCollider.size.y * 0.85f);
-        
+        inAirTime = 0f;
+    }
+
+    
+    /// <summary>
+    /// JumpState 진입할 때 벽에 붙어있었으면 이걸로 실행함.
+    /// 좌우 속도를 멈춘 뒤에 점프하는거
+    /// </summary>
+    public void PlaceJump()
+    {
+        rb.velocity = Vector2.zero;
+        Jump();
     }
 
 
@@ -160,9 +173,20 @@ public class PlayerMove : MonoBehaviour
         if (moveInput.x < 0) keyboardLeft = true;
         else if (moveInput.x > 0) keyboardLeft = false;
 
-        if (moveInput.x != 0) Controller.OnMove();
+        if (moveInput.x != 0)
+        {
+            if (!isGrounded && inAirTime < AirMoveThresholdTime) return;
+            Controller.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Move);
+        }
     }
-   
+
+    private void FixedUpdate()
+    {
+        if (!isGrounded)
+        {
+            inAirTime += Time.fixedDeltaTime;
+        }
+    }
 
     public void SetAnimation(string animName)
     {
@@ -248,6 +272,7 @@ public class PlayerMove : MonoBehaviour
                 isWallJumped = false;
                 isWallTouched = false;
                 curWall = null;
+                inAirTime = 0f;
                 return;
             }
         }

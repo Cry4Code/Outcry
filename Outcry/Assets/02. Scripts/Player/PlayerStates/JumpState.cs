@@ -4,17 +4,29 @@ using UnityEngine;
 
 public class JumpState : AirSubState
 {
+    private float minWallHoldTime = 1f; // 이 초가 지나야 벽 짚기가 가능함
+    private float elapsedTime;
+    
     public override void Enter(PlayerController player)
     {
         base.Enter(player);
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Jump);
         player.isLookLocked = true; 
-        player.PlayerMove.Jump();
+        elapsedTime = 0f;
+        if (player.PlayerMove.isWallTouched)
+        {
+            player.PlayerMove.PlaceJump();
+        }
+        else
+        {
+            player.PlayerMove.Jump();
+        }
         if (!player.PlayerMove.isGroundJump) player.PlayerMove.isGroundJump = true;
     }
 
     public override void HandleInput(PlayerController player)
     {
+        elapsedTime += Time.deltaTime;
         var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
         
         if (player.Inputs.Player.Jump.triggered)
@@ -25,7 +37,7 @@ public class JumpState : AirSubState
                 return;
             }
         }
-        if (player.PlayerMove.isWallTouched)
+        if (player.PlayerMove.isWallTouched && elapsedTime >= minWallHoldTime)
         {
             player.ChangeState<WallHoldState>();
             return;
