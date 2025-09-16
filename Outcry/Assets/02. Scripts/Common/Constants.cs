@@ -13,5 +13,6 @@ public static class AnimatorStrings
     {
         public const string Running = "Running";
         public const string NormalAttack = "NormalAttack";
+        public static readonly int MetalBladeHash = Animator.StringToHash("MetalBlade");
     }
 }
