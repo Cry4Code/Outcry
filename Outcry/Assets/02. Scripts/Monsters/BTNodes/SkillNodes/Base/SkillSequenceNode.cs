@@ -14,7 +14,7 @@ public abstract class SkillSequenceNode : SequenceNode
     protected Player target;
     protected MonsterSkillModel skillData;
     
-    //todo. think. virtual일 이유가? 그냥 일반 클래스로 변경해도 되지 않을까?
+    //todo. think. virtual일 이유가? 그냥 일반 클래스로 변경해도 되지 않을까? //think. 아예 생성자로 바꿔버릴까??
     public virtual void InitializeSkillSequenceNode(MonsterBase monster, Player target, MonsterSkillModel skillData)
     {
         this.skillId = skillData.skillId;

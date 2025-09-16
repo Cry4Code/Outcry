@@ -9,11 +9,11 @@ public static class Temp_DataBase
 {
     public static List<MonsterSkillModel> monsterSkillDatas = new List<MonsterSkillModel>()
     {
-        new MonsterSkillModel(1, "MonsterSkill1", 1, 1f, "첫번째 스킬입니다."),
-        new MonsterSkillModel(2, "MonsterSkill2",2, 2f, "두번째 스킬입니다."),
-        new MonsterSkillModel(3, "MonsterSkill3",2, 2f, "세번째 스킬입니다."),
-        new MonsterSkillModel(4, "MonsterSkill4",2, 2f, "네번째 스킬입니다."),
-        new MonsterSkillModel(5, "MonsterSkill5",2, 2f, "다섯번째 스킬입니다.")
+        new MonsterSkillModel(1, "MonsterSkill1", 1,0,0,0, 1f,10f, "첫번째 스킬입니다."),
+        new MonsterSkillModel(2, "MonsterSkill2",2, 0,0,0, 1f,10f, "두번째 스킬입니다."),
+        new MonsterSkillModel(3, "MonsterSkill3",2, 0,0,0, 1f,10f, "세번째 스킬입니다."),
+        new MonsterSkillModel(4, "MonsterSkill4",2, 0,0,0, 1f,10f,  "네번째 스킬입니다."),
+        new MonsterSkillModel(5, "MonsterSkill5",2, 0,0,0, 1f,10f,  "다섯번째 스킬입니다.")
     };
 
     public static MonsterSkillModel GetMonsterSkillById(int id)

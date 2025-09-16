@@ -10,11 +10,10 @@ using UnityEngine;
 public class DataManager : Singleton<DataManager>
 {
     [SerializeField] private SkillNodeDataList skillNodeDataList;
+    [SerializeField] private MonsterSkillDataList monsterSkillDataList;
     public SkillNodeDataList SkillNodeDataList => skillNodeDataList;
-    // + dataList: DataListBase 
-    // + monsterList: MonsterDataList
-    // ------------ 
-    // -Initialize(): void
+    public MonsterSkillDataList MonsterSkillDataList => monsterSkillDataList;
+    
     private void Start()
     {
         Initialize();
@@ -28,14 +27,22 @@ public class DataManager : Singleton<DataManager>
         skillNodeDataList.Initialize();
         SetSkillNodeDataList();
         
-        //todo. 기획테이블 데이터를 TableDataHandler를 사용해 가공하여 데이터리스트에 추가
+        //MonsterSkill 리스트 초기화
+        monsterSkillDataList = new MonsterSkillDataList();
+        monsterSkillDataList.Initialize();
+        SetMonsterSkillDataList();
     }
     
     
-    //스킬 노드 생성 코드 todo. think. 이게 베스트일까?
+    //스킬 노em 생성 코드 todo. think. 이게 베스트일까?
     private void SetSkillNodeDataList()
     {
         skillNodeDataList.AddToList(new SkillNode(){skillId = 1, skillNode = new TestSkillSequenceNode() });
         skillNodeDataList.AddToList(new SkillNode(){skillId = 1, skillNode = new TestSkillSequenceNode() });
+    }
+    
+    private void SetMonsterSkillDataList()
+    {
+        //todo. 기획테이블 데이터를 TableDataHandler를 사용해 가공하여 데이터리스트에 추가
     }
 }
