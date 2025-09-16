@@ -11,27 +11,23 @@ public class BossMonster : MonsterBase
     [SerializeField] private List<MonsterSkillModel> specialSkillDatas;
     [SerializeField] private List<MonsterSkillModel> commonSkillDatas;
 
-
-    protected new void Awake()
-    {
-        //test용 코드
-        this.monsterData = new BossMonsterModel(
-            1, "BossMonster1", 100,
-            10f, 10f, 10f, new int[2] {1,2}, new int[2] {2,2});
-        Debug.Log($"{monsterData.monsterId}가 Awake 되었습니다.");
-        base.Awake();
-    }
-
     protected override void InitializeSkills()
     {
+        if (DataManager.Instance == null)
+            Debug.LogError("DataManager.Instance가 null입니다.");
+        else if (DataManager.Instance.MonsterSkillDataList == null)
+            Debug.LogError("MonsterSkillDataList가 null입니다.");
+        specialSkillDatas = new List<MonsterSkillModel>();
+        commonSkillDatas = new List<MonsterSkillModel>();
+        
         if (monsterData is BossMonsterModel bossMonsterData)
         {
             Debug.Log("BossMonster임");
             //스페셜 스킬 데이터 초기화
             foreach (int skillId in bossMonsterData.specialSkillIds)
             {
-                MonsterSkillModel skillData =
-                    Temp_DataBase.GetMonsterSkillById(skillId);
+                
+                DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(skillId, out MonsterSkillModel skillData);
                 if (skillData != null)
                 {
                     specialSkillDatas.Add(skillData);
@@ -41,8 +37,7 @@ public class BossMonster : MonsterBase
             //커먼 스킬 데이터 초기화
             foreach (int skillId in bossMonsterData.commonSkillIds)
             {
-                MonsterSkillModel skillData =
-                    Temp_DataBase.GetMonsterSkillById(skillId);
+                DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(skillId, out MonsterSkillModel skillData);
                 if (skillData != null)
                 {
                     commonSkillDatas.Add(skillData);

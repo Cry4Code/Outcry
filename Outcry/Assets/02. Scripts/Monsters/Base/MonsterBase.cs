@@ -62,7 +62,7 @@ public abstract class MonsterBase : MonoBehaviour
             Debug.LogError(this.monsterData.monsterId + ": hitBox is missing");
         }
         
-        Initialize();
+        Debug.Log($"{monsterData.monsterId}가 Awake 되었습니다.");
     }
 
     protected void FixedUpdate()

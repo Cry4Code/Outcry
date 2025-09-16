@@ -14,7 +14,7 @@ public class DataManager : Singleton<DataManager>
     public SkillNodeDataList SkillNodeDataList => skillNodeDataList;
     public MonsterSkillDataList MonsterSkillDataList => monsterSkillDataList;
     
-    private void Start()
+    private void Awake()
     {
         Initialize();
     }
@@ -43,6 +43,12 @@ public class DataManager : Singleton<DataManager>
     
     private void SetMonsterSkillDataList()
     {
-        //todo. 기획테이블 데이터를 TableDataHandler를 사용해 가공하여 데이터리스트에 추가
+        //todo. 기획테이블 데이터를 TableDataHandler를 사용해 가공하여 데이터리스트에 추가List<MonsterSkillModel> monsterSkillDatas = new List<MonsterSkillModel>()
+        //임시 데이터
+        monsterSkillDataList.AddToList(new MonsterSkillModel(1, "MonsterSkill1", 1,0,0,0, 1f,10f, "첫번째 스킬입니다."));
+        monsterSkillDataList.AddToList(new MonsterSkillModel(2, "MonsterSkill2",2, 0,0,0, 1f,10f, "두번째 스킬입니다."));
+        monsterSkillDataList.AddToList(new MonsterSkillModel(3, "MonsterSkill3",2, 0,0,0, 1f,10f, "세번째 스킬입니다."));
+        monsterSkillDataList.AddToList(new MonsterSkillModel(4, "MonsterSkill4",2, 0,0,0, 1f,10f,  "네번째 스킬입니다."));
+        monsterSkillDataList.AddToList(new MonsterSkillModel(5, "MonsterSkill5",2, 0,0,0, 1f,10f,  "다섯번째 스킬입니다."));
     }
 }
