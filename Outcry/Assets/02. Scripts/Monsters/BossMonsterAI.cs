@@ -64,12 +64,10 @@ public class BossMonsterAI : MonsterAIBase
                 specialSkillSelectorNode.AddChild(skillNode);
             }
         }
-        specialSkillSelectorNode.ShuffleChildren();
-        
         attackSelectorNode.AddChild(specialSkillSelectorNode);
         
         //일반 스킬 셀럭터 노드 자식들 생성.
-        SelectorNode commonSkillSelectorNode = new SelectorNode();
+        SkillSelectorNode commonSkillSelectorNode = new SkillSelectorNode();
         foreach (int id in monsterModel.commonSkillIds)
         {
             DataManager.Instance.SkillSequenceNodeDataList.GetSkillSequenceNode(id, out SkillSequenceNode skillNode);

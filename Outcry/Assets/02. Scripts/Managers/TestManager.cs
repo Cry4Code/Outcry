@@ -15,7 +15,7 @@ public class TestManager : MonoBehaviour
         
         BossMonsterModel monsterData = new BossMonsterModel(
             1, "BossMonster1", 100,
-            10f, 3f, 10f, new int[0], new int[3] {103001, 103005, 103006});
+            10f, 3f, 10f, new int[0], new int[2] {103005, 103006});
         GameObject monsterObj = GameObject.Instantiate(monsterPrefab);
         
         MonsterBase monster = monsterObj.GetComponent<MonsterBase>();

@@ -27,7 +27,7 @@ public abstract class CompositeNode : Node
             child.Reset();
         }
     }
-    public void ShuffleChildren()   //todo. 랜덤 셔플 알고리즘은 추후 한번 더 체크해봐야됨. (임시생성)
+    protected void ShuffleChildren()   //todo. 랜덤 셔플 알고리즘은 추후 한번 더 체크해봐야됨. (임시생성)
     {
         for (int i = 0; i < children.Count; i++)
         {

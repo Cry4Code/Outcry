@@ -12,7 +12,7 @@ public abstract class SkillSequenceNode : SequenceNode
     [SerializeField]  protected int skillId;
     protected MonsterBase monster;
     protected Player target;
-    [SerializeField] protected MonsterSkillModel skillData;
+    protected MonsterSkillModel skillData; //인스펙터에 직렬화 시키면 에러뜸.
     
     public int SkillId => skillId;
     
