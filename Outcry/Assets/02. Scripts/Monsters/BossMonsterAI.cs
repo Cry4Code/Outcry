@@ -34,14 +34,17 @@ public class BossMonsterAI : MonsterAIBase
         MetalBladeSkillSequenceNode test1SkillSeuqnceNode = new MetalBladeSkillSequenceNode();
         StompSkillSequenceNode test2SkillSeuqnceNode = new StompSkillSequenceNode();
         UpperSlashSequenceNode test3SkillSeuqnceNode = new UpperSlashSequenceNode();
+        HeavyDestroyerSkillSequenceNode test4SkillSeuqnceNode = new HeavyDestroyerSkillSequenceNode();
         test1SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
         test2SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
         test3SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
-        
+        test4SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
+
         attackSelectorNode.AddChild(test1SkillSeuqnceNode);
         attackSelectorNode.AddChild(test2SkillSeuqnceNode);
         attackSelectorNode.AddChild(test3SkillSeuqnceNode);
-            
+        attackSelectorNode.AddChild(test4SkillSeuqnceNode);
+
         // //스킬은 보스몬스터로 형변환 후에 접근.
         // BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
         // if (monsterModel == null)
@@ -64,7 +67,7 @@ public class BossMonsterAI : MonsterAIBase
         //     }
         // }
         // specialSkillSelectorNode.ShuffleChildren();
-        
+
         // attackSelectorNode.AddChild(specialSkillSelectorNode);
         //
         // //일반 스킬 셀럭터 노드 자식들 생성.
@@ -78,7 +81,7 @@ public class BossMonsterAI : MonsterAIBase
         //     }
         // }
         // attackSelectorNode.AddChild(commonSkillSelectorNode);
-        
+
         //ChaseSelector
         SelectorNode chaseSelectorNode = new SelectorNode();
         //todo. 추후 DashSequenceNode및, ActionNode 추가할 것.
