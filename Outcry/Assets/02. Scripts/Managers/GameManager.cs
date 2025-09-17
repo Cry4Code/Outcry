@@ -11,6 +11,17 @@ public class GameManager : Singleton<GameManager>
     {
         // Firebase 초기화를 기다리는 코루틴 시작
         StartCoroutine(WaitForFirebaseAndInitialize());
+
+
+        AudioManager.Instance.PlayBGM("Title");
+
+        StartCoroutine(ChangeBGMCoroutine());
+    }
+
+    private IEnumerator ChangeBGMCoroutine()
+    {
+        yield return new WaitForSeconds(10f); // 10초 대기
+        AudioManager.Instance.PlayBGM("InGame"); // BGM 변경
     }
 
     private IEnumerator WaitForFirebaseAndInitialize()
