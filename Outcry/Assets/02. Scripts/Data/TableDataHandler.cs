@@ -23,45 +23,37 @@ public class MonsterTableData{ //테이블에서 받아온 데이터. (가공전
 /// 순수 변환만을 담당함 (기획테이블 데이터 -> 모델)
 /// DataManager에서 Initialize할때 호출됨
 /// 데이터를 보관하지 않으며, 가공하는 메서드만 존재.
+/// 추가로 필요한 변환 메서드는 본인의 원하는 형태로 구현.
 /// </summary>
 public static class TableDataHandler
 {
-    // -GetExampleData(): ExampleModel static 
-    // +GetExampleDatabase(): List<ExampleModel> static
-
-    // public static void LoadMonsterData()
-    // {
-    //     DataTableManager.Instance.LoadCollectionData<EnemyDataTable>();
-    //     DataTableManager.Instance.GetCollectionData<EnemyData>();
-    //     
-    // }
-    //todo. 몬스터스킬데이터를 기획테이블에서 가져와서 맵핑하는 메서드 추가하기.
-    
-    public static void LoadMonsterSkillData()
+    public static List<MonsterSkillModel> LoadMonsterSkillData()
     {
+        List<MonsterSkillModel> monsterSkillDataList = new List<MonsterSkillModel>();
+        
+        // tableData: json에서 불러온 데이터
         DataTableManager.Instance.LoadCollectionData<EnemySkillDataTable>();
         Dictionary<int, IData> tableData = DataTableManager.Instance.CollectionData[typeof(EnemySkillData)] as Dictionary<int, IData>;
-        foreach (var item in tableData)
-        {
-            EnemySkillData value = item.Value as EnemySkillData;
-            Debug.Log($"{item.Key} : {value.Skill_name}");
-        }
-    }
-    public static BossMonsterModel MapFromTableData(MonsterTableData tableData)
-    {   
-        // deep copy 이유: 해당 모델 인스펙터에서 보여주기 위해 public 인자를 갖고 있음.
-        // 데이터 변경이 되더라도 해당 객체의 데이터만 변경될 것임.
-        int[] specialSkillIds = new int[tableData.specialSkillIds.Length];
-        Array.Copy(tableData.specialSkillIds, specialSkillIds, specialSkillIds.Length);
-        int[] commonSkillIds = new int[tableData.commonSkillIds.Length];
-        Array.Copy(tableData.commonSkillIds, commonSkillIds, commonSkillIds.Length);
         
-        BossMonsterModel newBossMonsterModel = new BossMonsterModel(
-            tableData.monsterId, tableData.monsterName, tableData.health,
-            tableData.chaseSpeed, tableData.attackRange, tableData.attackCooldown,
-            specialSkillIds,
-            commonSkillIds);
+        // tableData의 각 아이템을 MonsterSkillModel로 변환하여 리스트에 추가
+        foreach (var item in tableData.Values)
+        {
+            MonsterSkillModel monsterSkillData = MapFromTableData(item as EnemySkillData);
+            monsterSkillDataList.Add(monsterSkillData);
+            Debug.Log($"{monsterSkillData.skillId} : {monsterSkillData.skillName}");
+        }
 
-        return newBossMonsterModel;
+        return monsterSkillDataList;
     }
+    private static MonsterSkillModel MapFromTableData(EnemySkillData tableData)
+    {
+        MonsterSkillModel newMonsterSkillModel = new MonsterSkillModel(
+            tableData.Skill_id, tableData.Skill_name, 
+            tableData.Damage, tableData.Damage2, tableData.Damage3, tableData.HealAmount, 
+            tableData.Cooldown, tableData.Range, tableData.Desc);
+        
+        return newMonsterSkillModel;
+    }
+    
+    //todo. 몬스터스킬데이터를 기획테이블에서 가져와서 맵핑하는 메서드 추가하기.
 }

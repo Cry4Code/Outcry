@@ -9,18 +9,27 @@ using UnityEngine;
 [Serializable]
 public abstract class SkillSequenceNode : SequenceNode
 {
-    protected int skillId;
+    [SerializeField]  protected int skillId;
     protected MonsterBase monster;
     protected Player target;
-    protected MonsterSkillModel skillData;
+    protected MonsterSkillModel skillData; //인스펙터에 직렬화 시키면 에러뜸.
+    
+    public int SkillId => skillId;
+    
+    public SkillSequenceNode(int skillId)
+    {
+        this.skillId = skillId;
+        if (!DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(skillId, out skillData))
+        {
+            Debug.LogError($"Skill ID {skillId} could not be found.");
+        }
+    }
     
     //todo. think. virtual일 이유가? 그냥 일반 클래스로 변경해도 되지 않을까? //think. 아예 생성자로 바꿔버릴까??
-    public virtual void InitializeSkillSequenceNode(MonsterBase monster, Player target, MonsterSkillModel skillData)
+    public virtual void InitializeSkillSequenceNode(MonsterBase monster, Player target)
     {
-        this.skillId = skillData.skillId;
         this.monster = monster;
         this.target = target;
-        this.skillData = skillData;
         
         ConditionNode canPerform = new ConditionNode(CanPerform);
         ActionNode skillAction = new ActionNode(SkillAction);

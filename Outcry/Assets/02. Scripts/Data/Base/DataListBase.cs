@@ -16,6 +16,11 @@ public abstract class DataListBase<T>
     // todo. think 필요없을듯?
     public abstract void Initialize();
 
+    public void InitializeWithDataList(List<T> dataList)
+    {
+        this.dataList = dataList;
+    }
+
     public void AddToList(T data)
     {
         dataList.Add(data);

@@ -4,19 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[Serializable]
-public class SkillNode
-{
-    public int skillId;
-    public SkillSequenceNode skillNode;
-}
-
 [Serializable]  //임시, 지워야됨.
-public class SkillNodeDataList: DataListBase<SkillNode>
+public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
 {
+    /// <summary>
+    /// Json 데이터로 불러오지 않기 때문에, 스킬 노드를 생성할때마다 이 곳에 추가해줘야함.
+    /// </summary>
     public override void Initialize()
     {
-        dataList = new List<SkillNode>();
+        dataList = new List<SkillSequenceNode>();
+        
+        //스킬 시퀀스 노드 생성
+        dataList.Add(new MetalBladeSkillSequenceNode(103001));
+        dataList.Add(new StompSkillSequenceNode(103005));
+        dataList.Add(new UpperSlashSequenceNode(103006));
     }
     
     /// <summary>
@@ -27,16 +28,14 @@ public class SkillNodeDataList: DataListBase<SkillNode>
     /// <returns></returns>
     public bool GetSkillSequenceNode(int skillId, out SkillSequenceNode skillSequenceNode)
     {
-        SkillNode node = dataList.FirstOrDefault(node => node.skillId == skillId);
+        skillSequenceNode = dataList.FirstOrDefault(node => node.SkillId == skillId);
 
-        if (node == null)
+        if (skillSequenceNode == null)
         {
-            skillSequenceNode = null;
             return false;
         }
         else
         {
-            skillSequenceNode = node.skillNode;
             return true;
         }
     }

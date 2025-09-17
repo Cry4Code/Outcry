@@ -24,9 +24,13 @@ public class MetalBladeSkillSequenceNode : SkillSequenceNode
     // 전체 애니메이션 길이 (33개 스프라이트 = 0~32번 인덱스)
     private const float ANIMATION_TOTAL_DURATION = (1.0f / ANIMATION_FRAME_RATE) * 33;
 
-    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target, MonsterSkillModel skillData)
+    public MetalBladeSkillSequenceNode(int skillId) : base(skillId)
     {
-        base.InitializeSkillSequenceNode(monster, target, skillData);
+    }
+
+    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target)
+    {
+        base.InitializeSkillSequenceNode(monster, target);
         this.nodeName = "MetalBladeSkillSequenceNode";
         animator = monster.Animator;
 
