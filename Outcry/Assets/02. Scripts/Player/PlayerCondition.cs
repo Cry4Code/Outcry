@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.Serialization;
 
 public class PlayerCondition : MonoBehaviour, IDamagable
 {
@@ -12,8 +13,8 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     public float recoveryStaminaTime; // 스태미나 회복 주기 (일단은 1초)
 
     [Header("Invisible Settings")] 
-    private bool isInvinsible;
-    public float invisibleTime; // 한 대 맞았을 때 무적 초 (일단은 1초)
+    private bool isInvincible;
+    public float invincibleTime; // 한 대 맞았을 때 무적 초 (일단은 1초)
     private WaitForSecondsRealtime waitInvisible;
     public event Action onTakeDamage;
 
@@ -25,8 +26,8 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         health.Init(EventBusKey.ChangeHealth);
         stamina.Init(EventBusKey.ChangeStamina);
         lastRecoveryStamina = Time.time;
-        invisibleTime = 1f;
-        waitInvisible = new WaitForSecondsRealtime(invisibleTime);
+        invincibleTime = 1f;
+        waitInvisible = new WaitForSecondsRealtime(invincibleTime);
     }
 
     void Update()
@@ -48,26 +49,38 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damage)
     {
-        if (!isInvinsible)
+        if (!isInvincible)
         {
             Debug.Log("플레이어 데미지 받음");
             onTakeDamage?.Invoke();
-            StartCoroutine(Invinsible());
+            StartCoroutine(Invincible());
         }
     }
 
-    IEnumerator Invinsible()
+    public void SetInvincible(float time)
     {
-        isInvinsible = true;
-        yield return waitInvisible;
-        isInvinsible = false;
+        if (!isInvincible)
+        {
+            StartCoroutine(Invincible(time));
+        }
     }
 
-    IEnumerator Invinsible(float time)
+    IEnumerator Invincible()
     {
-        isInvinsible = true;
+        Debug.Log("무적 시작");
+        isInvincible = true;
+        yield return waitInvisible;
+        isInvincible = false;
+        Debug.Log("무적 끝");
+    }
+
+    IEnumerator Invincible(float time)
+    {
+        Debug.Log("무적 시작");
+        isInvincible = true;
         yield return new WaitForSecondsRealtime(time);
-        isInvinsible = false;
+        isInvincible = false;
+        Debug.Log("무적 끝");
     }
 
     public void Die()

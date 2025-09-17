@@ -12,6 +12,7 @@ public class DodgeState : IPlayerState
     private float dodgePower = 20f;
     private float dodgeAnimationLength;
     private Vector2 dodgeDirection;
+    private float dodgeInvincibleTime = 0.3f;
     
     public void Enter(PlayerController player)
     {
@@ -29,6 +30,7 @@ public class DodgeState : IPlayerState
                 .animationClips.First(c => c.name == "Dodge").length;
         player.PlayerMove.rb.AddForce(dodgeDirection, ForceMode2D.Impulse);
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Dodge);
+        player.Condition.SetInvincible(dodgeInvincibleTime);
         player.isLookLocked = true;
         startStateTime = Time.time;
         animRunningTime = 0f;
