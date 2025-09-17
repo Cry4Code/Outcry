@@ -5,15 +5,15 @@ using System.Collections.Generic;
 [Serializable]
 public class SampleSingleData
 {
-    public int sampleInt;
-    public float sampleFloat;
-    public int zeroInt;
-    public float zeroFloat;
-    public string sampleString;
-    public string zeroString;
-    public bool sampleBool;
-    public int[] intArray;
-    public string[] stringArray;
-    public float[] floatArray;
-    public bool[] boolArray;
+    public int SampleInt;
+    public float SampleFloat;
+    public int ZeroInt;
+    public float ZeroFloat;
+    public string SampleString;
+    public string ZeroString;
+    public bool SampleBool;
+    public int[] IntArray;
+    public string[] StringArray;
+    public float[] FloatArray;
+    public bool[] BoolArray;
 }

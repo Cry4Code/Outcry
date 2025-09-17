@@ -28,6 +28,25 @@ public static class TableDataHandler
 {
     // -GetExampleData(): ExampleModel static 
     // +GetExampleDatabase(): List<ExampleModel> static
+
+    // public static void LoadMonsterData()
+    // {
+    //     DataTableManager.Instance.LoadCollectionData<EnemyDataTable>();
+    //     DataTableManager.Instance.GetCollectionData<EnemyData>();
+    //     
+    // }
+    //todo. 몬스터스킬데이터를 기획테이블에서 가져와서 맵핑하는 메서드 추가하기.
+    
+    public static void LoadMonsterSkillData()
+    {
+        DataTableManager.Instance.LoadCollectionData<EnemySkillDataTable>();
+        Dictionary<int, IData> tableData = DataTableManager.Instance.CollectionData[typeof(EnemySkillData)] as Dictionary<int, IData>;
+        foreach (var item in tableData)
+        {
+            EnemySkillData value = item.Value as EnemySkillData;
+            Debug.Log($"{item.Key} : {value.Skill_name}");
+        }
+    }
     public static BossMonsterModel MapFromTableData(MonsterTableData tableData)
     {   
         // deep copy 이유: 해당 모델 인스펙터에서 보여주기 위해 public 인자를 갖고 있음.
@@ -45,12 +64,4 @@ public static class TableDataHandler
 
         return newBossMonsterModel;
     }
-
-    public static void LoadMonsterData()
-    {
-        DataTableManager.Instance.LoadCollectionData<EnemyDataTable>();
-        DataTableManager.Instance.GetCollectionData<EnemyData>();
-        
-    }
-    //todo. 몬스터스킬데이터를 기획테이블에서 가져와서 맵핑하는 메서드 추가하기.
 }

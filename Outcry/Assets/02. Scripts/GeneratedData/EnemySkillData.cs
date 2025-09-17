@@ -5,10 +5,10 @@ using System.Collections.Generic;
 [Serializable]
 public class EnemySkillData : IData
 {
-    public int ID => skill_id;
+    public int ID => Skill_id;
 
-    public int skill_id;
-    public string name;
+    public int Skill_id;
+    public string Skill_name;
     public int Damage;
     public int Damage2;
     public int Damage3;

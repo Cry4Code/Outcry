@@ -1,8 +1,8 @@
 ﻿{
     "enemyskilldata": [
         {
-            "skill_id": 103000,
-            "name": "NormalAttack",
+            "Skill_id": 103000,
+            "Skill_name": "NormalAttack",
             "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
@@ -12,8 +12,8 @@
             "Desc": ""
         },
         {
-            "skill_id": 103001,
-            "name": "Metal_Blade",
+            "Skill_id": 103001,
+            "Skill_name": "Metal_Blade",
             "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
@@ -23,19 +23,19 @@
             "Desc": ""
         },
         {
-            "skill_id": 103002,
-            "name": "Heavy_Destroyer",
+            "Skill_id": 103002,
+            "Skill_name": "Heavy_Destroyer",
             "Damage": 2,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 0.0,
-            "Range": -10.0,
+            "Range": 10.0,
             "Desc": "10m 이상일때"
         },
         {
-            "skill_id": 103003,
-            "name": "Three_Point",
+            "Skill_id": 103003,
+            "Skill_name": "Three_Point",
             "Damage": 1,
             "Damage2": 1,
             "Damage3": 2,
@@ -45,8 +45,8 @@
             "Desc": ""
         },
         {
-            "skill_id": 103004,
-            "name": "Earthquake",
+            "Skill_id": 103004,
+            "Skill_name": "Earthquake",
             "Damage": 2,
             "Damage2": 1,
             "Damage3": 1,
@@ -56,8 +56,8 @@
             "Desc": ""
         },
         {
-            "skill_id": 103005,
-            "name": "Stomp",
+            "Skill_id": 103005,
+            "Skill_name": "Stomp",
             "Damage": 2,
             "Damage2": 0,
             "Damage3": 0,
@@ -67,8 +67,8 @@
             "Desc": ""
         },
         {
-            "skill_id": 103006,
-            "name": "Upper_Slash",
+            "Skill_id": 103006,
+            "Skill_name": "Upper_Slash",
             "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
@@ -78,8 +78,8 @@
             "Desc": ""
         },
         {
-            "skill_id": 103007,
-            "name": "Shark",
+            "Skill_id": 103007,
+            "Skill_name": "Shark",
             "Damage": 1,
             "Damage2": 1,
             "Damage3": 1,
@@ -89,8 +89,8 @@
             "Desc": ""
         },
         {
-            "skill_id": 103008,
-            "name": "WhirlWind",
+            "Skill_id": 103008,
+            "Skill_name": "WhirlWind",
             "Damage": 1,
             "Damage2": 1,
             "Damage3": 1,
@@ -100,8 +100,8 @@
             "Desc": ""
         },
         {
-            "skill_id": 103009,
-            "name": "",
+            "Skill_id": 103009,
+            "Skill_name": "",
             "Damage": 0,
             "Damage2": 0,
             "Damage3": 0,
@@ -111,8 +111,8 @@
             "Desc": ""
         },
         {
-            "skill_id": 103010,
-            "name": "",
+            "Skill_id": 103010,
+            "Skill_name": "",
             "Damage": 0,
             "Damage2": 0,
             "Damage3": 0,

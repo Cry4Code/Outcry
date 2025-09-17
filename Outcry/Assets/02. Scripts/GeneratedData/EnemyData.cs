@@ -5,17 +5,17 @@ using System.Collections.Generic;
 [Serializable]
 public class EnemyData : IData
 {
-    public int ID => enemy_id;
+    public int ID => Enemy_Id;
 
-    public int enemy_id;
-    public string name;
-    public int max_hp;
-    public int attack_power;
-    public float Patrol_speed;
-    public float Chase_speed;
+    public int Enemy_Id;
+    public string Enemy_Name;
+    public int Max_Hp;
+    public int Attack_Power;
+    public float Patrol_Speed;
+    public float Chase_Speed;
     public float Detect_Range;
-    public int[] skill_set;
-    public int[] Exskill_set;
+    public int[] Skill_Set;
+    public int[] Exskill_Set;
 }
 
 [Serializable]

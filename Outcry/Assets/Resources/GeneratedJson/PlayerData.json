@@ -1,9 +1,9 @@
 ﻿{
-    "max_hp": 5,
-    "attack_power": 10,
-    "attack_power2": 12,
-    "attack_power3": 18,
-    "jumpforce": 5.0,
-    "skill_ids": 102000,
-    "speed": 5.0
+    "Max_Hp": 5,
+    "Attack_Power": 10,
+    "Attack_Power2": 12,
+    "Attack_Power3": 18,
+    "Jumpforce": 5.0,
+    "Skill_Ids": 102000,
+    "Speed": 5.0
 }

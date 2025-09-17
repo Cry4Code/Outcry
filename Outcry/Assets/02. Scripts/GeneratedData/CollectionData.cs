@@ -5,16 +5,16 @@ using System.Collections.Generic;
 [Serializable]
 public class CollectionData : IData
 {
-    public int ID => item_id;
+    public int ID => Item_id;
 
-    public int item_id;
+    public int Item_id;
     public string Name;
     public int MaxStack;
-    public int zeroInt;
-    public float zeroFloat;
-    public string sampleString;
+    public int ZeroInt;
+    public float ZeroFloat;
+    public string SampleString;
     public string Desc;
-    public bool sampleBool;
+    public bool SampleBool;
 }
 
 [Serializable]

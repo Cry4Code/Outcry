@@ -1,8 +1,8 @@
 ﻿{
     "skilldata": [
         {
-            "skill_id": 102000,
-            "name": "UsePotion",
+            "Skill_id": 102000,
+            "P_Skill_Name": "UsePotion",
             "Damage": 0,
             "Damage2": 0,
             "DmgUp": 0,
@@ -16,8 +16,8 @@
             "Desc": "피격시 캔슬"
         },
         {
-            "skill_id": 102001,
-            "name": "WindSlash",
+            "Skill_id": 102001,
+            "P_Skill_Name": "WindSlash",
             "Damage": 80,
             "Damage2": 120,
             "DmgUp": 0,
@@ -31,8 +31,8 @@
             "Desc": "슈퍼아머"
         },
         {
-            "skill_id": 102002,
-            "name": "SuperCrash",
+            "Skill_id": 102002,
+            "P_Skill_Name": "SuperCrash",
             "Damage": 280,
             "Damage2": 0,
             "DmgUp": 0,
@@ -46,8 +46,8 @@
             "Desc": "슈퍼아머"
         },
         {
-            "skill_id": 102003,
-            "name": "ScrewAttack",
+            "Skill_id": 102003,
+            "P_Skill_Name": "ScrewAttack",
             "Damage": 120,
             "Damage2": 120,
             "DmgUp": 0,
@@ -61,8 +61,8 @@
             "Desc": "슈퍼아머"
         },
         {
-            "skill_id": 102004,
-            "name": "SpeedSting",
+            "Skill_id": 102004,
+            "P_Skill_Name": "SpeedSting",
             "Damage": 80,
             "Damage2": 0,
             "DmgUp": 0,
@@ -76,8 +76,8 @@
             "Desc": "슈퍼아머"
         },
         {
-            "skill_id": 102005,
-            "name": "PowerUp",
+            "Skill_id": 102005,
+            "P_Skill_Name": "PowerUp",
             "Damage": 0,
             "Damage2": 0,
             "DmgUp": 5,
@@ -91,8 +91,8 @@
             "Desc": "피격시 캔슬"
         },
         {
-            "skill_id": 102006,
-            "name": "Unbreakable",
+            "Skill_id": 102006,
+            "P_Skill_Name": "Unbreakable",
             "Damage": 0,
             "Damage2": 0,
             "DmgUp": 0,

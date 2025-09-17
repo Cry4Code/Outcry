@@ -5,11 +5,11 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerData
 {
-    public int max_hp;
-    public int attack_power;
-    public int attack_power2;
-    public int attack_power3;
-    public float jumpforce;
-    public int skill_ids;
-    public float speed;
+    public int Max_Hp;
+    public int Attack_Power;
+    public int Attack_Power2;
+    public int Attack_Power3;
+    public float Jumpforce;
+    public int Skill_Ids;
+    public float Speed;
 }

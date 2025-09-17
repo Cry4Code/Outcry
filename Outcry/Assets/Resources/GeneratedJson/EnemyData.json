@@ -1,47 +1,47 @@
 ﻿{
     "enemydata": [
         {
-            "enemy_id": 101000,
-            "name": "goblin_A",
-            "max_hp": 200,
-            "attack_power": 1,
-            "Patrol_speed": 1.0,
-            "Chase_speed": 0.0,
+            "Enemy_Id": 101000,
+            "Enemy_Name": "goblin_A",
+            "Max_Hp": 200,
+            "Attack_Power": 1,
+            "Patrol_Speed": 1.0,
+            "Chase_Speed": 0.0,
             "Detect_Range": 0.0,
-            "skill_set": [],
-            "Exskill_set": []
+            "Skill_Set": [],
+            "Exskill_Set": []
         },
         {
-            "enemy_id": 101001,
-            "name": "goblin_B",
-            "max_hp": 200,
-            "attack_power": 1,
-            "Patrol_speed": 0.5,
-            "Chase_speed": 0.0,
+            "Enemy_Id": 101001,
+            "Enemy_Name": "goblin_B",
+            "Max_Hp": 200,
+            "Attack_Power": 1,
+            "Patrol_Speed": 0.5,
+            "Chase_Speed": 0.0,
             "Detect_Range": 0.0,
-            "skill_set": [],
-            "Exskill_set": []
+            "Skill_Set": [],
+            "Exskill_Set": []
         },
         {
-            "enemy_id": 101002,
-            "name": "goblin_C",
-            "max_hp": 500,
-            "attack_power": 1,
-            "Patrol_speed": 0.800000011920929,
-            "Chase_speed": 0.0,
+            "Enemy_Id": 101002,
+            "Enemy_Name": "goblin_C",
+            "Max_Hp": 500,
+            "Attack_Power": 1,
+            "Patrol_Speed": 0.800000011920929,
+            "Chase_Speed": 0.0,
             "Detect_Range": 0.0,
-            "skill_set": [],
-            "Exskill_set": []
+            "Skill_Set": [],
+            "Exskill_Set": []
         },
         {
-            "enemy_id": 102001,
-            "name": "goblin_King",
-            "max_hp": 28000,
-            "attack_power": 1,
-            "Patrol_speed": 2.0,
-            "Chase_speed": 2.0,
+            "Enemy_Id": 102001,
+            "Enemy_Name": "goblin_King",
+            "Max_Hp": 28000,
+            "Attack_Power": 1,
+            "Patrol_Speed": 2.0,
+            "Chase_Speed": 2.0,
             "Detect_Range": 0.0,
-            "skill_set": [
+            "Skill_Set": [
                 103000,
                 103001,
                 103002,
@@ -52,32 +52,32 @@
                 103007,
                 103008
             ],
-            "Exskill_set": [
+            "Exskill_Set": [
                 103009,
                 103010
             ]
         },
         {
-            "enemy_id": 102002,
-            "name": "Boss_B",
-            "max_hp": 28000,
-            "attack_power": 1,
-            "Patrol_speed": 2.0,
-            "Chase_speed": 2.0,
+            "Enemy_Id": 102002,
+            "Enemy_Name": "Boss_B",
+            "Max_Hp": 28000,
+            "Attack_Power": 1,
+            "Patrol_Speed": 2.0,
+            "Chase_Speed": 2.0,
             "Detect_Range": 0.0,
-            "skill_set": [],
-            "Exskill_set": []
+            "Skill_Set": [],
+            "Exskill_Set": []
         },
         {
-            "enemy_id": 102003,
-            "name": "Boss_C",
-            "max_hp": 28000,
-            "attack_power": 1,
-            "Patrol_speed": 2.0,
-            "Chase_speed": 2.0,
+            "Enemy_Id": 102003,
+            "Enemy_Name": "Boss_C",
+            "Max_Hp": 28000,
+            "Attack_Power": 1,
+            "Patrol_Speed": 2.0,
+            "Chase_Speed": 2.0,
             "Detect_Range": 0.0,
-            "skill_set": [],
-            "Exskill_set": []
+            "Skill_Set": [],
+            "Exskill_Set": []
         }
     ]
 }

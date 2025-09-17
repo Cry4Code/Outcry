@@ -8,7 +8,7 @@ public class SoundData : IData
     public int ID => Sound_id;
 
     public int Sound_id;
-    public string name;
+    public string Sound_name;
     public bool Loop;
     public string Desc;
 }
