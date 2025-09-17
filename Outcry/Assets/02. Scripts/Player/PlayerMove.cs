@@ -57,7 +57,7 @@ public class PlayerMove : MonoBehaviour
     [HideInInspector] public Rigidbody2D rb;
     
     public SpriteRenderer SpriteRenderer;
-    private bool isDodged = false;
+    public bool isDodged = false;
     
     public PlayerController Controller { get; set; }
     

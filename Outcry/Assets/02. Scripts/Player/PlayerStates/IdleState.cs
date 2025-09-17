@@ -9,6 +9,7 @@ public class IdleState : GroundSubState
         // 애니메이션 설정 
         // player.SetAnimation("Idle");
         base.Enter(player);
+        
         player.PlayerMove.Stop();
         player.PlayerMove.ChangeGravity(false);
         player.PlayerAttack.ClearAttackCount();
@@ -29,6 +30,7 @@ public class IdleState : GroundSubState
         }
         else
         {
+            player.PlayerMove.Stop();
             return;
         }
         
@@ -40,6 +42,20 @@ public class IdleState : GroundSubState
             player.ChangeState<NormalAttackState>();
             return;
         }
+
+        if (player.Inputs.Player.SpecialAttack.triggered)
+        {
+            player.isLookLocked = false;
+            player.ChangeState<SpecialAttackState>();
+            return;
+        }
+        
+        if (player.Inputs.Player.Dodge.triggered)
+        {
+            player.ChangeState<DodgeState>();
+            return;
+        }
+        
         
         if (player.Inputs.Player.Jump.triggered 
             && player.PlayerMove.isGrounded 
@@ -64,6 +80,12 @@ public class IdleState : GroundSubState
     public override void LogicUpdate(PlayerController player) 
     {
         
+
+        if (player.PlayerMove.isDodged)
+        {
+            player.PlayerMove.Stop();
+            player.PlayerMove.isDodged = false;
+        }
         
         if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
     }

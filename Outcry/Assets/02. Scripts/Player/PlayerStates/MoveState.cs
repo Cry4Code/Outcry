@@ -43,6 +43,19 @@ public class MoveState : GroundSubState
             player.ChangeState<NormalAttackState>();
             return;
         }
+        
+        if (player.Inputs.Player.SpecialAttack.triggered)
+        {
+            player.isLookLocked = false;
+            player.ChangeState<SpecialAttackState>();
+            return;
+        }
+        
+        if (player.Inputs.Player.Dodge.triggered)
+        {
+            player.ChangeState<DodgeState>();
+            return;
+        }
 
 
     }

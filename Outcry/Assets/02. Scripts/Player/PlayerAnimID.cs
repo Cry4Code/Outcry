@@ -23,6 +23,8 @@ public static class PlayerAnimID
     public static readonly int WallJump = Animator.StringToHash("WallJump");
     public static readonly int NormalAttack = Animator.StringToHash("NormalAttack");
     public static readonly int DownAttack = Animator.StringToHash("DownAttack");
+    public static readonly int SpecialAttack = Animator.StringToHash("SpecialAttack");
+    public static readonly int Dodge = Animator.StringToHash("Dodge");
     
     // Int 파라미터
     public static readonly int NormalAttackCount = Animator.StringToHash("NormalAttackCount");

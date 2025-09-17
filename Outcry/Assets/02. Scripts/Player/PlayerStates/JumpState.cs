@@ -55,6 +55,18 @@ public class JumpState : AirSubState
             player.ChangeState<NormalJumpAttackState>();
             return;
         }
+        
+        if (player.Inputs.Player.SpecialAttack.triggered)
+        {
+            player.isLookLocked = false;
+            player.ChangeState<SpecialAttackState>();
+            return;
+        }
+        if (player.Inputs.Player.Dodge.triggered)
+        {
+            player.ChangeState<DodgeState>();
+            return;
+        }
     }
 
     public override void LogicUpdate(PlayerController player)

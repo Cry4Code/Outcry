@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
             { typeof(NormalAttackState), new NormalAttackState() },
             { typeof(NormalJumpAttackState), new NormalJumpAttackState()},
             { typeof(DownAttackState), new DownAttackState()},
+            { typeof(SpecialAttackState), new SpecialAttackState()},
+            { typeof(DodgeState), new DodgeState()},
         };
     }
 

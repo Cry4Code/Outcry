@@ -63,6 +63,13 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         isInvinsible = false;
     }
 
+    IEnumerator Invinsible(float time)
+    {
+        isInvinsible = true;
+        yield return new WaitForSecondsRealtime(time);
+        isInvinsible = false;
+    }
+
     public void Die()
     {
         Debug.Log("죽음!");
