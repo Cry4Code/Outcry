@@ -8,15 +8,6 @@ using static Paths;
 
 public class GameManager : Singleton<GameManager>
 {
-    // 테스트를 위해 GameManager 자신의 위치를 저장할 변수
-    private Transform myTransform;
-
-    private void Awake()
-    {
-        // TEST 자신의 Transform 저장
-        myTransform = this.transform;
-    }
-
     private async void Start()
     {
         await Init();
@@ -27,7 +18,6 @@ public class GameManager : Singleton<GameManager>
         // Firebase 초기화를 기다리는 코루틴 시작
         //StartCoroutine(WaitForFirebaseAndInitialize());
 
-
         AudioManager.Instance.PlayBGM("Title");
 
         StartCoroutine(ChangeBGMCoroutine());
@@ -35,7 +25,7 @@ public class GameManager : Singleton<GameManager>
         Task playerSFX = AudioManager.Instance.PreloadSFX("Fury", "Sword");
         await Task.WhenAll(playerSFX);
 
-        AudioManager.Instance.PlaySFX("Fury", Vector3.zero);
+        AudioManager.Instance.PlaySFX("Fury");
     }
 
     private void Update()
@@ -45,7 +35,7 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("스페이스바 입력 감지! SFX를 재생합니다.");
 
-            AudioManager.Instance.PlaySFX("Sword", myTransform.position);
+            AudioManager.Instance.PlaySFX("Sword");
         }
     }
 

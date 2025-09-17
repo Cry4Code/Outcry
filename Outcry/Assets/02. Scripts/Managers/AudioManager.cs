@@ -193,6 +193,12 @@ public class AudioManager : Singleton<AudioManager>
         bgmSource.Play();
     }
 
+    // SFX를 기본 위치(화면 중앙)에서 재생(예. UI 효과음)
+    public void PlaySFX(string name)
+    {
+        PlaySFX(name, Vector3.zero);
+    }
+
     // 지정된 이름의 SFX를 특정 위치에서 재생
     public async void PlaySFX(string name, Vector3 position)
     {
