@@ -29,18 +29,19 @@ public class BossMonsterAI : MonsterAIBase
         
         
         //각 스킬 노드 테스트용
-        MonsterSkillModel skillData = new MonsterSkillModel(1, "Stomp", 1, 0,0,0, 4f,10f, "설명");
         //TestSkillSequenceNode 대신에 본인이 제작한 SkillSequenceNode 상속 노드로 교체해서 테스트하세요.
-        MetalBladeSkillSequenceNode test1SkillSeuqnceNode = new MetalBladeSkillSequenceNode();
-        StompSkillSequenceNode test2SkillSeuqnceNode = new StompSkillSequenceNode();
-        UpperSlashSequenceNode test3SkillSeuqnceNode = new UpperSlashSequenceNode();
-        test1SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
-        test2SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
-        test3SkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
+        MetalBladeSkillSequenceNode metalBladeSkillSequenceNode = new MetalBladeSkillSequenceNode(103001);
+        metalBladeSkillSequenceNode.InitializeSkillSequenceNode(monster, target);
         
-        attackSelectorNode.AddChild(test1SkillSeuqnceNode);
-        attackSelectorNode.AddChild(test2SkillSeuqnceNode);
-        attackSelectorNode.AddChild(test3SkillSeuqnceNode);
+        StompSkillSequenceNode stompSkillSequenceNode = new StompSkillSequenceNode(103005);
+        stompSkillSequenceNode.InitializeSkillSequenceNode(monster, target);
+        
+        UpperSlashSequenceNode upperSlashSequenceNode = new UpperSlashSequenceNode(103006);
+        upperSlashSequenceNode.InitializeSkillSequenceNode(monster, target);
+        
+        attackSelectorNode.AddChild(metalBladeSkillSequenceNode);
+        attackSelectorNode.AddChild(stompSkillSequenceNode);
+        attackSelectorNode.AddChild(upperSlashSequenceNode);
             
         // //스킬은 보스몬스터로 형변환 후에 접근.
         // BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;

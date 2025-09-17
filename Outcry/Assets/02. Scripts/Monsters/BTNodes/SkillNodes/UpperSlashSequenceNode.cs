@@ -9,6 +9,11 @@ public class UpperSlashSequenceNode : SkillSequenceNode
     // MonsterParameter에 UpperSlash 추가 후 수정
     private int animationHash = AnimatorStrings.MonsterParameter.UpperSlash;  
     
+    public UpperSlashSequenceNode(int skillId) : base(skillId)
+    {
+        this.nodeName = "UpperSlashSequenceNode";
+    }
+
     protected override bool CanPerform()
     {
         bool result;

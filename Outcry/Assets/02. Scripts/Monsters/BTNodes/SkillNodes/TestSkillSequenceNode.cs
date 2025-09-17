@@ -10,6 +10,10 @@ public class TestSkillSequenceNode : SkillSequenceNode
     private float elapsedTime = 0f;
     private bool skillTriggered = false;
 
+    public TestSkillSequenceNode(int skillId) : base(skillId)
+    {
+    }
+
     protected override bool CanPerform()
     {
         elapsedTime += Time.deltaTime;

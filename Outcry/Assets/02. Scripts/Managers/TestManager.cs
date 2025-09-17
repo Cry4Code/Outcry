@@ -9,18 +9,17 @@ public class TestManager : MonoBehaviour
 
     [SerializeField] private GameObject monsterPrefab;
     
-    void Start()
+    void Awake()
     {
+        DataManager.Instance.ToString();
+        
         BossMonsterModel monsterData = new BossMonsterModel(
-                1, "BossMonster1", 100,
-                10f, 3f, 10f, new int[2] {1,2}, new int[2] {2,2});
+            1, "BossMonster1", 100,
+            10f, 3f, 10f, new int[2] {1,2}, new int[2] {2,2});
         GameObject monsterObj = GameObject.Instantiate(monsterPrefab);
         
         MonsterBase monster = monsterObj.GetComponent<MonsterBase>();
         monster.SetMonsterData(monsterData);
-
-
-        // TableDataHandler.LoadMonsterSkillData();
     }
 
 }

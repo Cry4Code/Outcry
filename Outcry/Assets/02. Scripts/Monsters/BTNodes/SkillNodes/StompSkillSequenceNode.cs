@@ -6,7 +6,12 @@ public class StompSkillSequenceNode : SkillSequenceNode
 {
     [SerializeField] private float elapsedTime = 0f;
     private bool skillTriggered = false;
-    
+
+    public StompSkillSequenceNode(int skillId) : base(skillId)
+    {
+        this.nodeName = "StompSkillSequenceNode";
+    }
+
     protected override bool CanPerform()
     {
         bool result;
