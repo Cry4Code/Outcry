@@ -6,7 +6,12 @@ public class StompSkillSequenceNode : SkillSequenceNode
 {
     [SerializeField] private float elapsedTime = 0f;
     private bool skillTriggered = false;
-    
+
+    public StompSkillSequenceNode(int skillId) : base(skillId)
+    {
+        this.nodeName = "StompSkillSequenceNode";
+    }
+
     protected override bool CanPerform()
     {
         bool result;
@@ -29,7 +34,6 @@ public class StompSkillSequenceNode : SkillSequenceNode
         if(elapsedTime >= skillData.cooldown)
         {
             isCooldownComplete = true;
-            elapsedTime = 0f;
         }
         else
         {
@@ -37,7 +41,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         }
 
         result = isInRange && isCooldownComplete;
-        Debug.Log($"Skill used? {result} : {elapsedTime} / {skillData.cooldown}");
+        Debug.Log($"Skill {skillData.skillName} used? {result} : {elapsedTime} / {skillData.cooldown}");
         return result;
     }
 
@@ -53,6 +57,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
 
         if (!skillTriggered)
         {
+            elapsedTime = 0f;
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Stomp);
             //todo. player damage 처리
             monster.AttackController.SetDamage(skillData.damage1);
@@ -61,6 +66,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         }
 
         elapsedTime += Time.deltaTime;
+        
         if (elapsedTime < 0.1f) //시작 직후는 무조건 Running
         {
             return NodeState.Running;
@@ -98,7 +104,6 @@ public class StompSkillSequenceNode : SkillSequenceNode
         else
         {
             Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
-            skillTriggered = false;
             return false;
         }
     }

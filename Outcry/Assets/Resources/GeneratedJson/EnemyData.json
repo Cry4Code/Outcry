@@ -7,7 +7,7 @@
             "Attack_Power": 1,
             "Patrol_Speed": 1.0,
             "Chase_Speed": 0.0,
-            "Detect_Range": 0.0,
+            "Detect_Range": 10.0,
             "Skill_Set": [],
             "Exskill_Set": []
         },
@@ -18,7 +18,7 @@
             "Attack_Power": 1,
             "Patrol_Speed": 0.5,
             "Chase_Speed": 0.0,
-            "Detect_Range": 0.0,
+            "Detect_Range": 10.0,
             "Skill_Set": [],
             "Exskill_Set": []
         },
@@ -29,7 +29,7 @@
             "Attack_Power": 1,
             "Patrol_Speed": 0.800000011920929,
             "Chase_Speed": 0.0,
-            "Detect_Range": 0.0,
+            "Detect_Range": 10.0,
             "Skill_Set": [],
             "Exskill_Set": []
         },
