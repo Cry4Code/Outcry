@@ -6,7 +6,6 @@ public class UpperSlashSequenceNode : SkillSequenceNode
 {
     [SerializeField] private float elapsedTime = 0f;
     private bool skillTriggered = false;
-    // MonsterParameter에 UpperSlash 추가 후 수정
     private int animationHash = AnimatorStrings.MonsterParameter.UpperSlash;  
     
     protected override bool CanPerform()
@@ -47,14 +46,19 @@ public class UpperSlashSequenceNode : SkillSequenceNode
     {
         NodeState state;
 
-        // 기본 피해 2칸
+        // 기본 피해 : HP 2칸 감소
         // 넉백 추가는 미정
-        // 플레이어 회피, 패링 가능
+
+        // ** 플레이어 대응 **
+        //      - 회피 사용 가능
+        //      - 패링 사용 가능
 
         if (!skillTriggered)
         {
             monster.Animator.SetTrigger(animationHash);
+
             // todo. 플레이어 데미지 처리
+            monster.AttackController.SetDamage(skillData.damage1);
 
             skillTriggered = true;
         }
@@ -66,7 +70,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
             return NodeState.Running;
         }
 
-        bool isSkillAnimationPlaying = IsSkillAnimationPlaying(AnimatorStrings.MonsterAnimation.UpperSlash); // MonsterAnimation에 UpperSlash 추가 후 수정
+        bool isSkillAnimationPlaying = IsSkillAnimationPlaying(AnimatorStrings.MonsterAnimation.UpperSlash);
         if (isSkillAnimationPlaying)
         {
             Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
@@ -75,6 +79,8 @@ public class UpperSlashSequenceNode : SkillSequenceNode
         else
         {
             Debug.Log($"Skill End: {skillData.skillName} (ID: {skillData.skillId})");
+
+            monster.AttackController.SetDamage(0);  // 데미지 초기화
             skillTriggered = false;
             state = NodeState.Success;
         }
