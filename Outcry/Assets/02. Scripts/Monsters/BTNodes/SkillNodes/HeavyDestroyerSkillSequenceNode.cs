@@ -11,7 +11,7 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
 
     // 상수
     private const float MOVE_SPEED = 50f;   // 이동 속도
-    private const float ATTACK_RANGE = 10f;  // 공격 범위(플레이어 감지)
+    private const float ATTACK_RANGE = 14f;  // 공격 범위(플레이어 감지)
 
     // 애니메이션 설정값
     private const float ANIMATION_FRAME_RATE = 20f; // 이 애니메이션 클립의 초당 프레임 수
@@ -88,6 +88,7 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
 
         // 애니메이션 경과 시간에 따른 이동 처리
         // 이동 시작 시간과 종료 시간 사이에만 이동 로직을 실행
+
         if (elapsedTime >= MOVE_START_TIME && elapsedTime < MOVE_END_TIME)
         {
             float direction = Mathf.Sign(monster.transform.localScale.x);
@@ -95,6 +96,15 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
             // direction 값에 따라 왼쪽 또는 오른쪽으로 움직임
             monster.transform.Translate(Vector3.right * direction * MOVE_SPEED * Time.deltaTime);
         }
+
+        if (elapsedTime >= MOVE_START_TIME && elapsedTime < MOVE_END_TIME)
+        {
+            float direction = Mathf.Sign(monster.transform.localScale.x);
+            // Vector3.right를 사용하여 월드 좌표계의 오른쪽 방향을 기준으로 이동
+            // direction 값에 따라 왼쪽 또는 오른쪽으로 움직임
+            monster.transform.Translate(Vector3.right * direction * MOVE_SPEED * Time.deltaTime);
+        }
+
 
         // 스킬 종료 처리
         // 총 애니메이션 길이만큼 시간이 지났다면 스킬을 종료
