@@ -37,6 +37,11 @@ public class MoveToTargetActionNode : ActionNode
         }
         else
         {
+            if (me.position.x < target.position.x)
+                me.localScale = new Vector3(1, me.localScale.y, me.localScale.z);
+            else
+                me.localScale = new Vector3(-1, me.localScale.y, me.localScale.z);
+            
             me.position = Vector2.MoveTowards(
                 me.position,
                 targetPosition,

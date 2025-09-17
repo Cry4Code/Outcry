@@ -8,7 +8,7 @@
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 0.0,
-            "Range": 2.0,
+            "Range": 3.0,
             "Desc": ""
         },
         {
@@ -19,7 +19,7 @@
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 10.0,
-            "Range": 1.5,
+            "Range": 2.0,
             "Desc": ""
         },
         {
@@ -30,8 +30,8 @@
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 0.0,
-            "Range": 10.0,
-            "Desc": "10m 이상일때"
+            "Range": 14.0,
+            "Desc": "14f 이상일때"
         },
         {
             "Skill_id": 103003,
@@ -74,7 +74,7 @@
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 10.0,
-            "Range": 2.0,
+            "Range": 3.0,
             "Desc": ""
         },
         {
@@ -85,7 +85,7 @@
             "Damage3": 1,
             "HealAmount": 0,
             "Cooldown": 10.0,
-            "Range": 2.0,
+            "Range": 3.0,
             "Desc": ""
         },
         {
@@ -112,6 +112,72 @@
         },
         {
             "Skill_id": 103010,
+            "Skill_name": "",
+            "Damage": 0,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 0.0,
+            "Desc": ""
+        },
+        {
+            "Skill_id": 103101,
+            "Skill_name": "",
+            "Damage": 0,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 0.0,
+            "Desc": ""
+        },
+        {
+            "Skill_id": 103102,
+            "Skill_name": "",
+            "Damage": 0,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 0.0,
+            "Desc": ""
+        },
+        {
+            "Skill_id": 103201,
+            "Skill_name": "",
+            "Damage": 0,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 0.0,
+            "Desc": ""
+        },
+        {
+            "Skill_id": 103202,
+            "Skill_name": "",
+            "Damage": 0,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 0.0,
+            "Desc": ""
+        },
+        {
+            "Skill_id": 103301,
+            "Skill_name": "",
+            "Damage": 0,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 0.0,
+            "Desc": ""
+        },
+        {
+            "Skill_id": 103302,
             "Skill_name": "",
             "Damage": 0,
             "Damage2": 0,
