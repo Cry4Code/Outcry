@@ -27,19 +27,22 @@ public class BossMonsterAI : MonsterAIBase
         
         rootNode.AddChild(attackSequenceNode);
         
-        // #region ForDebug
-        //
-        // attackSelectorNode.AddChild(new ActionNode(() =>
-        // {
-        //     Debug.Log("BossMonster Attack!");
-        //     monster.Animator.SetTrigger("Attack");
-        //     IsAttacking = true;
-        //     return NodeState.Success;
-        // })); //공격 액션 노드 임시
-        //
-        // #endregion
         
-        
+        //각 스킬 노드 테스트용
+        //TestSkillSequenceNode 대신에 본인이 제작한 SkillSequenceNode 상속 노드로 교체해서 테스트하세요.
+        // MetalBladeSkillSequenceNode metalBladeSkillSequenceNode = new MetalBladeSkillSequenceNode(103001);
+        // metalBladeSkillSequenceNode.InitializeSkillSequenceNode(monster, target);
+        //
+        // StompSkillSequenceNode stompSkillSequenceNode = new StompSkillSequenceNode(103005);
+        // stompSkillSequenceNode.InitializeSkillSequenceNode(monster, target);
+        //
+        // UpperSlashSequenceNode upperSlashSequenceNode = new UpperSlashSequenceNode(103006);
+        // upperSlashSequenceNode.InitializeSkillSequenceNode(monster, target);
+        //
+        // attackSelectorNode.AddChild(metalBladeSkillSequenceNode);
+        // attackSelectorNode.AddChild(stompSkillSequenceNode);
+        // attackSelectorNode.AddChild(upperSlashSequenceNode);
+            
         //스킬은 보스몬스터로 형변환 후에 접근.
         BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
         if (monsterModel == null)
@@ -52,36 +55,37 @@ public class BossMonsterAI : MonsterAIBase
         specialSkillSelectorNode.nodeName = "SpecialSkillSelectorNode"; //디버깅용 노드 이름 설정.
         foreach (int id in monsterModel.specialSkillIds )
         {
-            SkillSequenceNode skillNode = SkillNodeDatabase.GetSkillNode(id);
-            MonsterSkillModel skillData = Temp_DataBase.GetMonsterSkillById(id);
+            DataManager.Instance.SkillSequenceNodeDataList.GetSkillSequenceNode(id, out SkillSequenceNode skillNode);
+            DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(id, out MonsterSkillModel skillData);
             if (skillNode != null)
             {
-                skillNode.InitializeSkillSequenceNode(monster, target, skillData);
-                skillNode.nodeName = "SkillNode_" + skillData.skillName; //디버깅용 노드 이름 설정.
+                skillNode.InitializeSkillSequenceNode(monster, target);
+                skillNode.nodeName = "S_SkillNode_" + skillData.skillName; //디버깅용 노드 이름 설정.
                 specialSkillSelectorNode.AddChild(skillNode);
             }
         }
-        specialSkillSelectorNode.ShuffleChildren();
-        
         attackSelectorNode.AddChild(specialSkillSelectorNode);
-        //
-        // //일반 스킬 셀럭터 노드 자식들 생성.
-        // SelectorNode commonSkillSelectorNode = new SelectorNode();
-        // foreach (int id in monsterModel.commonSkillIds)
-        // {
-        //     SkillNode skillNode = BehaviorTreeNodeData.skillNodes.Find(x => x.skillId == id);
-        //     if (skillNode != null)
-        //     {
-        //         commonSkillSelectorNode.AddChild(skillNode.skillNode);
-        //     }
-        // }
-        // attackSelectorNode.AddChild(commonSkillSelectorNode);
+        
+        //일반 스킬 셀럭터 노드 자식들 생성.
+        SkillSelectorNode commonSkillSelectorNode = new SkillSelectorNode();
+        foreach (int id in monsterModel.commonSkillIds)
+        {
+            DataManager.Instance.SkillSequenceNodeDataList.GetSkillSequenceNode(id, out SkillSequenceNode skillNode);
+            DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(id, out MonsterSkillModel skillData);
+            if (skillNode != null)
+            {
+                skillNode.InitializeSkillSequenceNode(monster, target);
+                skillNode.nodeName = "C_SkillNode_" + skillData.skillName; //디버깅용 노드 이름 설정.
+                specialSkillSelectorNode.AddChild(skillNode);
+            }
+        }
+        attackSelectorNode.AddChild(commonSkillSelectorNode);
         
         //ChaseSelector
         SelectorNode chaseSelectorNode = new SelectorNode();
         //todo. 추후 DashSequenceNode및, ActionNode 추가할 것.
         ChaseActionNode chaseActionNode = new ChaseActionNode(
-            monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.attackRange,
+            monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.detectRange,
             monster.Animator);
         chaseSelectorNode.AddChild(chaseActionNode);
         
@@ -91,8 +95,6 @@ public class BossMonsterAI : MonsterAIBase
 
         rootNode.nodeName = "RootNode";
         attackSequenceNode.nodeName = "AttackSequenceNode";
-        // inverterNode.nodeName = "InverterNode";
-        // isAttackingConditionNode.nodeName = "IsAttackingConditionNode";
         canAttackConditionNode.nodeName = "CanAttackConditionNode";
         attackSelectorNode.nodeName = "AttackSelectorNode";
         waitActionNode.nodeName = "WaitActionNode";

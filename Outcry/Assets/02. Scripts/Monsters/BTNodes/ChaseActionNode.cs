@@ -19,11 +19,11 @@ public class ChaseActionNode : MoveToTargetActionNode
         //todo. Animation 추가되면 수정하기.
         if (state == NodeState.Running)
         {
-            // animator.SetBool("isRunning", true);
+            animator.SetBool(AnimatorStrings.MonsterParameter.Running, true);
         }
         else
         {
-            // animator.SetBool("isRunning", false);
+            animator.SetBool(AnimatorStrings.MonsterParameter.Running, false);
         }
         return state;
     }

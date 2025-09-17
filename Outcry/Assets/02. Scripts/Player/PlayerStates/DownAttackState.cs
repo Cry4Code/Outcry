@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DownAttackState : IPlayerState
+public class DownAttackState : DownAttackSubState
 {
-    public void Enter(PlayerController player)
+    public override void Enter(PlayerController player)
     {
+        base.Enter(player);
         player.PlayerAnimator.ClearBool();
         player.isLookLocked = true; 
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.DownAttack);
@@ -13,23 +14,33 @@ public class DownAttackState : IPlayerState
         player.PlayerMove.rb.gravityScale = 3.5f;
     }
 
-    public void HandleInput(PlayerController player)
+    public override void HandleInput(PlayerController player)
     {
-        
+        if (player.Inputs.Player.SpecialAttack.triggered)
+        {
+            player.isLookLocked = false;
+            player.ChangeState<SpecialAttackState>();
+            return;
+        }
+        if (player.Inputs.Player.Dodge.triggered)
+        {
+            player.ChangeState<DodgeState>();
+            return;
+        }
     }
 
-    public void LogicUpdate(PlayerController player)
+    public override void LogicUpdate(PlayerController player)
     {
         if (player.PlayerMove.isGrounded)
         {
             player.ChangeState<IdleState>();
             return;
         }
-            
     }
 
-    public void Exit(PlayerController player)
+    public override void Exit(PlayerController player)
     {
+        base.Exit(player);
         player.PlayerMove.rb.gravityScale = 1f;
     }
 }
