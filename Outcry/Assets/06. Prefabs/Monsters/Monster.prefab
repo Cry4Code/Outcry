@@ -130,7 +130,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2491108663814049582}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -222,7 +222,7 @@ MonoBehaviour:
     monsterName: 
     health: 0
     chaseSpeed: 0
-    attackRange: 0
+    detectRange: 0
     attackCooldown: 0
   hitbox: {fileID: 3680998514601764723}
   specialSkillDatas: []
