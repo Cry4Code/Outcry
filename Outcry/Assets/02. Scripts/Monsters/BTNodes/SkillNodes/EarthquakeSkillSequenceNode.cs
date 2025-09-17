@@ -92,9 +92,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         if (!skillTriggered)
         {
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Earthquake);
-
-            // 플레이어 데미지 주기
-            monster.AttackController.SetDamage(skillData.damage1);  
+            monster.AttackController.SetDamage(skillData.damage1);  // 플레이어 데미지 주기
 
             skillTriggered = true;
         }
@@ -128,7 +126,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
             //todo. 돌 프리팹 생성
             // 위치를 어떻게 잡?지?
             Object.Instantiate(stone, new Vector3(x1, y1, 0), Quaternion.identity);
-        }                
+        }      
 
         if (elapsedTime == INSTANTIATE_STONE2_TIME)
         {
