@@ -2,7 +2,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Slider))]
 public class VolumeSlider : MonoBehaviour
 {
     [SerializeField] private EVolumeType volumeType;
@@ -20,9 +19,10 @@ public class VolumeSlider : MonoBehaviour
         {
             label.text = volumeType.ToString();
         }
+    }
 
-        // AudioManager의 볼륨 설정 변경 이벤트 구독
-        // 이벤트가 발생하면 SyncSliderWithVolume 함수 호출
+    private void OnEnable()
+    {
         AudioManager.OnVolumeSettingsChanged += SyncSliderWithVolume;
 
         if (slider != null)
@@ -31,11 +31,6 @@ public class VolumeSlider : MonoBehaviour
             // UI가 활성화될 때 현재 값으로 한 번 동기화
             SyncSliderWithVolume();
         }
-    }
-
-    private void OnEnable()
-    {
-
     }
 
     private void OnDisable()
@@ -70,6 +65,9 @@ public class VolumeSlider : MonoBehaviour
         {
             return;
         }
+
+        // 이 로그가 콘솔에 찍히는지 확인 (슬라이더를 움직일 때마다)
+        Debug.Log($"[VolumeSlider] {volumeType} Slider Value Changed: {value}");
 
         AudioManager.Instance.SetVolume(volumeType, value);
     }

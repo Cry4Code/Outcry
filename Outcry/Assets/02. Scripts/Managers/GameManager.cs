@@ -10,7 +10,7 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         // Firebase 초기화를 기다리는 코루틴 시작
-        StartCoroutine(WaitForFirebaseAndInitialize());
+        //StartCoroutine(WaitForFirebaseAndInitialize());
 
 
         AudioManager.Instance.PlayBGM("Title");

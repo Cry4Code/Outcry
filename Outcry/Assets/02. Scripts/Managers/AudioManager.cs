@@ -48,9 +48,9 @@ public class AudioManager : Singleton<AudioManager>
     public static event Action<EVolumeType, bool> OnMuteStateChanged;
 
     // 믹서 파라미터 이름
-    private const string MASTER_VOLUME_PARAM = "Master_Volume";
-    private const string BGM_VOLUME_PARAM = "BGM_Volume";
-    private const string SFX_VOLUME_PARAM = "SFX_Volume";
+    private const string MASTER_VOLUME_PARAM = "Master";
+    private const string BGM_VOLUME_PARAM = "BGM";
+    private const string SFX_VOLUME_PARAM = "SFX";
 
     private void Awake()
     {
@@ -60,9 +60,10 @@ public class AudioManager : Singleton<AudioManager>
 
     private void Start()
     {
-        // TODO: 초기 볼륨 설정(파이어베이스에서 불러오기?)
         // 볼륨 기본값으로 초기화
         ResetToDefaultState();
+
+        // TODO: 초기 볼륨 설정(파이어베이스에서 불러오기?)
     }
 
     #region 초기화
@@ -205,6 +206,9 @@ public class AudioManager : Singleton<AudioManager>
         // 0~1 사이의 선형 볼륨 값을 로그 스케일(dB)로 변환(UI 값을 오디오 엔진 값으로 변환)
         float volumeDB = (volume <= 0.0001f) ? -80f : Mathf.Log10(volume) * 20f;
 
+        // 이 로그가 콘솔에 찍히는지 param과 volumeDB 값이 정상적인지 확인
+        Debug.Log($"[AudioManager] Setting Mixer Param: '{param}' to {volumeDB} dB");
+
         // 변환된 값으로 실제 오디오 믹서의 볼륨 조절
         gameAudioMixer.SetFloat(param, volumeDB);
     }
@@ -251,8 +255,12 @@ public class AudioManager : Singleton<AudioManager>
         switch (type)
         {
             case EVolumeType.Master:
-                if (isMasterMuted == isMute) return; // 상태 변경이 없으면 종료
+                if (isMasterMuted == isMute)
+                {
+                    return; // 상태 변경이 없으면 종료
+                }
                 isMasterMuted = isMute;
+
                 if (isMute)
                 {
                     gameAudioMixer.GetFloat(param, out lastMasterVolume); // 현재 볼륨 저장
@@ -263,8 +271,13 @@ public class AudioManager : Singleton<AudioManager>
                     gameAudioMixer.SetFloat(param, lastMasterVolume); // 저장된 볼륨 복원
                 }
                 break;
+
             case EVolumeType.BGM:
-                if (isBgmMuted == isMute) return;
+                if (isBgmMuted == isMute)
+                {
+                    return;
+                }
+
                 isBgmMuted = isMute;
                 if (isMute)
                 {
@@ -276,8 +289,13 @@ public class AudioManager : Singleton<AudioManager>
                     gameAudioMixer.SetFloat(param, lastBgmVolume);
                 }
                 break;
+
             case EVolumeType.SFX:
-                if (isSfxMuted == isMute) return;
+                if (isSfxMuted == isMute)
+                {
+                    return;
+                }
+
                 isSfxMuted = isMute;
                 if (isMute)
                 {

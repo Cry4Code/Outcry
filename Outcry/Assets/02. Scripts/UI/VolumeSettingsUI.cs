@@ -17,14 +17,6 @@ public class VolumeSettingsUI : MonoBehaviour
         }
     }
 
-    public void UpdateSliders()
-    {
-        foreach (VolumeSlider slider in volumeSliders)
-        {
-            slider.SyncSliderWithVolume();
-        }
-    }
-
     private void OnExitButtonClicked()
     {
         gameObject.SetActive(false); // test
