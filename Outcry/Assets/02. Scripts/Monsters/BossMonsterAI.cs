@@ -29,11 +29,12 @@ public class BossMonsterAI : MonsterAIBase
         
         
         //각 스킬 노드 테스트용
-        MonsterSkillModel skillData = new MonsterSkillModel(2, "UpperSlash", 2, 2f, "설명");
+        MonsterSkillModel skillData = new MonsterSkillModel(3, "ThreePoint", 1, 2f, "설명");
         //TestSkillSequenceNode 대신에 본인이 제작한 SkillSequenceNode 상속 노드로 교체해서 테스트하세요.
         //MetalBladeSkillSequenceNode testSkillSeuqnceNode = new MetalBladeSkillSequenceNode();
         //StompSkillSequenceNode testSkillSeuqnceNode = new StompSkillSequenceNode();
-        UpperSlashSequenceNode testSkillSeuqnceNode = new UpperSlashSequenceNode();
+        //UpperSlashSequenceNode testSkillSeuqnceNode = new UpperSlashSequenceNode();
+        ThreePointSkillSequenceNode testSkillSeuqnceNode = new ThreePointSkillSequenceNode();
         testSkillSeuqnceNode.InitializeSkillSequenceNode(monster, target, skillData);
         
         attackSelectorNode.AddChild(testSkillSeuqnceNode);

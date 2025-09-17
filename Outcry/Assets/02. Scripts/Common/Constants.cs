@@ -22,6 +22,8 @@ public static class AnimatorStrings
         public const string Stomp = "Stomp";
         public static readonly int MetalBladeHash = Animator.StringToHash("MetalBlade");
         public static readonly int UpperSlash = Animator.StringToHash("UpperSlash");
+        public static readonly int ThreePoint = Animator.StringToHash("ThreePoint");
+
     }
 
     public static class MonsterAnimation
