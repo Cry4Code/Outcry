@@ -26,9 +26,14 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
     private float x2 = 0f;
     private float y2 = 0f;
 
-    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target, MonsterSkillModel skillData)
+    public EarthquakeSkillSequenceNode(int skillId) : base(skillId)
     {
-        base.InitializeSkillSequenceNode(monster, target, skillData);
+
+    }
+
+    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target)
+    {
+        base.InitializeSkillSequenceNode(monster, target);
         this.nodeName = "EarthquakeSkillSequenceNode";
 
         // 투사체 로드
