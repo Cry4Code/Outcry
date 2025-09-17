@@ -4,8 +4,36 @@ using UnityEngine;
 
 public class EarthquakeSkillSequenceNode : SkillSequenceNode
 {
+    // 경과 시간, 쿨타임 등 계산용
     [SerializeField] private float elapsedTime = 0f;
+
+    // 스킬 작동 트리거
     private bool skillTriggered = false;
+
+    // 애니메이션 클립 초당 프레임 수
+    private const float ANIMATION_FRAME_RATE = 20f;
+    // 투사체 생성 프레임
+    private const float INSTANTIATE_STONE1_TIME = (1.0f / ANIMATION_FRAME_RATE) * 20;   // 20프레임이 지난 시점
+    private const float INSTANTIATE_STONE2_TIME = (1.0f / ANIMATION_FRAME_RATE) * 28;   // 28프레임이 지난 시점
+
+    // 투사체 오브젝트
+    private GameObject stone;
+
+    // 투사체 좌표?
+    private float x1 = 0f;
+    private float y1 = 0f;
+
+    private float x2 = 0f;
+    private float y2 = 0f;
+
+    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target, MonsterSkillModel skillData)
+    {
+        base.InitializeSkillSequenceNode(monster, target, skillData);
+        this.nodeName = "EarthquakeSkillSequenceNode";
+
+        // 투사체 로드
+        stone = ResourceManager.Instance.LoadAsset<GameObject>("Stone", Paths.Prefabs.Projectile);
+    }
 
     protected override bool CanPerform()
     {
@@ -44,19 +72,24 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
     protected override NodeState SkillAction()
     {
         NodeState state;
-        //기본 피해 : HP 2칸 감소
-        //추가 효과 : 오브젝트(Stone) 생성 
-        //          - 각 오브젝트는 HP 1칸 감소
 
-        // **플레이어 대응**
-        //      - 회피 사용 가능
-        //      - 패링 사용 가능
+        /*
+        기본 피해 : HP 2칸 감소
+        추가 효과 : 오브젝트(Stone) 생성 
+                  - 각 오브젝트는 HP 1칸 감소
 
+        **플레이어 대응**
+            - 회피 사용 가능
+            - 패링 사용 가능
+        */
 
+        // 스킬 트리거 켜기
         if (!skillTriggered)
-        {            
-            monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Earthquake);            
-            monster.AttackController.SetDamage(skillData.damage1);  // 플레이어 데미지 주기
+        {
+            monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Earthquake);
+
+            // 플레이어 데미지 주기
+            monster.AttackController.SetDamage(skillData.damage1);  
 
             skillTriggered = true;
         }
@@ -84,11 +117,24 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
             state = NodeState.Success;
         }
 
+        // 애니메이션의 동작 시간에 투사체(Stone) 생성 로직 실행
+        if (elapsedTime == INSTANTIATE_STONE1_TIME)
+        {
+            //todo. 돌 프리팹 생성
+            // 위치를 어떻게 잡?지?
+            Object.Instantiate(stone, new Vector3(x1, y1, 0), Quaternion.identity);
+        }                
+
+        if (elapsedTime == INSTANTIATE_STONE2_TIME)
+        {
+            Object.Instantiate(stone, new Vector3(x2, y2, 0), Quaternion.identity);
+        }
+
         return state;
     }
-
+    
     // 애니메이션 실행 중 확인용 함수
-    //todo. 부모 클래스에 넣어서 상속? Stomp 내 주석 확인
+    //todo. 부모 클래스에 넣어서 상속할 수도 있음. Stomp 내 주석 확인
     private bool IsSkillAnimationPlaying(string animationName)
     {
         bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);

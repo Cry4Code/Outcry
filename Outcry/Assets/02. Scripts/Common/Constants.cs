@@ -4,7 +4,11 @@ using UnityEngine;
 
 public static class Paths
 {
-    public static class Prefabs { public const string UI = "Prefabs/UI/";}
+    public static class Prefabs 
+    {
+        public const string UI = "Prefabs/UI/";
+        public const string Projectile = "Prefabs/Projectile/";
+    }
 }
 
 public static class EventBusKey
