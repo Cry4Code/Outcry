@@ -16,10 +16,21 @@ public class DodgeState : IPlayerState
     
     public void Enter(PlayerController player)
     {
+        var moveInputs = player.Inputs.Player.Move.ReadValue<Vector2>();
         player.isLookLocked = false;
         player.PlayerMove.rb.velocity = Vector2.zero;
-        dodgeDirection = (player.PlayerMove.keyboardLeft ? Vector2.left : Vector2.right) * dodgePower;
-        player.PlayerMove.ForceLook(player.PlayerMove.keyboardLeft);
+        if (moveInputs.x != 0)
+        {
+            // 입력이 있을 때 그 쪽 보게
+            dodgeDirection = (moveInputs.x < 0 ? Vector2.left : Vector2.right) * dodgePower;
+            player.PlayerMove.ForceLook(moveInputs.x < 0);
+        }
+        else
+        {
+            // 입력이 없으면 그냥 보던 쪽으로 가게
+            dodgeDirection = (player.transform.localScale.x < 0 ? Vector2.left : Vector2.right) * dodgePower;
+            player.PlayerMove.ForceLook(player.transform.localScale.x < 0);
+        }
         player.PlayerMove.isDodged = true;
         player.PlayerAnimator.ClearTrigger();
         player.PlayerAnimator.ClearInt();

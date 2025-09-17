@@ -9,7 +9,6 @@ public class WallHoldState : AirSubState
         base.Enter(player);
         player.PlayerMove.ForceLook(!player.PlayerMove.lastWallIsLeft);
         player.PlayerAttack.ClearAttackCount();
-        player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.WallHold);
         player.isLookLocked = true;
     }
 
@@ -75,6 +74,11 @@ public class WallHoldState : AirSubState
 
     public override void LogicUpdate(PlayerController player)
     {
+        if (player.PlayerMove.rb.velocity.y < 0)
+        {
+            player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.WallHold);
+        }
+        
         if (player.PlayerMove.keyboardLeft != player.PlayerMove.lastWallIsLeft)
         {
             player.PlayerMove.Move();
