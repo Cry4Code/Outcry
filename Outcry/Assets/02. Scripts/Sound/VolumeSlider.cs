@@ -66,9 +66,6 @@ public class VolumeSlider : MonoBehaviour
             return;
         }
 
-        // 이 로그가 콘솔에 찍히는지 확인 (슬라이더를 움직일 때마다)
-        Debug.Log($"[VolumeSlider] {volumeType} Slider Value Changed: {value}");
-
         AudioManager.Instance.SetVolume(volumeType, value);
     }
 }

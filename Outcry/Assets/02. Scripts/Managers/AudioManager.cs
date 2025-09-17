@@ -229,9 +229,6 @@ public class AudioManager : Singleton<AudioManager>
         // 0~1 사이의 선형 볼륨 값을 로그 스케일(dB)로 변환(UI 값을 오디오 엔진 값으로 변환)
         float volumeDB = (volume <= 0.0001f) ? -80f : Mathf.Log10(volume) * 20f;
 
-        // 이 로그가 콘솔에 찍히는지 param과 volumeDB 값이 정상적인지 확인
-        Debug.Log($"[AudioManager] Setting Mixer Param: '{param}' to {volumeDB} dB");
-
         // 변환된 값으로 실제 오디오 믹서의 볼륨 조절
         gameAudioMixer.SetFloat(param, volumeDB);
     }
