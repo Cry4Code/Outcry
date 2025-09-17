@@ -177,6 +177,7 @@ public class PlayerMove : MonoBehaviour
         {
             if (!isGrounded && inAirTime < AirMoveThresholdTime) return;
             Controller.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Move);
+            ForceLook(moveInput.x < 0);
         }
     }
 
