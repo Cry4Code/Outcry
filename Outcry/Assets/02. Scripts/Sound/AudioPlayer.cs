@@ -27,6 +27,7 @@ public class AudioPlayer : MonoBehaviour
     private IEnumerator ReturnToPoolWhenFinished()
     {
         yield return new WaitWhile(() => audioSource.isPlaying);
+
         AudioManager.Instance.ReturnAudioPlayerToPool(this);
     }
 }

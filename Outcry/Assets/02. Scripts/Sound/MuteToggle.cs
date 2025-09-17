@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class MuteToggle : MonoBehaviour
@@ -51,6 +52,9 @@ public class MuteToggle : MonoBehaviour
     private void OnClick()
     {
         AudioManager.Instance.ToggleMute(volumeType);
+
+        // 버튼을 클릭한 후 이 버튼의 선택된 상태(포커스)를 즉시 해제
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     // AudioManager의 음소거 상태가 변경되었다는 이벤트가 왔을 때 호출됨

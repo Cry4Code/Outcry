@@ -23,14 +23,15 @@ public class AudioManager : Singleton<AudioManager>
 
     [Header("Object Pooling")]
     [SerializeField] private AudioPlayer audioPlayerPrefab;
-    [SerializeField] private int poolSize = 10;
+    [Tooltip("풀이 가득 찼을 때 추가로 생성할 오디오 플레이어의 수")]
+    [SerializeField] private int poolExpansionAmount = 10;
 
     [Header("Sound Container")]
     [Tooltip("게임에서 사용할 모든 사운드 정보를 담은 ScriptableObject")]
     [SerializeField] private SoundContainer[] soundContainers;
 
-    private Queue<AudioPlayer> audioPlayerPool = new Queue<AudioPlayer>();
-    private Dictionary<string, Sound> soundDict = new Dictionary<string, Sound>();
+    private Queue<AudioPlayer> audioPlayerPool;
+    private Dictionary<string, Sound> soundDict;
     private Coroutine duckingCoroutine;
 
     // 음소거 상태 및 이전 볼륨 저장을 위한 변수
@@ -70,12 +71,9 @@ public class AudioManager : Singleton<AudioManager>
     // 지정된 크기만큼 AudioPlayer 오브젝트를 미리 생성하여 풀에 저장
     private void InitializePool()
     {
-        for (int i = 0; i < poolSize; i++)
-        {
-            AudioPlayer newPlayer = Instantiate(audioPlayerPrefab, transform);
-            newPlayer.gameObject.SetActive(false);
-            audioPlayerPool.Enqueue(newPlayer);
-        }
+        audioPlayerPool = new Queue<AudioPlayer>();
+
+        ExpandPool(poolExpansionAmount);
     }
 
     // SoundContainer의 사운드들을 딕셔너리에 등록
@@ -86,6 +84,8 @@ public class AudioManager : Singleton<AudioManager>
             Debug.LogError("SoundContainer array is not assigned or empty.");
             return;
         }
+
+        soundDict = new Dictionary<string, Sound>();
 
         foreach (SoundContainer container in soundContainers)
         {
@@ -123,6 +123,25 @@ public class AudioManager : Singleton<AudioManager>
     #endregion
 
     #region 오브젝트 풀링
+    // 지정된 개수만큼 오디오 플레이어를 생성하여 풀에 추가
+    private void ExpandPool(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            AudioPlayer newPlayer = Instantiate(audioPlayerPrefab, transform);
+
+            AudioSource audioSource = newPlayer.GetComponent<AudioSource>();
+            if (audioSource != null)
+            {
+                audioSource.playOnAwake = false;
+                audioSource.outputAudioMixerGroup = sfxMixerGroup;
+            }
+
+            newPlayer.gameObject.SetActive(false);
+            audioPlayerPool.Enqueue(newPlayer);
+        }
+    }
+
     private AudioPlayer GetAudioPlayerFromPool()
     {
         if (audioPlayerPool.Count > 0)
@@ -133,8 +152,11 @@ public class AudioManager : Singleton<AudioManager>
         }
         else
         {
-            AudioPlayer newPlayer = Instantiate(audioPlayerPrefab, transform);
-            newPlayer.GetComponent<AudioSource>().outputAudioMixerGroup = sfxMixerGroup;
+            ExpandPool(poolExpansionAmount);
+
+            AudioPlayer newPlayer = audioPlayerPool.Dequeue();
+            newPlayer.gameObject.SetActive(true);
+
             return newPlayer;
         }
     }
@@ -166,6 +188,7 @@ public class AudioManager : Singleton<AudioManager>
         bgmSource.volume = sound.volume;
         bgmSource.pitch = sound.pitch;
         bgmSource.loop = loop;
+        bgmSource.playOnAwake = false;
         bgmSource.outputAudioMixerGroup = bgmMixerGroup;
         bgmSource.Play();
     }
@@ -369,7 +392,7 @@ public class AudioManager : Singleton<AudioManager>
 
     #region 사운드 에셋 관리
     // 지정된 이름의 사운드 클립들을 미리 로드하여 캐싱 (예: 로딩 화면에서 호출)
-    public async Task LoadSFX(params string[] names)
+    public async Task PreloadSFX(params string[] names)
     {
         List<Task> loadTasks = new List<Task>();
         foreach (string name in names)

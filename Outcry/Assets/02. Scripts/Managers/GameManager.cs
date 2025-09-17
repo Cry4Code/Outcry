@@ -2,12 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Paths;
 
 public class GameManager : Singleton<GameManager>
 {
-    private void Start()
+    // 테스트를 위해 GameManager 자신의 위치를 저장할 변수
+    private Transform myTransform;
+
+    private void Awake()
+    {
+        // TEST 자신의 Transform 저장
+        myTransform = this.transform;
+    }
+
+    private async void Start()
+    {
+        await Init();
+    }
+
+    private async Task Init()
     {
         // Firebase 초기화를 기다리는 코루틴 시작
         //StartCoroutine(WaitForFirebaseAndInitialize());
@@ -16,6 +31,22 @@ public class GameManager : Singleton<GameManager>
         AudioManager.Instance.PlayBGM("Title");
 
         StartCoroutine(ChangeBGMCoroutine());
+
+        Task playerSFX = AudioManager.Instance.PreloadSFX("Fury", "Sword");
+        await Task.WhenAll(playerSFX);
+
+        AudioManager.Instance.PlaySFX("Fury", Vector3.zero);
+    }
+
+    private void Update()
+    {
+        // 스페이스바를 누를 때마다
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("스페이스바 입력 감지! SFX를 재생합니다.");
+
+            AudioManager.Instance.PlaySFX("Sword", myTransform.position);
+        }
     }
 
     private IEnumerator ChangeBGMCoroutine()

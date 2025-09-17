@@ -2602,6 +2602,7 @@ MonoBehaviour:
   poolSize: 10
   soundContainers:
   - {fileID: 11400000, guid: 2903a84b7a69f2245b3e38bfe57beb42, type: 2}
+  - {fileID: 11400000, guid: 503101da6d46a2147b6132bed916f072, type: 2}
 --- !u!4 &1520982630
 Transform:
   m_ObjectHideFlags: 0
