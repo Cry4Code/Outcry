@@ -16,6 +16,9 @@ public class DataTableManager : Singleton<DataTableManager>
     private Dictionary<Type, object> _collectionData = new Dictionary<Type, object>();
     private const string DATA_PATH = "GeneratedJson";
 
+    public Dictionary<Type, object> SingleData => _singleData;
+    public Dictionary<Type, object> CollectionData => _collectionData;
+    
     // 단일 객체 데이터 로드 (예: PlayerData)
     public void LoadSingleData<T>() where T : class
     {

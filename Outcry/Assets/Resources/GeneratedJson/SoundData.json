@@ -1,0 +1,28 @@
+﻿{
+    "sounddata": [
+        {
+            "Sound_id": 104000,
+            "name": "",
+            "Loop": true,
+            "Desc": "배경음"
+        },
+        {
+            "Sound_id": 104001,
+            "name": "Sword_Fix",
+            "Loop": false,
+            "Desc": "평타1"
+        },
+        {
+            "Sound_id": 104002,
+            "name": "Parry_Fix",
+            "Loop": false,
+            "Desc": "패링"
+        },
+        {
+            "Sound_id": 104003,
+            "name": "Fury_Fix",
+            "Loop": false,
+            "Desc": "섬단"
+        }
+    ]
+}

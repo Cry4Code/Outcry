@@ -1,0 +1,125 @@
+﻿{
+    "enemyskilldata": [
+        {
+            "skill_id": 103000,
+            "name": "NormalAttack",
+            "Damage": 1,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 2.0,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103001,
+            "name": "Metal_Blade",
+            "Damage": 1,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 10.0,
+            "Range": 1.5,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103002,
+            "name": "Heavy_Destroyer",
+            "Damage": 2,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": -10.0,
+            "Desc": "10m 이상일때"
+        },
+        {
+            "skill_id": 103003,
+            "name": "Three_Point",
+            "Damage": 1,
+            "Damage2": 1,
+            "Damage3": 2,
+            "HealAmount": 0,
+            "Cooldown": 10.0,
+            "Range": 3.0,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103004,
+            "name": "Earthquake",
+            "Damage": 2,
+            "Damage2": 1,
+            "Damage3": 1,
+            "HealAmount": 0,
+            "Cooldown": 10.0,
+            "Range": 4.0,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103005,
+            "name": "Stomp",
+            "Damage": 2,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 10.0,
+            "Range": 3.0,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103006,
+            "name": "Upper_Slash",
+            "Damage": 1,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 10.0,
+            "Range": 2.0,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103007,
+            "name": "Shark",
+            "Damage": 1,
+            "Damage2": 1,
+            "Damage3": 1,
+            "HealAmount": 0,
+            "Cooldown": 10.0,
+            "Range": 2.0,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103008,
+            "name": "WhirlWind",
+            "Damage": 1,
+            "Damage2": 1,
+            "Damage3": 1,
+            "HealAmount": 0,
+            "Cooldown": 15.0,
+            "Range": 3.0,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103009,
+            "name": "",
+            "Damage": 0,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 0.0,
+            "Desc": ""
+        },
+        {
+            "skill_id": 103010,
+            "name": "",
+            "Damage": 0,
+            "Damage2": 0,
+            "Damage3": 0,
+            "HealAmount": 0,
+            "Cooldown": 0.0,
+            "Range": 0.0,
+            "Desc": ""
+        }
+    ]
+}
