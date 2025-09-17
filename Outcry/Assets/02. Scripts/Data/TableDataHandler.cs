@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 #region 임시
 
@@ -43,6 +44,13 @@ public static class TableDataHandler
             commonSkillIds);
 
         return newBossMonsterModel;
+    }
+
+    public static void LoadMonsterData()
+    {
+        DataTableManager.Instance.LoadCollectionData<EnemyDataTable>();
+        DataTableManager.Instance.GetCollectionData<EnemyData>();
+        
     }
     //todo. 몬스터스킬데이터를 기획테이블에서 가져와서 맵핑하는 메서드 추가하기.
 }
