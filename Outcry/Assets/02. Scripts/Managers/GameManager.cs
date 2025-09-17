@@ -2,15 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Paths;
 
 public class GameManager : Singleton<GameManager>
 {
-    private void Start()
+    private async void Start()
+    {
+        await Init();
+    }
+
+    private async Task Init()
     {
         // Firebase 초기화를 기다리는 코루틴 시작
-        StartCoroutine(WaitForFirebaseAndInitialize());
+        //StartCoroutine(WaitForFirebaseAndInitialize());
+
+        AudioManager.Instance.PlayBGM("Title");
+
+        StartCoroutine(ChangeBGMCoroutine());
+
+        Task playerSFX = AudioManager.Instance.PreloadSFX("Fury", "Sword");
+        await Task.WhenAll(playerSFX);
+
+        AudioManager.Instance.PlaySFX("Fury");
+    }
+
+    private void Update()
+    {
+        // 스페이스바를 누를 때마다
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("스페이스바 입력 감지! SFX를 재생합니다.");
+
+            AudioManager.Instance.PlaySFX("Sword");
+        }
+    }
+
+    private IEnumerator ChangeBGMCoroutine()
+    {
+        yield return new WaitForSeconds(10f); // 10초 대기
+        AudioManager.Instance.PlayBGM("InGame"); // BGM 변경
     }
 
     private IEnumerator WaitForFirebaseAndInitialize()

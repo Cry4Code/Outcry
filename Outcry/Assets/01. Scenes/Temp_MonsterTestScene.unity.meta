@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Outcry/Assets/Resources/Prefabs/UI/OptionUI.prefab.meta
+guid: 8b54ac707a614e84caf9e30a393eb0a2
+PrefabImporter:
+========
 guid: 343597381a2fac24da40771b456151fa
 DefaultImporter:
+>>>>>>>> DesignTeam:Outcry/Assets/01. Scenes/Temp_MonsterTestScene.unity.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

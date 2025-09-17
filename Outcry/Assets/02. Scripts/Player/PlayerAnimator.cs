@@ -21,6 +21,16 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetBool(animHash, true);
     }
 
+    public void OnBoolParam(int animHash)
+    {
+        animator.SetBool(animHash, true);
+    }
+
+    public void OffBoolParam(int animHash)
+    {
+        animator.SetBool(animHash, false);
+    }
+
     /// <summary>
     /// 트리거 애니메이션 실행 (중복 방지를 위해 Reset 후 Set)
     /// </summary>

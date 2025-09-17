@@ -2,18 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpState : IPlayerState
+public class JumpState : AirSubState
 {
-    public void Enter(PlayerController player)
+    private float minWallHoldTime = 1f; // 이 초가 지나야 벽 짚기가 가능함
+    private float elapsedTime;
+    
+    public override void Enter(PlayerController player)
     {
-        player.SetAnimation(PlayerAnimID.Jump, true);
+        base.Enter(player);
+        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Jump);
         player.isLookLocked = true; 
-        player.PlayerMove.Jump();
+        elapsedTime = 0f;
+        if (player.PlayerMove.isWallTouched)
+        {
+            player.PlayerMove.PlaceJump();
+        }
+        else
+        {
+            player.PlayerMove.Jump();
+        }
         if (!player.PlayerMove.isGroundJump) player.PlayerMove.isGroundJump = true;
     }
 
-    public void HandleInput(PlayerController player)
+    public override void HandleInput(PlayerController player)
     {
+        elapsedTime += Time.deltaTime;
         var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
         
         if (player.Inputs.Player.Jump.triggered)
@@ -24,7 +37,7 @@ public class JumpState : IPlayerState
                 return;
             }
         }
-        if (player.PlayerMove.isWallTouched)
+        if (player.PlayerMove.isWallTouched && elapsedTime >= minWallHoldTime)
         {
             player.ChangeState<WallHoldState>();
             return;
@@ -42,11 +55,21 @@ public class JumpState : IPlayerState
             player.ChangeState<NormalJumpAttackState>();
             return;
         }
-
         
+        if (player.Inputs.Player.SpecialAttack.triggered)
+        {
+            player.isLookLocked = false;
+            player.ChangeState<SpecialAttackState>();
+            return;
+        }
+        if (player.Inputs.Player.Dodge.triggered)
+        {
+            player.ChangeState<DodgeState>();
+            return;
+        }
     }
 
-    public void LogicUpdate(PlayerController player)
+    public override void LogicUpdate(PlayerController player)
     {
         if (!player.PlayerMove.isGroundJump)
         {
@@ -61,8 +84,9 @@ public class JumpState : IPlayerState
         }
     }
 
-    public void Exit(PlayerController player)
+    public override void Exit(PlayerController player)
     {
+        base.Exit(player);
         player.isLookLocked = false;
     }
 }
