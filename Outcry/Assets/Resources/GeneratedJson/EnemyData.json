@@ -1,0 +1,83 @@
+﻿{
+    "enemydata": [
+        {
+            "Enemy_Id": 101000,
+            "Enemy_Name": "goblin_A",
+            "Max_Hp": 200,
+            "Attack_Power": 1,
+            "Patrol_Speed": 1.0,
+            "Chase_Speed": 0.0,
+            "Detect_Range": 10.0,
+            "Skill_Set": [],
+            "Exskill_Set": []
+        },
+        {
+            "Enemy_Id": 101001,
+            "Enemy_Name": "goblin_B",
+            "Max_Hp": 200,
+            "Attack_Power": 1,
+            "Patrol_Speed": 0.5,
+            "Chase_Speed": 0.0,
+            "Detect_Range": 10.0,
+            "Skill_Set": [],
+            "Exskill_Set": []
+        },
+        {
+            "Enemy_Id": 101002,
+            "Enemy_Name": "goblin_C",
+            "Max_Hp": 500,
+            "Attack_Power": 1,
+            "Patrol_Speed": 0.800000011920929,
+            "Chase_Speed": 0.0,
+            "Detect_Range": 10.0,
+            "Skill_Set": [],
+            "Exskill_Set": []
+        },
+        {
+            "Enemy_Id": 102001,
+            "Enemy_Name": "goblin_King",
+            "Max_Hp": 28000,
+            "Attack_Power": 1,
+            "Patrol_Speed": 2.0,
+            "Chase_Speed": 2.0,
+            "Detect_Range": 0.0,
+            "Skill_Set": [
+                103000,
+                103001,
+                103002,
+                103003,
+                103004,
+                103005,
+                103006,
+                103007,
+                103008
+            ],
+            "Exskill_Set": [
+                103009,
+                103010
+            ]
+        },
+        {
+            "Enemy_Id": 102002,
+            "Enemy_Name": "Boss_B",
+            "Max_Hp": 28000,
+            "Attack_Power": 1,
+            "Patrol_Speed": 2.0,
+            "Chase_Speed": 2.0,
+            "Detect_Range": 0.0,
+            "Skill_Set": [],
+            "Exskill_Set": []
+        },
+        {
+            "Enemy_Id": 102003,
+            "Enemy_Name": "Boss_C",
+            "Max_Hp": 28000,
+            "Attack_Power": 1,
+            "Patrol_Speed": 2.0,
+            "Chase_Speed": 2.0,
+            "Detect_Range": 0.0,
+            "Skill_Set": [],
+            "Exskill_Set": []
+        }
+    ]
+}
