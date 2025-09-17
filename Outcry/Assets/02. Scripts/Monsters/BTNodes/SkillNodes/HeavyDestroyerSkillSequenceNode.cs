@@ -22,7 +22,7 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
     // 25번째 스프라이트 = 24번 인덱스
     private const float MOVE_END_TIME = (1.0f / ANIMATION_FRAME_RATE) * 9;
     // 전체 애니메이션 길이 (33개 스프라이트 = 0~32번 인덱스)
-    private const float ANIMATION_TOTAL_DURATION = (1.0f / ANIMATION_FRAME_RATE) * 28;
+    private const float ANIMATION_TOTAL_DURATION = (1.0f / ANIMATION_FRAME_RATE) * 27;
 
     public override void InitializeSkillSequenceNode(MonsterBase monster, Player target, MonsterSkillModel skillData)
     {
