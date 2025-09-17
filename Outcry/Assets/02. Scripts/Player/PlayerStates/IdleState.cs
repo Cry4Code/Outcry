@@ -11,22 +11,47 @@ public class IdleState : IPlayerState
 
         player.PlayerMove.Stop();
         player.PlayerMove.ChangeGravity(false);
+        player.PlayerAttack.ClearAttackCount();
+        player.PlayerAnimator.ClearTrigger();
+        player.PlayerAnimator.ClearInt();
+        
+        player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Idle);
+        player.Inputs.Player.Move.Enable();
     }
 
     public void HandleInput(PlayerController player)
     {
         var input = player.Inputs.Player.Move.ReadValue<Vector2>();
-        if (player.Inputs.Player.Jump.triggered && player.PlayerMove.isGrounded &&!player.PlayerMove.isGroundJump)
+        if (player.Inputs.Player.Jump.triggered && player.PlayerMove.isGrounded && !player.PlayerMove.isGroundJump)
         {
-            Debug.Log("Jump Key Input");
+            // Debug.Log("Jump Key Input");
             player.ChangeState<JumpState>();
+            return;
         }
-        else if (input.x != 0) player.ChangeState<MoveState>(); // 이동이 있으면 MoveState로 이동
-        // else if (player.Inputs.Player.Dodge.triggered) player.ChangeState(new DodgeState());
+        if (input.x != 0)
+        {
+            player.PlayerMove.ForceLook(input.x < 0);
+            player.isLookLocked = true;
+            player.ChangeState<MoveState>();
+            return;
+        }
+
+        if (player.Inputs.Player.NormalAttack.triggered)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<NormalAttackState>();
+            return;
+        }
     }
 
     public void LogicUpdate(PlayerController player) 
     {
+        AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+        if (curAnimInfo.IsName("Idle"))
+        {
+            player.isLookLocked = false;
+        }
+        
         if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
     }
     public void Exit(PlayerController player) { }

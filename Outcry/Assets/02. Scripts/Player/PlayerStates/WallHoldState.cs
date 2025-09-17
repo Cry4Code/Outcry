@@ -6,12 +6,16 @@ public class WallHoldState : IPlayerState
 {
     public void Enter(PlayerController player)
     {
-        
+        player.PlayerMove.ForceLook(!player.PlayerMove.lastWallIsLeft);
+        player.PlayerAttack.ClearAttackCount();
+        player.SetAnimation(PlayerAnimID.WallHold);
+        player.isLookLocked = true;
     }
 
     public void Exit(PlayerController player)
     {
-       
+        player.isLookLocked = false;
+        // player.PlayerAnimator.ClearBool();
     }
 
     public void HandleInput(PlayerController player)
@@ -25,13 +29,13 @@ public class WallHoldState : IPlayerState
             // 점프 키가 눌림 and 벽점 가능함
             if(player.Inputs.Player.Jump.triggered && player.PlayerMove.CanWallJump())
             {
-                Debug.Log("벽점으로");
+                // Debug.Log("벽점으로");
                 player.ChangeState<WallJumpState>();
                 return;
             }
             if (player.PlayerMove.isWallTouched)
             {
-                Debug.Log("중력 감소");
+                // Debug.Log("중력 감소");
                 player.PlayerMove.ChangeGravity(true);
                 return;
             }

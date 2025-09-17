@@ -105,3 +105,4 @@ InitTestScene*.unity*
 
 # Firebase config file
 /[Aa]ssets/google-services.json
+/[Aa]ssets/google-services.json.meta
