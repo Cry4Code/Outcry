@@ -4,7 +4,6 @@ public class MetalBladeSkillSequenceNode : SkillSequenceNode
 {
     private float stateEnterTime; // 스킬(상태)에 진입한 시간
     [SerializeField] private float cooldownTimer = 0f; // 쿨다운 계산을 위한 타이머
-    private bool skillTriggered = false;
 
     // 컴포넌트 참조
     private Animator animator;
@@ -77,7 +76,7 @@ public class MetalBladeSkillSequenceNode : SkillSequenceNode
             );
 
             animator.SetTrigger(AnimatorStrings.MonsterParameter.MetalBladeHash);
-            monster.AttackController.SetDamage(skillData.damage1);
+            monster.AttackController.SetDamages(skillData.damage1);
 
             // 상태 초기화 및 애니메이션 시작 시간 기록
             skillTriggered = true;
@@ -103,7 +102,7 @@ public class MetalBladeSkillSequenceNode : SkillSequenceNode
         if (elapsedTime >= ANIMATION_TOTAL_DURATION)
         {
             skillTriggered = false; // 다음 스킬 사용을 위해 플래그 리셋
-            monster.AttackController.SetDamage(0); //데미지 초기화
+            monster.AttackController.ResetDamages(); //데미지 초기화
             return NodeState.Success;
         }
 

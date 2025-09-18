@@ -14,6 +14,9 @@ public abstract class SkillSequenceNode : SequenceNode
     protected Player target;
     protected MonsterSkillModel skillData; //인스펙터에 직렬화 시키면 에러뜸.
     
+    [SerializeField] protected float elapsedTime = 0f;
+    protected bool skillTriggered = false;
+    
     public int SkillId => skillId;
     
     public SkillSequenceNode(int skillId)
@@ -23,6 +26,8 @@ public abstract class SkillSequenceNode : SequenceNode
         {
             Debug.LogError($"Skill ID {skillId} could not be found.");
         }
+
+        elapsedTime = skillData.cooldown;
     }
     
     //todo. think. virtual일 이유가? 그냥 일반 클래스로 변경해도 되지 않을까? //think. 아예 생성자로 바꿔버릴까??

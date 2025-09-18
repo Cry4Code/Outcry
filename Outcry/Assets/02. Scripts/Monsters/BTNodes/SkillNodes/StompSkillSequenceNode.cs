@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class StompSkillSequenceNode : SkillSequenceNode
 {
-    [SerializeField] private float elapsedTime = 0f;
-    private bool skillTriggered = false;
-
     public StompSkillSequenceNode(int skillId) : base(skillId)
     {
         this.nodeName = "StompSkillSequenceNode";
@@ -60,7 +57,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
             elapsedTime = 0f;
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Stomp);
             //todo. player damage 처리
-            monster.AttackController.SetDamage(skillData.damage1);
+            monster.AttackController.SetDamages(skillData.damage1);
             
             skillTriggered = true;
         }
@@ -82,7 +79,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         {
             Debug.Log($"Skill End: {skillData.skillName} (ID: {skillData.skillId})");
             
-            monster.AttackController.SetDamage(0); //데미지 초기화.
+            monster.AttackController.SetDamages(0); //데미지 초기화.
             skillTriggered = false;
             state = NodeState.Success;
         }
