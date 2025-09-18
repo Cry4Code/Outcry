@@ -27,8 +27,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         }
 
         //쿨다운 확인
-        elapsedTime += Time.deltaTime;
-        if(elapsedTime >= skillData.cooldown)
+        if(Time.time - lastUsedTime >= skillData.cooldown)
         {
             isCooldownComplete = true;
         }
@@ -38,7 +37,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         }
 
         result = isInRange && isCooldownComplete;
-        Debug.Log($"Skill {skillData.skillName} used? {result} : {elapsedTime} / {skillData.cooldown}");
+        Debug.Log($"Skill {skillData.skillName} used? {result} : {Time.time - lastUsedTime} / {skillData.cooldown}");
         return result;
     }
 
@@ -54,7 +53,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
 
         if (!skillTriggered)
         {
-            elapsedTime = 0f;
+            lastUsedTime = Time.time;
             FlipCharacter();
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Stomp);
             //todo. player damage 처리
@@ -62,9 +61,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
             skillTriggered = true;
         }
 
-        elapsedTime += Time.deltaTime;
-        
-        if (elapsedTime < 0.1f) //시작 직후는 무조건 Running
+        if (Time.time - lastUsedTime < 0.1f) //시작 직후는 무조건 Running
         {
             return NodeState.Running;
         }

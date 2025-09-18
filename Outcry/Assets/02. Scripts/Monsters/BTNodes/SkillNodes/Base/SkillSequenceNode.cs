@@ -14,7 +14,7 @@ public abstract class SkillSequenceNode : SequenceNode
     protected Player target;
     protected MonsterSkillModel skillData; //인스펙터에 직렬화 시키면 에러뜸.
     
-    [SerializeField] protected float elapsedTime = 0f;
+    protected float lastUsedTime;
     protected bool skillTriggered = false;
     
     public int SkillId => skillId;
@@ -28,10 +28,9 @@ public abstract class SkillSequenceNode : SequenceNode
         }
 
         nodeName = skillData.skillName + skillData.skillId;
-        elapsedTime = skillData.cooldown;
+        lastUsedTime = Time.time - skillData.cooldown;
     }
     
-    //todo. think. virtual일 이유가? 그냥 일반 클래스로 변경해도 되지 않을까? //think. 아예 생성자로 바꿔버릴까??
     public virtual void InitializeSkillSequenceNode(MonsterBase monster, Player target)
     {
         this.monster = monster;

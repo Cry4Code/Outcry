@@ -31,8 +31,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
         }
 
         // 쿨다운 체크
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime >= skillData.cooldown)
+        if (Time.time - lastUsedTime >= skillData.cooldown)
         {
             isCooldownComplete = true;
         }
@@ -42,7 +41,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
         }
 
         result = isInRange && isCooldownComplete;
-        Debug.Log($"Skill {skillData.skillName} used? {result} : {elapsedTime} / {skillData.cooldown}");
+        Debug.Log($"Skill {skillData.skillName} used? {result} : {Time.time - lastUsedTime} / {skillData.cooldown}");
         return result;
     }
 
@@ -59,7 +58,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
 
         if (!skillTriggered)
         {
-            elapsedTime = 0f;
+            lastUsedTime = Time.time;
             FlipCharacter();
             monster.Animator.SetTrigger(animationHash);
 
@@ -70,8 +69,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
         }
 
         // 시작 직후 Running 강제
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime < 0.1f)
+        if (Time.time - lastUsedTime < 0.1f)
         {            
             return NodeState.Running;
         }
