@@ -267,6 +267,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: monsterData.commonSkillIds.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: monsterData.commonSkillIds.Array.data[0]
+      value: 103001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: monsterData.commonSkillIds.Array.data[1]
+      value: 103002
+      objectReference: {fileID: 0}
+    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: monsterData.commonSkillIds.Array.data[2]
+      value: 103003
+      objectReference: {fileID: 0}
+    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: monsterData.commonSkillIds.Array.data[3]
+      value: 103004
+      objectReference: {fileID: 0}
+    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: monsterData.commonSkillIds.Array.data[4]
+      value: 103005
+      objectReference: {fileID: 0}
+    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: monsterData.commonSkillIds.Array.data[5]
+      value: 103006
+      objectReference: {fileID: 0}
     - target: {fileID: 5226652059249393811, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

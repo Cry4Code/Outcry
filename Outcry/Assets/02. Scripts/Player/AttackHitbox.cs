@@ -20,28 +20,22 @@ public class AttackHitbox : MonoBehaviour
         if (Player.PlayerAttack.isStartParry)
         {
             Player.PlayerAttack.successParry = true;
-            Debug.Log("패링 성공");
-            // TODO : 나중에 other.collider.TryGetComponent 해서 
-            // ICountable 찾으면 그거 부르도록 할거임 
+
+            if (other.TryGetComponent(out ICountable countable))
+            {
+                Player.PlayerCondition.SetInvincible(0.2f);
+                countable?.CounterAttacked();
+                Debug.Log("플레이어 패링 성공");
+            }
             return;
         }
-        
+            
         if (other.TryGetComponent<IDamagable>(out var damagable))
-        {
-            Debug.Log("플레이어가 몬스터의 IDamagable을 찾음");
-        }
-            
-        if (other.gameObject.layer == LayerMask.NameToLayer("Monster"))
-        {
-            Debug.Log("플레이어가 몬스터의 레이어를 찾음");
-        }
-            
-        /*if (other.TryGetComponent<IDamagable>(out var damagable)
-            && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+            // && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             damagable?.TakeDamage(Damage);
             Debug.Log($"플레이어가 몬스터에게 {Damage} 만큼 데미지 줌");
-        }*/ 
+        } 
         
     }
 }
