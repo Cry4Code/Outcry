@@ -19,19 +19,17 @@ public class AttackHitbox : MonoBehaviour
     {
         if (Player.PlayerAttack.isStartParry)
         {
-            Player.PlayerAttack.successParry = true;
-
             if (other.TryGetComponent(out ICountable countable))
             {
-                Player.PlayerCondition.SetInvincible(0.2f);
+                Player.PlayerAttack.successParry = true;
                 countable?.CounterAttacked();
                 Debug.Log("플레이어 패링 성공");
             }
             return;
         }
             
-        if (other.TryGetComponent<IDamagable>(out var damagable)
-            && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        if (other.TryGetComponent<IDamagable>(out var damagable))
+            // && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             damagable?.TakeDamage(Damage);
             Debug.Log($"플레이어가 몬스터에게 {Damage} 만큼 데미지 줌");

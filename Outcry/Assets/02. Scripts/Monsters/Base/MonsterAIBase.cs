@@ -25,7 +25,6 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
         }
         this.monster = monster;
         InitializeBehaviorTree();
-        monster.Condition.OnDeath += DisactivateBt;   //죽으면 행동 못하게 막음.
     }
     protected abstract void InitializeBehaviorTree(); 
     
@@ -42,12 +41,12 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
         NodeState state = rootNode.Tick();
     }
     
-    private void DisactivateBt()
+    public void DisactivateBt()
     {
         isAvailableToAct = false;
     }
 
-    private void ActivateBt()
+    public void ActivateBt()
     {
         isAvailableToAct = true;
     }

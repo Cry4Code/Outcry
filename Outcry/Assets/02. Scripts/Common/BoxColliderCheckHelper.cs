@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BoxColliderCheckHelper : MonoBehaviour
 {
-    public BoxCollider2D collider2D;
+    private BoxCollider2D collider2D;
     public Color color = Color.red;
 
     private void Start()

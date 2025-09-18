@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class JumpState : AirSubState
@@ -10,9 +11,11 @@ public class JumpState : AirSubState
     public override void Enter(PlayerController player)
     {
         base.Enter(player);
+        
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Jump);
         player.isLookLocked = true; 
         elapsedTime = 0f;
+        
         if (player.PlayerMove.isWallTouched)
         {
             player.PlayerMove.PlaceJump();
@@ -21,6 +24,7 @@ public class JumpState : AirSubState
         {
             player.PlayerMove.Jump();
         }
+        
         if (!player.PlayerMove.isGroundJump) player.PlayerMove.isGroundJump = true;
     }
 

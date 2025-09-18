@@ -9,7 +9,7 @@ public class FallState : AirSubState
         base.Enter(player);
         player.isLookLocked = true; 
         player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Fall);
-        player.PlayerMove.rb.gravityScale = 2.5f;
+        player.PlayerMove.rb.gravityScale = 6f;
     }
 
     public override void Exit(PlayerController player)

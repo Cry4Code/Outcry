@@ -20,7 +20,7 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
         dataList.Add(new StompSkillSequenceNode(103005));
         dataList.Add(new UpperSlashSequenceNode(103006));
         
-        dataList.Add(new UpperSlashSequenceNode(103002));
+        dataList.Add(new HeavyDestroyerSkillSequenceNode(103002));
         dataList.Add(new UpperSlashSequenceNode(103003));
     }
     
@@ -47,6 +47,9 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
                 break;
             case UpperSlashSequenceNode:
                 skillSequenceNode = new UpperSlashSequenceNode(skillId);
+                break;
+            case HeavyDestroyerSkillSequenceNode:
+                skillSequenceNode = new HeavyDestroyerSkillSequenceNode(skillId);
                 break;
             default:
                 skillSequenceNode = null;
