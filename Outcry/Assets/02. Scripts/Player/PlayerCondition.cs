@@ -57,6 +57,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     {
         if (!isInvincible || !player.PlayerAttack.successParry)
         {
+            if(!player.IsCurrentState<DamagedState>()) player.ChangeState<DamagedState>();
             StartCoroutine(Invincible());
             Debug.Log("플레이어 데미지 받음");
             onTakeDamage?.Invoke();
