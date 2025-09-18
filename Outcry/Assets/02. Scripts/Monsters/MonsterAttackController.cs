@@ -10,8 +10,8 @@ public class MonsterAttackController : MonoBehaviour
     private MonsterBase monster;
     [SerializeField] private LayerMask playerLayer;
 
-    private int damage = 1;
-    
+    private int currentDamage;
+    private int[] damages = new int[3];
     private void Start()
     {
         monster = GetComponentInParent<MonsterBase>();
@@ -23,9 +23,48 @@ public class MonsterAttackController : MonoBehaviour
         playerLayer = LayerMask.GetMask("Player");
     }
 
-    public void SetDamage(int damage)
+    public void ResetDamages()
     {
-        this.damage = damage;
+        this.damages[0] = 0;
+        this.damages[1] = 0;
+        this.damages[2] = 0;
+        currentDamage = 0;
+    }
+    public void SetDamages(int damage1)
+    {
+        this.damages[0] = damage1;
+        this.damages[1] = 0;
+        this.damages[2] = 0;
+        currentDamage = damage1;
+    }
+    public void SetDamages(int damage1, int damage2)
+    {
+        this.damages[0] = damage1;
+        this.damages[1] = damage2;
+        this.damages[2] = 0;
+        currentDamage = damage1;
+    }
+    public void SetDamages(int damage1, int damage2, int damage3)
+    {
+        this.damages[0] = damage1;
+        this.damages[1] = damage2;
+        this.damages[2] = damage3;
+        currentDamage = damage1;
+    }
+
+    protected void SetCurrentDamageAsDamage1()
+    {
+        currentDamage = this.damages[0];
+    }
+
+    protected void SetCurrentDamageAsDamage2()
+    {
+        currentDamage = this.damages[1];
+    }
+
+    protected void SetCurrentDamageAsDamage3()
+    {
+        currentDamage = this.damages[2];
     }
 
     // 투사체 생성 메서드
@@ -46,11 +85,11 @@ public class MonsterAttackController : MonoBehaviour
         {
             Debug.Log("Playerlayer hit");
             Player damagable = other.gameObject.GetComponentInParent<Player>();
-            if (damagable != null && damage > 0)
+            if (damagable != null && currentDamage > 0)
             {
                 //todo. Player IDamagable 구현 후 데미지 주기
                 // damagable.TakeDamage(damage);
-                Debug.Log("Player took " + damage + " damage from " + monster.MonsterData.monsterId);
+                Debug.Log("Player took " + currentDamage + " damage from " + monster.MonsterData.monsterId);
             }
         }
     }
