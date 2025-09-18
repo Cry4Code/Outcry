@@ -30,12 +30,15 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
-        // 스페이스바를 누를 때마다
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("스페이스바 입력 감지! SFX를 재생합니다.");
+            Vector3 mousePos = Input.mousePosition;
 
-            AudioManager.Instance.PlaySFX("Sword");
+            mousePos.z = 0f;
+
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+
+            AudioManager.Instance.PlaySFX("Sword", worldPosition);
         }
     }
 
