@@ -1,15 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class EarthquakeSkillSequenceNode : SkillSequenceNode
 {
     // 경과 시간, 쿨타임 등 계산용
-    [SerializeField] private float elapsedTime = 0f;//경과 시간 타이머
     private float stateEnterTime; // 스킬(상태)에 진입한 시간
-
-    // 스킬 작동 트리거
-    private bool skillTriggered = false;
 
     // 애니메이션 클립 초당 프레임 수
     private const float ANIMATION_FRAME_RATE = 20f;

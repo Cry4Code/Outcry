@@ -1,5 +1,6 @@
+using System;
 using UnityEngine;
-
+[Serializable]
 public class MetalBladeSkillSequenceNode : SkillSequenceNode
 {
     private float stateEnterTime; // 스킬(상태)에 진입한 시간

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 예시로 작성한 임시 클래스
 /// </summary>
+[Serializable]
 public class TestSkillSequenceNode : SkillSequenceNode
 {
     private float elapsedTime = 0f;

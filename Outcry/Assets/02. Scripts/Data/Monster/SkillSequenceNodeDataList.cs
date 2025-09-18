@@ -16,6 +16,7 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
         
         //스킬 시퀀스 노드 생성
         dataList.Add(new MetalBladeSkillSequenceNode(103001));
+        dataList.Add(new EarthquakeSkillSequenceNode(103004));
         dataList.Add(new StompSkillSequenceNode(103005));
         dataList.Add(new UpperSlashSequenceNode(103006));
     }
