@@ -30,8 +30,13 @@ public class TestManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            Debug.Log("TestManager: M key pressed. Monster takes 10 damage.");
+            Debug.Log("TestManager: UpArrow key pressed. Monster takes 10 damage.");
             monster.Condition.TakeDamage(10);
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            Debug.Log("TestManager: DownArrow key pressed. Monster takes 10 damage.");
+            monster.AttackController.CounterAttacked();
         }
     }
 }

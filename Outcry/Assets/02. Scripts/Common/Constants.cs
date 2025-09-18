@@ -22,8 +22,8 @@ public static class AnimatorStrings
     public static class MonsterParameter
     {
         public static readonly int Running = Animator.StringToHash("Running");
-        public static readonly int IsDead = Animator.StringToHash("IsDead");
-        public static readonly int Hit = Animator.StringToHash("Hit");
+        public static readonly int Dead = Animator.StringToHash("Dead");
+        public static readonly int Stun = Animator.StringToHash("Stun");
         public static readonly int Stomp = Animator.StringToHash("Stomp");
         public static readonly int MetalBladeHash = Animator.StringToHash("MetalBlade");
         public static readonly int UpperSlash = Animator.StringToHash("UpperSlash");
@@ -34,7 +34,7 @@ public static class AnimatorStrings
     {
         public const string Idle = "Idle";
         public const string Run = "Run";
-        public const string Hit = "Hit";
+        public const string Stun = "Stun";
         public const string Stomp = "Stomp";
         public const string UpperSlash = "UpperSlash";
         public const string Earthquake = "Earthquake";
