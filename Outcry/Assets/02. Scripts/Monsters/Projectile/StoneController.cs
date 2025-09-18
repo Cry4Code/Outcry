@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class StoneController : MonoBehaviour
+public class StoneController : MonoBehaviour, ICountable
 {
     [SerializeField] private LayerMask playerLayer;
     private int damage = 1;
@@ -33,5 +33,11 @@ public class StoneController : MonoBehaviour
                 Debug.Log("Player took " + damage + " damage from " + gameObject.name);
             }
         }
+    }
+
+    public void CounterAttacked()
+    {
+        Debug.Log("Stone CounterAttacked");
+        //돌이 부딪힘. 아직까지는 구현예정인 기능 없음.
     }
 }
