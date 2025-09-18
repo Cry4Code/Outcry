@@ -3,29 +3,19 @@ using UnityEngine;
 public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
 {
     private float stateEnterTime; // 스킬(상태)에 진입한 시간
-    [SerializeField] private float cooldownTimer = 0f; // 쿨다운 계산을 위한 타이머
+    [SerializeField] 
+    private float cooldownTimer = 0f; // 쿨다운 계산을 위한 타이머
     private bool skillTriggered = false;
-
-    // 컴포넌트 참조
+    //애니메이터 추가
     private Animator animator;
-
     // 상수
     private const float MOVE_SPEED = 50f;   // 이동 속도
-    private const float ATTACK_RANGE = 14f;  // 공격 범위(플레이어 감지)
 
-    // 애니메이션 설정값
-    private const float ANIMATION_FRAME_RATE = 20f; // 이 애니메이션 클립의 초당 프레임 수
 
-    // 이동 시작/종료 시간 계산 (스프라이트 기준)
-    // 10번째 스프라이트 = 9번 인덱스. 0프레임부터 시작하므로 인덱스 9는 9프레임이 지난 시점
-    private const float MOVE_START_TIME = (1.0f / ANIMATION_FRAME_RATE) * 5;
-    // 25번째 스프라이트 = 24번 인덱스
-    private const float MOVE_END_TIME = (1.0f / ANIMATION_FRAME_RATE) * 9;
-    // 전체 애니메이션 길이 (33개 스프라이트 = 0~32번 인덱스)
-    private const float ANIMATION_TOTAL_DURATION = (1.0f / ANIMATION_FRAME_RATE) * 27;
 
-    public HeavyDestroyerSkillSequenceNode(int skillId) : base(skillId)
+    public HeavyDestroyerSkillSequenceNode(int skillId) : base(skillId) // 뭔지 모르겠음
     {
+        this.nodeName = "HeavyDestroyerSkillSequenceNode";
     }
 
     public override void InitializeSkillSequenceNode(MonsterBase monster, Player target)
@@ -41,7 +31,7 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
         }
     }
 
-    protected override bool CanPerform()
+    protected override bool CanPerform() // 이해 완료, 트리거 되는거 까지 완료
     {
         // 쿨다운이 다 차지 않았을 때만 시간 더함
         if (cooldownTimer < skillData.cooldown)
@@ -49,9 +39,8 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
             cooldownTimer += Time.deltaTime;
         }
 
-        // 플레이어와의 거리 확인 (거리가 10 이상일때)
-        float distanceToTarget = Vector3.Distance(monster.transform.position, target.transform.position);
-        bool isInRange = (distanceToTarget >= ATTACK_RANGE);
+        // 플레이어와의 거리 확인 (거리가  이상일때만 사용) 황상욱
+        bool isInRange = Vector2.Distance(monster.transform.position, target.transform.position) > skillData.range;
 
         // 쿨다운 확인
         bool isCooldownComplete = (cooldownTimer >= skillData.cooldown);
@@ -64,12 +53,10 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
 
     protected override NodeState SkillAction()
     {
-        // 스킬이 아직 발동되지 않았다면 트리거 켜기
         if (!skillTriggered)
         {
             // 몬스터를 기준으로 플레이어가 어느 방향에 있는지 계산
             float directionToTarget = Mathf.Sign(target.transform.position.x - monster.transform.position.x);
-
             // 스킬 시작할 때 플레이어를 바라보게 만듦
             // Mathf.Abs를 사용하여 기존 스케일의 크기 유지
             monster.transform.localScale = new Vector3(
@@ -78,8 +65,8 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
                 monster.transform.localScale.z
             );
 
-            animator.SetTrigger(AnimatorStrings.MonsterParameter.HeavyDestroyerHash);
-            monster.AttackController.SetDamage(skillData.damage1);
+            monster.Animator.SetTrigger("HeavyDestroyerStart"); // 돌진 시작 애니메이션 트리거 on
+            monster.AttackController.SetDamages(skillData.damage1);
 
             // 상태 초기화 및 애니메이션 시작 시간 기록
             skillTriggered = true;
@@ -87,39 +74,74 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
             cooldownTimer = 0f; // 스킬을 사용했으므로 쿨다운 타이머 리셋
         }
 
-        // 애니메이션 경과 시간 계산
-        float elapsedTime = Time.time - stateEnterTime;
-
-        // 애니메이션 경과 시간에 따른 이동 처리
-        // 이동 시작 시간과 종료 시간 사이에만 이동 로직을 실행
-
-        if (elapsedTime >= MOVE_START_TIME && elapsedTime < MOVE_END_TIME)
+        //시작 애니메이션이 끝났으면 바로 다음 돌진 애니메이션 켜기
+        if (IsSkillAnimationEnd("HeavyDestroyerStart"))
         {
+
+            Debug.Log("돌진 시작 끝");
+            animator.SetTrigger("HeavyDestroyerMove");
+        }
+
+
+        if (target.transform.position.x != monster.transform.position.x && !IsSkillAnimationPlaying("HeavyDestroyerStart"))/* 스킬 시작 시x 좌표가 타겟x 좌표와 같아질 때 까지 루프 애니메이션 호출하면서 이동*/
+        {
+            animator.SetTrigger(AnimatorStrings.MonsterParameter.HeavyDestroyerMove);
             float direction = Mathf.Sign(monster.transform.localScale.x);
             // Vector3.right를 사용하여 월드 좌표계의 오른쪽 방향을 기준으로 이동
             // direction 값에 따라 왼쪽 또는 오른쪽으로 움직임
             monster.transform.Translate(Vector3.right * direction * MOVE_SPEED * Time.deltaTime);
         }
-
-        if (elapsedTime >= MOVE_START_TIME && elapsedTime < MOVE_END_TIME)
-        {
-            float direction = Mathf.Sign(monster.transform.localScale.x);
-            // Vector3.right를 사용하여 월드 좌표계의 오른쪽 방향을 기준으로 이동
-            // direction 값에 따라 왼쪽 또는 오른쪽으로 움직임
-            monster.transform.Translate(Vector3.right * direction * MOVE_SPEED * Time.deltaTime);
+        else
+        { 
+            animator.SetTrigger("HeavyDestroyerIsArrived");
         }
 
+
+
+
+
+
+        if (IsSkillAnimationPlaying("HeavyDestroyerEnd"))
+        {
+            monster.AttackController.SetDamages((int)skillData.damage1);
+        }
 
         // 스킬 종료 처리
-        // 총 애니메이션 길이만큼 시간이 지났다면 스킬을 종료
-        if (elapsedTime >= ANIMATION_TOTAL_DURATION)
+        // 엔드 애니메이션 실행이 끝나면 스킬 종료 
+        if (IsSkillAnimationEnd("HeavyDestroyerEnd"))
         {
             skillTriggered = false; // 다음 스킬 사용을 위해 플래그 리셋
-            monster.AttackController.SetDamage(0); //데미지 초기화
+            monster.AttackController.SetDamages(0); //데미지 초기화
             return NodeState.Success;
         }
 
         // 위의 종료 조건에 해당하지 않으면 스킬이 아직 진행 중인 것
         return NodeState.Running;
     }
+
+    private bool IsSkillAnimationPlaying(string animationName) // 해당 이름의 애니메이션이 재생중인지 확인
+    {
+        //스킬 애니메이션이 끝났는지 확인.
+        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+
+        if (isSkillAnimationPlaying)
+        {
+            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
+            return true;
+        }
+        else
+        {
+            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
+            return false;
+        }
+    }
+
+    private bool IsSkillAnimationEnd(string animationName) // 해당 애니메이션이 끝났는지
+    {
+        var stateInfo = monster.Animator.GetCurrentAnimatorStateInfo(0);
+
+        return stateInfo.IsName(animationName) && stateInfo.normalizedTime >= 1f;
+    }
+
+
 }
