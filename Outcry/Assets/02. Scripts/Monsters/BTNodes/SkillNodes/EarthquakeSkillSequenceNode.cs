@@ -61,8 +61,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         }
 
         // 쿨다운 체크
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime >= skillData.cooldown)
+        if (Time.time - lastUsedTime >= skillData.cooldown)
         {
             isCooldownComplete = true;
             isSpawned1 = false;
@@ -75,7 +74,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         }
 
         result = isInRange && isCooldownComplete;
-        Debug.Log($"Skill {skillData.skillName} used? {result} : {elapsedTime} / {skillData.cooldown}");
+        Debug.Log($"Skill {skillData.skillName} used? {result} : {Time.time - lastUsedTime} / {skillData.cooldown}");
         return result;
     }
 
@@ -96,7 +95,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         // 스킬 트리거 켜기
         if (!skillTriggered)
         {
-            elapsedTime = 0f;
+            lastUsedTime = Time.time;
             FlipCharacter();
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Earthquake);
             monster.AttackController.SetDamages(skillData.damage1);  // 플레이어 데미지 주기
@@ -108,8 +107,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         }
 
         // 시작 직후 Running 강제
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime < 0.1f) // 시작 직후는 무조건 Running
+        if (Time.time - lastUsedTime < 0.1f) // 시작 직후는 무조건 Running
         {
             return NodeState.Running;
         }
