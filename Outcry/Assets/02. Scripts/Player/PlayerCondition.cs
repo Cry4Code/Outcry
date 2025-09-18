@@ -33,7 +33,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         health.Init(EventBusKey.ChangeHealth);
         stamina.Init(EventBusKey.ChangeStamina);
         lastRecoveryStamina = Time.time;
-        invincibleTime = 1f;
+        invincibleTime = 0.75f;
         waitInvisible = new WaitForSecondsRealtime(invincibleTime);
         invincibleCoroutine = null;
     }
@@ -57,11 +57,18 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damage)
     {
+        if (player.PlayerAttack.successParry)
+        {
+            if (invincibleCoroutine != null) return;
+            invincibleCoroutine = StartCoroutine(Invincible(0.3f));
+        }
         if (invincibleCoroutine == null)
         {
             if(!player.IsCurrentState<DamagedState>()) player.ChangeState<DamagedState>();
             invincibleCoroutine = StartCoroutine(Invincible());
             Debug.Log("플레이어 데미지 받음");
+            health.Substract(damage);
+            Debug.Log($"플레이어 현재 체력 : {health.CurValue()}");
             onTakeDamage?.Invoke();
         }
         

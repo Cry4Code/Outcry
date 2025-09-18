@@ -265,6 +265,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2607310298386377837, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5226652059249393811, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -961,7 +965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4271897825629240966, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: <DoubleJumpForce>k__BackingField
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4271897825629240966, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: <AirMoveThresholdTime>k__BackingField
