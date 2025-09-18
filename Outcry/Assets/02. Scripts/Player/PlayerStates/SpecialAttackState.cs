@@ -14,8 +14,12 @@ public class SpecialAttackState : IPlayerState
     private float specialAttackDistance = 7f;
     private Vector2 startPos;
     private Vector2 targetPos;
+    private Vector2 newPos;
+    private Vector2 curPos;
     private float cursorAngle = 0f;
-    
+
+
+    private float t;
     public void Enter(PlayerController player)
     {
         player.isLookLocked = false;
@@ -50,7 +54,6 @@ public class SpecialAttackState : IPlayerState
         
         startPos = player.transform.position;
         targetPos = startPos + (specialAttackDirection * specialAttackDistance);
-
     }
 
     public void HandleInput(PlayerController player)
@@ -60,14 +63,32 @@ public class SpecialAttackState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
-        
-        
         animRunningTime += Time.deltaTime;
-        float t = animRunningTime / attackAnimationLength;
+        t = animRunningTime / attackAnimationLength;
 
-        // 선형 보간하는 포지션을 만들어서 거기로 MovePosition
-        Vector2 newPos = Vector2.MoveTowards(startPos, targetPos, t * specialAttackSpeed);
+        newPos = Vector2.MoveTowards(startPos, targetPos, t * specialAttackSpeed);
+
+        curPos = player.transform.position;
+        
+        
+        // 현재 위치에서 이동할 위치만큼 선 하나 그어서, 그게 벽에 닿으면 벽 끝에까지만 가고 상태 바뀌게함
+        Vector2 direction = (newPos - curPos).normalized;
+        float distance = Vector2.Distance(curPos, newPos);
+        
+        RaycastHit2D hit =
+            Physics2D.Raycast(player.transform.position, direction, distance, player.PlayerMove.groundMask);
+        
+        if (hit.collider != null)
+        {
+             player.PlayerMove.rb.MovePosition(hit.point - direction * 0.01f);
+            if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+            else player.ChangeState<FallState>();
+            return;
+        }
+        
+        
         player.PlayerMove.rb.MovePosition(newPos);
+        
         if (Vector2.Distance(newPos, targetPos) < 0.01f)
         {
             player.PlayerMove.rb.velocity = Vector2.zero;
