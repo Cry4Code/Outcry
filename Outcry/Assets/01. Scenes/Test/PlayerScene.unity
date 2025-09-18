@@ -1065,10 +1065,14 @@ PrefabInstance:
       objectReference: {fileID: 6200000, guid: c78d72528abcd364aa490ab46f6f3553, type: 2}
     - target: {fileID: 2546533353557174264, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
-      value: 128
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2546533353557174264, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2912411631412783795, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2912411631412783795, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
