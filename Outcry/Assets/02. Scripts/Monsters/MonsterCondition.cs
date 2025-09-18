@@ -63,18 +63,22 @@ public class MonsterCondition : MonoBehaviour, IDamagable
     
     public void TakeDamage(int damage)
     {
+        Debug.Log("Monster Take Damage");
         currentHealth = Mathf.Max(0, currentHealth - damage);
         if (animationCoroutine != null)
         {
+            Debug.Log("Monster Take Damage2");
             spriteRenderer.color = originalColor;
             StopCoroutine(animationCoroutine);
         }
         if (currentHealth <= 0)
         {
+            Debug.Log("Monster Take Damage3");
             Death();
         }
         else
         {
+            Debug.Log("Monster Take Damage4");
             animationCoroutine = StartCoroutine(HitAnimation(hitAnimationLength));
         }
     }
