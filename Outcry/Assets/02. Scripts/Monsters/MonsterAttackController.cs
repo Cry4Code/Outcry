@@ -79,11 +79,8 @@ public class MonsterAttackController : MonoBehaviour, ICountable
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("OnTriggerStay2D: " + other.gameObject.name);
-        
         if ((playerLayer.value & (1 << other.gameObject.layer)) != 0) //(other.gameObject.layer == playerLayer)
         {
-            Debug.Log("Playerlayer hit");
             bool isPlayer = other.gameObject.TryGetComponent<IDamagable>(out var damagable);
             if (isPlayer && damagable != null && currentDamage > 0)
             {
@@ -96,6 +93,7 @@ public class MonsterAttackController : MonoBehaviour, ICountable
     public void CounterAttacked()
     {
         Debug.Log($"{monster.MonsterData.monsterName} (ID: {monster.MonsterData.monsterId}) was counterattacked!" );
-        // todo. 몬스터가 카운터 어택 당했을 때의 처리 로직 추가
+        
+        monster.Condition.Stunned();
     }
 }
