@@ -60,6 +60,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
         if (!skillTriggered)
         {
             elapsedTime = 0f;
+            FlipCharacter();
             monster.Animator.SetTrigger(animationHash);
 
             // todo. 플레이어 데미지 처리
