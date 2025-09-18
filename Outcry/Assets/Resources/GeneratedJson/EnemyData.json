@@ -6,10 +6,14 @@
             "Max_Hp": 200,
             "Attack_Power": 1,
             "Patrol_Speed": 1.0,
-            "Chase_Speed": 0.0,
+            "Chase_Speed": 1.5,
             "Detect_Range": 10.0,
-            "Skill_Set": [],
-            "Exskill_Set": []
+            "Skill_Set": [
+                103101
+            ],
+            "Exskill_Set": [
+                103102
+            ]
         },
         {
             "Enemy_Id": 101001,
@@ -17,10 +21,14 @@
             "Max_Hp": 200,
             "Attack_Power": 1,
             "Patrol_Speed": 0.5,
-            "Chase_Speed": 0.0,
+            "Chase_Speed": 1.5,
             "Detect_Range": 10.0,
-            "Skill_Set": [],
-            "Exskill_Set": []
+            "Skill_Set": [
+                103201
+            ],
+            "Exskill_Set": [
+                103202
+            ]
         },
         {
             "Enemy_Id": 101002,
@@ -28,10 +36,14 @@
             "Max_Hp": 500,
             "Attack_Power": 1,
             "Patrol_Speed": 0.800000011920929,
-            "Chase_Speed": 0.0,
+            "Chase_Speed": 1.5,
             "Detect_Range": 10.0,
-            "Skill_Set": [],
-            "Exskill_Set": []
+            "Skill_Set": [
+                103301
+            ],
+            "Exskill_Set": [
+                103302
+            ]
         },
         {
             "Enemy_Id": 102001,
@@ -39,7 +51,7 @@
             "Max_Hp": 28000,
             "Attack_Power": 1,
             "Patrol_Speed": 2.0,
-            "Chase_Speed": 2.0,
+            "Chase_Speed": 3.0,
             "Detect_Range": 0.0,
             "Skill_Set": [
                 103000,
@@ -63,7 +75,7 @@
             "Max_Hp": 28000,
             "Attack_Power": 1,
             "Patrol_Speed": 2.0,
-            "Chase_Speed": 2.0,
+            "Chase_Speed": 3.0,
             "Detect_Range": 0.0,
             "Skill_Set": [],
             "Exskill_Set": []
@@ -74,7 +86,7 @@
             "Max_Hp": 28000,
             "Attack_Power": 1,
             "Patrol_Speed": 2.0,
-            "Chase_Speed": 2.0,
+            "Chase_Speed": 3.0,
             "Detect_Range": 0.0,
             "Skill_Set": [],
             "Exskill_Set": []
