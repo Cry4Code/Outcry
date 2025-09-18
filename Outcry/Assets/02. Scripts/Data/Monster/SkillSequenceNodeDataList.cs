@@ -19,6 +19,9 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
         dataList.Add(new EarthquakeSkillSequenceNode(103004));
         dataList.Add(new StompSkillSequenceNode(103005));
         dataList.Add(new UpperSlashSequenceNode(103006));
+        
+        dataList.Add(new UpperSlashSequenceNode(103002));
+        dataList.Add(new UpperSlashSequenceNode(103003));
     }
     
     /// <summary>

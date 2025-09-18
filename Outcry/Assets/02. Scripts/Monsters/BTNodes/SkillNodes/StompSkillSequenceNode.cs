@@ -16,8 +16,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         bool isInRange;
         bool isCooldownComplete;
         
-        //플레이어와의 거리 2m 이내에 있을때
-        //todo. 2f는 2m 이내. MonsterSkillModel에서 이걸 받아올 수 있도록 변경해야함
+        //플레이어와 거리 이내에 있을때
         if (Vector2.Distance(monster.transform.position, target.transform.position) <= skillData.range)
         {
             isInRange = true;

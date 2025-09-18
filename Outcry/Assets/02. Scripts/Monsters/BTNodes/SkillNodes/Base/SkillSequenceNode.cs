@@ -27,6 +27,7 @@ public abstract class SkillSequenceNode : SequenceNode
             Debug.LogError($"Skill ID {skillId} could not be found.");
         }
 
+        nodeName = skillData.skillName + skillData.skillId;
         elapsedTime = skillData.cooldown;
     }
     
