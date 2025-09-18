@@ -137,23 +137,4 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
 
         return state;
     }
-    
-    // 애니메이션 실행 중 확인용 함수
-    //todo. 부모 클래스에 넣어서 상속할 수도 있음. Stomp 내 주석 확인
-    private bool IsSkillAnimationPlaying(string animationName)
-    {
-        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
-
-        if (isSkillAnimationPlaying)
-        {
-            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return true;
-        }
-        else
-        {
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
-            skillTriggered = false;
-            return false;
-        }
-    }
 }

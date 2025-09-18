@@ -55,10 +55,10 @@ public class StompSkillSequenceNode : SkillSequenceNode
         if (!skillTriggered)
         {
             elapsedTime = 0f;
+            FlipCharacter();
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Stomp);
             //todo. player damage 처리
             monster.AttackController.SetDamages(skillData.damage1);
-            
             skillTriggered = true;
         }
 
@@ -85,23 +85,5 @@ public class StompSkillSequenceNode : SkillSequenceNode
         }
 
         return state;
-    }
-
-    //todo. 나중에 부모 클래스에 넣어두고 상속해서 사용하도록 해도 될듯.
-    private bool IsSkillAnimationPlaying(string animationName)
-    {
-        //스킬 애니메이션이 끝났는지 확인.
-        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
-        
-        if (isSkillAnimationPlaying)
-        {
-            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return true;
-        }
-        else
-        {
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return false;
-        }
     }
 }

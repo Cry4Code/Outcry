@@ -90,22 +90,4 @@ public class UpperSlashSequenceNode : SkillSequenceNode
 
         return state;
     }
-
-    // 나중에 부모클래스에 넣고 상속받는다고 함. Stomp 스킬 참조
-    private bool IsSkillAnimationPlaying(string animationName)
-    {
-        //스킬 애니메이션이 끝났는지 확인
-        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
-
-        if (isSkillAnimationPlaying)
-        {
-            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return true;
-        }
-        else
-        {
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return false;
-        }
-    }
 }

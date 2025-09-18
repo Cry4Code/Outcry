@@ -52,4 +52,29 @@ public abstract class SkillSequenceNode : SequenceNode
 
     protected abstract NodeState SkillAction();
     
+    protected void FlipCharacter()
+    {
+        if (monster.transform.position.x < target.transform.position.x)
+            monster.transform.localScale = new Vector3(1, monster.transform.localScale.y, monster.transform.localScale.z);
+        else
+            monster.transform.localScale = new Vector3(-1, monster.transform.localScale.y, monster.transform.localScale.z);
+    }
+    
+    protected bool IsSkillAnimationPlaying(string animationName)
+    {
+        //스킬 애니메이션이 끝났는지 확인.
+        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+        
+        if (isSkillAnimationPlaying)
+        {
+            Debug.Log($"Running skill animation: {animationName} from {skillData.skillName} (ID: {skillData.skillId})");
+            return true;
+        }
+        else
+        {
+            Debug.Log($"Using skill: {animationName} from {skillData.skillName} (ID: {skillData.skillId})");
+            return false;
+        }
+    }
+    
 }

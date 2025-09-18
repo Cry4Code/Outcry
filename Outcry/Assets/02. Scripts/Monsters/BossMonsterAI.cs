@@ -19,7 +19,7 @@ public class BossMonsterAI : MonsterAIBase
         SequenceNode attackSequenceNode = new SequenceNode();
         CanAttackConditionNode canAttackConditionNode = new CanAttackConditionNode(this);
         SelectorNode attackSelectorNode = new SelectorNode();
-        WaitActionNode waitActionNode = new WaitActionNode(2.0f);
+        WaitActionNode waitActionNode = new WaitActionNode(1.0f);
 
         attackSequenceNode.AddChild(canAttackConditionNode);
         attackSequenceNode.AddChild(attackSelectorNode);
