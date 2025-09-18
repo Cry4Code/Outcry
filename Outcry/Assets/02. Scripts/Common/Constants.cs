@@ -28,7 +28,7 @@ public static class AnimatorStrings
         public static readonly int UpperSlash = Animator.StringToHash("UpperSlash");
         public static readonly int Earthquake = Animator.StringToHash("Earthquake");
         public static readonly int HeavyDestroyer = Animator.StringToHash("HeavyDestroyer");
-        public static readonly int HeavyDestroyerIsArrived = Animator.StringToHash("HeavyDestroyerIsArrived");
+        public static readonly int IsArrived = Animator.StringToHash("IsArrived");
 
     }
 

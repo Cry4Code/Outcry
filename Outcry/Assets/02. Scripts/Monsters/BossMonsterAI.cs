@@ -42,15 +42,15 @@ public class BossMonsterAI : MonsterAIBase
         // EarthquakeSkillSequenceNode earthquakeSkillSequenceNode = new EarthquakeSkillSequenceNode(103004);
         // earthquakeSkillSequenceNode.InitializeSkillSequenceNode(monster, target);
 
-        HeavyDestroyerSkillSequenceNode heavyDestroyerSkillSequenceNode = new HeavyDestroyerSkillSequenceNode(103002);
-        heavyDestroyerSkillSequenceNode.InitializeSkillSequenceNode(monster, target);
+        //HeavyDestroyerSkillSequenceNode heavyDestroyerSkillSequenceNode = new HeavyDestroyerSkillSequenceNode(103002);
+        //heavyDestroyerSkillSequenceNode.InitializeSkillSequenceNode(monster, target);
 
 
         // attackSelectorNode.AddChild(metalBladeSkillSequenceNode);
         // attackSelectorNode.AddChild(stompSkillSequenceNode);
         // attackSelectorNode.AddChild(upperSlashSequenceNode);
         // attackSelectorNode.AddChild(earthquakeSkillSequenceNode);
-        attackSelectorNode.AddChild(heavyDestroyerSkillSequenceNode);
+        //attackSelectorNode.AddChild(heavyDestroyerSkillSequenceNode);
 
         // 스킬은 보스몬스터로 형변환 후에 접근.
         BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;

@@ -9,11 +9,14 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
     //애니메이터 추가
     private Animator animator;
     // 상수
-    private const float MOVE_SPEED = 50f;   // 이동 속도
+    private const float MOVE_SPEED = 20f;   // 이동 속도
     private float targetPosX;
     private bool isArrived = false;
+    private const float ALLOW_GAP = 1.0f;
+    private const float FORCED_EXIT_TIME = 2f;
 
-    public HeavyDestroyerSkillSequenceNode(int skillId) : base(skillId) // 뭔지 모르겠음
+
+    public HeavyDestroyerSkillSequenceNode(int skillId) : base(skillId)
     {
     }
 
@@ -89,7 +92,7 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
         if (IsSkillAnimationPlaying(AnimatorStrings.MonsterAnimation.HeavyDestroyerLoop))
         {
 
-            if (targetPosX != monster.transform.position.x)
+            if (Mathf.Abs( targetPosX - monster.transform.position.x) > ALLOW_GAP)
             {
                 //이동 로직 구현
                 float direction = Mathf.Sign(monster.transform.localScale.x);
@@ -100,7 +103,16 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
             else
             {
                 isArrived = true; // isArrived 라는 bool 값을 이동이 끝났을 때 true 로 바꿔줘서 애니메이션이 끝났는지 다른곳에서 확인할 수 있게 해줌
-                animator.SetTrigger(AnimatorStrings.MonsterParameter.HeavyDestroyerIsArrived);
+                animator.SetTrigger(AnimatorStrings.MonsterParameter.IsArrived);
+            }
+
+            //일정 시간 이상 추적 시 강제 종료
+            if (Time.time - stateEnterTime > FORCED_EXIT_TIME)
+            {
+                animator.SetTrigger(AnimatorStrings.MonsterParameter.IsArrived);
+                FieldReset();
+                return NodeState.Success;
+
             }
             state = NodeState.Running;
         }
@@ -108,9 +120,7 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
         //isArrived 를 통해서 이전 모든 애니메이션이 실행 된 상태에서, 엔드 애니메이션 까지 실행중이 아니면 == 모든 애니메이션이 실행됨 => 필드를 초기화 하고 성공 반환 
         if (!IsSkillAnimationPlaying(AnimatorStrings.MonsterAnimation.HeavyDestroyerEnd) && isArrived)
         {
-            skillTriggered = false; // 다음 스킬 사용을 위해 플래그 리셋
-            monster.AttackController.SetDamages(0); //데미지 초기화
-            isArrived = false; // 다음 스킬 사용을 위해 플래그 리셋
+            FieldReset();
             state = NodeState.Success;
         }
         else 
@@ -129,17 +139,23 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
 
         if (isSkillAnimationPlaying)
         {
-            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
+            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId}) {animationName}");
             return true;
         }
         else
         {
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
+            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId}) {animationName}");
             return false;
         }
 
     }
 
+    private void FieldReset()
+    {
+        skillTriggered = false; // 다음 스킬 사용을 위해 플래그 리셋
+        monster.AttackController.SetDamages(0); //데미지 초기화
+        isArrived = false; // 다음 스킬 사용을 위해 플래그 리셋
+    }
     
 
 
