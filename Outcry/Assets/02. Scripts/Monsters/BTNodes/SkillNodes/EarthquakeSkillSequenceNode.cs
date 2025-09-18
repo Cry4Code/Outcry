@@ -94,7 +94,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Earthquake);
 
             // 플레이어 데미지 주기
-            monster.AttackController.SetDamage(skillData.damage1);  
+            monster.AttackController.SetDamages(skillData.damage1);  
 
             skillTriggered = true;
         }
@@ -117,7 +117,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         {
             Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
 
-            monster.AttackController.SetDamage(0);  //데미지 초기화
+            monster.AttackController.ResetDamages();  //데미지 초기화
             skillTriggered = false;
             state = NodeState.Success;
         }
