@@ -5,7 +5,8 @@ using UnityEngine;
 public class EarthquakeSkillSequenceNode : SkillSequenceNode
 {
     // 경과 시간, 쿨타임 등 계산용
-    [SerializeField] private float elapsedTime = 0f;
+    [SerializeField] private float elapsedTime = 0f;//경과 시간 타이머
+    private float stateEnterTime; // 스킬(상태)에 진입한 시간
 
     // 스킬 작동 트리거
     private bool skillTriggered = false;
@@ -13,18 +14,22 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
     // 애니메이션 클립 초당 프레임 수
     private const float ANIMATION_FRAME_RATE = 20f;
     // 투사체 생성 프레임
-    private const float INSTANTIATE_STONE1_TIME = (1.0f / ANIMATION_FRAME_RATE) * 20;   // 20프레임이 지난 시점
-    private const float INSTANTIATE_STONE2_TIME = (1.0f / ANIMATION_FRAME_RATE) * 28;   // 28프레임이 지난 시점
+    private const float INSTANTIATE_STONE1_TIME = (1.0f / ANIMATION_FRAME_RATE) * 19;   // 20프레임이 지난 시점
+    private const float INSTANTIATE_STONE2_TIME = (1.0f / ANIMATION_FRAME_RATE) * 25;   // 26프레임이 지난 시점
+    private const float INSTANTIATE_STONE3_TIME = (1.0f / ANIMATION_FRAME_RATE) * 31;   // 32프레임이 지난 시점
 
     // 투사체 오브젝트
     private GameObject stone;
 
-    // 투사체 좌표?
-    private float x1 = 0f;
-    private float y1 = 0f;
+    // 투사체 좌표
+    private Vector3 position1 = new Vector3(5.7f, -1.47f, 0f);
+    private Vector3 position2 = new Vector3(10.2f, -1.47f, 0f);
+    private Vector3 position3 = new Vector3(14.7f, -1.47f, 0f);
 
-    private float x2 = 0f;
-    private float y2 = 0f;
+    // 투사체 생성 플레그
+    private bool isSpawned1 = false;
+    private bool isSpawned2 = false;
+    private bool isSpawned3 = false;
 
     public EarthquakeSkillSequenceNode(int skillId) : base(skillId)
     {
@@ -63,6 +68,9 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         {
             isCooldownComplete = true;
             elapsedTime = 0f;
+            isSpawned1 = false;
+            isSpawned2 = false;
+            isSpawned3 = false;
         }
         else
         {
@@ -92,11 +100,12 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         if (!skillTriggered)
         {
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Earthquake);
-
-            // 플레이어 데미지 주기
-            monster.AttackController.SetDamages(skillData.damage1);  
+            monster.AttackController.SetDamages(skillData.damage1);  // 플레이어 데미지 주기
 
             skillTriggered = true;
+
+            // 상태 시작 시간 저장
+            stateEnterTime = Time.time;
         }
 
         // 시작 직후 Running 강제
@@ -117,22 +126,34 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         {
             Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
 
-            monster.AttackController.ResetDamages();  //데미지 초기화
+            monster.AttackController.SetDamages(0);  //데미지 초기화
             skillTriggered = false;
             state = NodeState.Success;
         }
 
-        // 애니메이션의 동작 시간에 투사체(Stone) 생성 로직 실행
-        if (elapsedTime == INSTANTIATE_STONE1_TIME)
-        {
-            //todo. 돌 프리팹 생성
-            // 위치를 어떻게 잡?지?
-            Object.Instantiate(stone, new Vector3(x1, y1, 0), Quaternion.identity);
-        }                
+        // 애니메이션 경과 시간 계산
+        float animationElapsedTime = Time.time - stateEnterTime;
 
-        if (elapsedTime == INSTANTIATE_STONE2_TIME)
+        // 애니메이션의 동작 시간에 투사체(Stone) 생성 로직 실행
+        if (animationElapsedTime >= INSTANTIATE_STONE1_TIME && !isSpawned1)
         {
-            Object.Instantiate(stone, new Vector3(x2, y2, 0), Quaternion.identity);
+            Debug.Log($"{skillData.skillName} : {stone.name} 생성 - 위치 {position1}");
+            monster.AttackController.InstantiateProjectile(stone, position1);
+            isSpawned1 = true;
+        }      
+
+        if (animationElapsedTime >= INSTANTIATE_STONE2_TIME && !isSpawned2)
+        {
+            Debug.Log($"{skillData.skillName} : {stone.name} 생성 - 위치 {position2}");
+            monster.AttackController.InstantiateProjectile(stone, position2);
+            isSpawned2 = true;
+        }
+
+        if (animationElapsedTime >= INSTANTIATE_STONE3_TIME && !isSpawned3)
+        {
+            Debug.Log($"{skillData.skillName} : {stone.name} 생성 - 위치 {position3}");
+            monster.AttackController.InstantiateProjectile(stone, position3);
+            isSpawned3 = true;
         }
 
         return state;

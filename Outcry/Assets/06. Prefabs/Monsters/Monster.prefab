@@ -178,10 +178,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8858785292247172092}
   - component: {fileID: 6454998150797816761}
-  - component: {fileID: 4847742923386489334}
   - component: {fileID: 7035247694721522103}
   - component: {fileID: 8131204332901593751}
   - component: {fileID: 8223912052011406626}
+  - component: {fileID: 1780738220554408116}
   m_Layer: 7
   m_Name: Monster
   m_TagString: Untagged
@@ -227,20 +227,6 @@ MonoBehaviour:
   hitbox: {fileID: 3680998514601764723}
   specialSkillDatas: []
   commonSkillDatas: []
---- !u!114 &4847742923386489334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7265725166589081669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2312f880d0af63f48bd400ec1d194df6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 0
-  currentHealth: 0
 --- !u!114 &7035247694721522103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,3 +319,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1780738220554408116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7265725166589081669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2312f880d0af63f48bd400ec1d194df6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
