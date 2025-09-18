@@ -12,7 +12,14 @@ public class PlayerAttack : MonoBehaviour
     public int MaxAttackCount = 2;
     public bool HasJumpAttack = false;
 
+    #endregion
+    
+    #region 패링 관련
 
+    [field: Header("Parry")] 
+    public bool isStartParry = false;
+    public bool successParry = false;
+    
     
     #endregion
 

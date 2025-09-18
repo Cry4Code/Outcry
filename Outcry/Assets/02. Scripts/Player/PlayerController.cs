@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
@@ -40,6 +41,8 @@ public class PlayerController : MonoBehaviour
             { typeof(DownAttackState), new DownAttackState()},
             { typeof(SpecialAttackState), new SpecialAttackState()},
             { typeof(DodgeState), new DodgeState()},
+            { typeof(StartParryState), new StartParryState()},
+            { typeof(SuccessParryState), new SuccessParryState()},
         };
     }
 
@@ -81,6 +84,11 @@ public class PlayerController : MonoBehaviour
 
         currentState = states[typeof(T)];
         currentState.Enter(this);
+    }
+
+    public bool IsCurrentState<T>() where T : IPlayerState
+    {
+        return currentState is T;
     }
 
     public void SetAnimation(int animHash, bool isTrigger = false)

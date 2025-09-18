@@ -25,6 +25,8 @@ public static class PlayerAnimID
     public static readonly int DownAttack = Animator.StringToHash("DownAttack");
     public static readonly int SpecialAttack = Animator.StringToHash("SpecialAttack");
     public static readonly int Dodge = Animator.StringToHash("Dodge");
+    public static readonly int StartParry = Animator.StringToHash("StartParry");
+    public static readonly int SuccessParry = Animator.StringToHash("SuccessParry");
     
     // Int 파라미터
     public static readonly int NormalAttackCount = Animator.StringToHash("NormalAttackCount");
