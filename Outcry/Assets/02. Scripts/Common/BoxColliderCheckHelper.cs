@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class BoxColliderCheckHelper : MonoBehaviour
 {
-    #if UNITY_EDITOR
     public BoxCollider2D collider2D;
     public Color color = Color.red;
 
-#if UNITY_EDITOR
     private void Start()
     {
         collider2D = GetComponent<BoxCollider2D>();
@@ -19,6 +17,7 @@ public class BoxColliderCheckHelper : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -28,5 +27,4 @@ public class BoxColliderCheckHelper : MonoBehaviour
         }
     }
 #endif
-    #endif
 }

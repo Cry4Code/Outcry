@@ -25,12 +25,11 @@ public class StoneController : MonoBehaviour, ICountable
         if ((playerLayer.value & (1 << other.gameObject.layer)) != 0) //(other.gameObject.layer == playerLayer)
         {
             Debug.Log("Playerlayer hit");
-            Player damagable = other.gameObject.GetComponentInParent<Player>();
-            if (damagable != null && damage > 0)
+            bool isPlayer = other.gameObject.TryGetComponent<IDamagable>(out var damagable);
+            if (isPlayer && damagable != null && damage > 0)
             {
-                //todo. Player IDamagable 구현 후 데미지 주기
-                // damagable.TakeDamage(damage);
-                Debug.Log("Player took " + damage + " damage from " + gameObject.name);
+                damagable.TakeDamage(damage);
+                // Debug.Log("Player took " + damage + " damage from " + gameObject.name);
             }
         }
     }
