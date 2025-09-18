@@ -46,3 +46,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   monsterPrefab: {fileID: 7265725166589081669, guid: 7c47239983a7f284ab1a8917035b1c9f, type: 3}
+  monsterData:
+    monsterId: 1
+    monsterName: sad
+    health: 111
+    chaseSpeed: 7
+    detectRange: 3
+    attackCooldown: 1
+    specialSkillIds: 
+    commonSkillIds: 599201005e9201005b9201005c9201005d920100

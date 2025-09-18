@@ -267,70 +267,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestManager
       objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.health
-      value: 111
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.monsterId
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.chaseSpeed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.detectRange
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.monsterName
-      value: sad
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.attackCooldown
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.specialSkillIds.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.data[0]
-      value: 103001
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.data[1]
-      value: 103006
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.data[2]
-      value: 103003
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.data[3]
-      value: 103004
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.data[4]
-      value: 103005
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.data[5]
-      value: 103006
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.data[6]
-      value: 103005
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
-      propertyPath: monsterData.commonSkillIds.Array.data[7]
-      value: 103005
-      objectReference: {fileID: 0}
     - target: {fileID: 5226652059249393811, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1011,7 +947,7 @@ PrefabInstance:
       objectReference: {fileID: 6200000, guid: c78d72528abcd364aa490ab46f6f3553, type: 2}
     - target: {fileID: 2546533353557174264, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
-      value: 128
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4271897825629240966, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: <DoubleJumpForce>k__BackingField

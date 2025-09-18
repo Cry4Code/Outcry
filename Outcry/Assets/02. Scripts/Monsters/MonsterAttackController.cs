@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MonsterAttackController : MonoBehaviour
+public class MonsterAttackController : MonoBehaviour, ICountable
 {
     private MonsterBase monster;
     [SerializeField] private LayerMask playerLayer;
@@ -84,14 +84,18 @@ public class MonsterAttackController : MonoBehaviour
         if ((playerLayer.value & (1 << other.gameObject.layer)) != 0) //(other.gameObject.layer == playerLayer)
         {
             Debug.Log("Playerlayer hit");
-            Player damagable = other.gameObject.GetComponentInParent<Player>();
-            if (damagable != null && currentDamage > 0)
+            bool isPlayer = other.gameObject.TryGetComponent<IDamagable>(out var damagable);
+            if (isPlayer && damagable != null && currentDamage > 0)
             {
-                //todo. Player IDamagable 구현 후 데미지 주기
-                // damagable.TakeDamage(damage);
-                Debug.Log("Player took " + currentDamage + " damage from " + monster.MonsterData.monsterId);
+                damagable.TakeDamage(currentDamage);
+                // Debug.Log("Player took " + currentDamage + " damage from " + monster.MonsterData.monsterId);
             }
         }
     }
 
+    public void CounterAttacked()
+    {
+        Debug.Log($"{monster.MonsterData.monsterName} (ID: {monster.MonsterData.monsterId}) was counterattacked!" );
+        // todo. 몬스터가 카운터 어택 당했을 때의 처리 로직 추가
+    }
 }
