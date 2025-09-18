@@ -30,8 +30,8 @@ public class AttackHitbox : MonoBehaviour
             return;
         }
             
-        if (other.TryGetComponent<IDamagable>(out var damagable)
-            && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        if (other.TryGetComponent<IDamagable>(out var damagable))
+            // && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             damagable?.TakeDamage(Damage);
             Debug.Log($"플레이어가 몬스터에게 {Damage} 만큼 데미지 줌");
