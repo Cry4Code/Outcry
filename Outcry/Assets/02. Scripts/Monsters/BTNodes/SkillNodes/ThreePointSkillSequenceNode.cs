@@ -5,7 +5,6 @@ public class ThreePointSkillSequenceNode : SkillSequenceNode
 {
     private float skillStartTime;
     private float coolTime;
-    private bool skillTriggered = false;   
     private Animator animator;
 
     private const float ATTACK_RANGE = 2f; // 공격 범위 (플레이어 감지)
@@ -14,9 +13,13 @@ public class ThreePointSkillSequenceNode : SkillSequenceNode
     // 전체 애니메이션 길이 (38개 스프라이트 = 0~37번 인덱스)
     private const float ANIMATION_TOTAL_DURATION = (1.0f / ANIMATION_FRAME_RATE) * 38;
 
-    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target, MonsterSkillModel skillData)
+    public ThreePointSkillSequenceNode(int skillId) : base(skillId)
     {
-        base.InitializeSkillSequenceNode(monster, target, skillData);
+    }
+
+    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target)
+    {
+        base.InitializeSkillSequenceNode(monster, target);
 
         this.nodeName = "ThreePointSkillSequenceNode";
         animator =  monster.Animator;
@@ -81,7 +84,7 @@ public class ThreePointSkillSequenceNode : SkillSequenceNode
         if (elapsedTime >= ANIMATION_TOTAL_DURATION)
         {
             skillTriggered = false; // 다음 스킬 사용을 위해 플래그 리셋
-            monster.AttackController.SetDamage(0); //데미지 초기화
+            monster.AttackController.ResetDamages(); //데미지 초기화
             return NodeState.Success;
         }
 

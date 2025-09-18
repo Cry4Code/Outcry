@@ -30,6 +30,7 @@ public static class AnimatorStrings
         public static readonly int Earthquake = Animator.StringToHash("Earthquake");
         public static readonly int HeavyDestroyer = Animator.StringToHash("HeavyDestroyer");
         public static readonly int IsArrived = Animator.StringToHash("IsArrived");
+        public static readonly int ThreePoint = Animator.StringToHash("TreePoint");
 
     }
 

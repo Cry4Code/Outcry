@@ -5,7 +5,6 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
     private float stateEnterTime; // 스킬(상태)에 진입한 시간
     [SerializeField] 
     private float cooldownTimer = 0f; // 쿨다운 계산을 위한 타이머
-    private bool skillTriggered = false;
     //애니메이터 추가
     private Animator animator;
     // 상수
@@ -131,32 +130,11 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
         return state;
 
     }
-
-    private bool IsSkillAnimationPlaying(string animationName) // 해당 이름의 애니메이션이 재생중인지 확인
-    {
-        //스킬 애니메이션이 끝났는지 확인.
-        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
-
-        if (isSkillAnimationPlaying)
-        {
-            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId}) {animationName}");
-            return true;
-        }
-        else
-        {
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId}) {animationName}");
-            return false;
-        }
-
-    }
-
+    
     private void FieldReset()
     {
         skillTriggered = false; // 다음 스킬 사용을 위해 플래그 리셋
         monster.AttackController.SetDamages(0); //데미지 초기화
         isArrived = false; // 다음 스킬 사용을 위해 플래그 리셋
     }
-    
-
-
 }
