@@ -19,6 +19,12 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     public event Action onTakeDamage;
 
     private float lastRecoveryStamina;
+    private PlayerController player;
+
+    private void Awake()
+    {
+        player = GetComponent<PlayerController>();
+    }
 
     // Start is called before the first frame update
     void Start()

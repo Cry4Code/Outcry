@@ -55,6 +55,12 @@ public class IdleState : GroundSubState
             player.ChangeState<DodgeState>();
             return;
         }
+
+        if (player.Inputs.Player.Parry.triggered)
+        {
+            player.ChangeState<StartParryState>();
+            return;
+        }
         
         
         if (player.Inputs.Player.Jump.triggered 
