@@ -83,7 +83,7 @@ public class DataTableManager : Singleton<DataTableManager>
     }
 
     // 목록형 데이터 가져오기
-    public T GetCollectionData<T>(int id) where T : class, IData
+    public T GetCollectionDataById<T>(int id) where T : class, IData
     {
         if (_collectionData.TryGetValue(typeof(T), out object table))
         {

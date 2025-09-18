@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using SoundEnums;
 
 public class MuteToggle : MonoBehaviour
 {

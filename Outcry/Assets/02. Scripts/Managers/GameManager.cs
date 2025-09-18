@@ -1,71 +1,162 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
-using static Paths;
+using UnityEngine.SceneManagement; // 씬 관리를 위해 추가
+
+public class UserData
+{
+    public string Nickname;
+    public List<int> ClearedBossIds; // 클리어한 보스 ID 목록
+    public bool IsTutorialCleared;
+
+    public UserData(string nickname)
+    {
+        Nickname = nickname;
+        ClearedBossIds = new List<int>();
+        IsTutorialCleared = false;
+    }
+}
+
+// 게임 전체의 상태를 나타내는 열거형
+public enum EGameState
+{
+    Initializing, // 초기화 중
+    MainMenu,     // 메인 메뉴 (로그인 전)
+    Lobby,        // 로비 (캐릭터/보스 선택)
+    InGame,       // 게임 플레이 중 (보스 전투)
+    LoadingScene  // 씬 로딩 중
+}
 
 public class GameManager : Singleton<GameManager>
 {
-    private async void Start()
+    public EGameState CurrentGameState { get; private set; }
+    public UserData CurrentUserData { get; private set; }
+
+    // StageManager에 전달할 현재 선택된 스테이지의 모든 정보
+    public StageData SelectedStageData { get; private set; }
+    public string CurrentUserUID { get; private set; }
+
+    private void Awake()
     {
-        await Init();
+        InitializeCoreSystems();
     }
 
-    private async Task Init()
+    private void Start()
     {
-        // Firebase 초기화를 기다리는 코루틴 시작
-        //StartCoroutine(WaitForFirebaseAndInitialize());
-
-        AudioManager.Instance.PlayBGM("Title");
-
-        StartCoroutine(ChangeBGMCoroutine());
-
-        Task playerSFX = AudioManager.Instance.PreloadSFX("Fury", "Sword");
-        await Task.WhenAll(playerSFX);
-
-        AudioManager.Instance.PlaySFX("Fury");
+        // 오디오 테스트
+        AudioManager.Instance.PlayBGM((int)SoundEnums.EBGM.Title);
+        AudioManager.Instance.PlaySFX((int)SoundEnums.ESFX.Parry);
     }
 
-    private void Update()
+    // 게임 시작 시 단 한번만 실행되어야 하는 초기화 로직
+    private void InitializeCoreSystems()
     {
-        if (Input.GetMouseButtonDown(0))
+        CurrentGameState = EGameState.Initializing;
+        // Application.targetFrameRate = 60;
+
+        // TODO: ResourceManager, AudioManager 등 다른 핵심 시스템 초기화 호출
+        // StartCoroutine(WaitForFirebaseAndInitialize());
+
+        Debug.Log("GameManager Initialized.");
+    }
+
+    private void OnEnable()
+    {
+        // StageManager가 보스 처치 시 발생시키는 이벤트를 구독
+        StageManager.OnBossDefeated += HandleBossDefeated;
+    }
+
+    private void OnDisable()
+    {
+        // 구독 해제
+        StageManager.OnBossDefeated -= HandleBossDefeated;
+    }
+
+    public void CreateNewGame(string nickname)
+    {
+        CurrentUserData = new UserData(nickname);
+        // TODO: 새 데이터 저장 요청
+        // SaveGame(); 
+
+        // 튜토리얼용 보스 전투 시작
+        StartBossBattle(0); // 튜토리얼 보스 ID를 0으로 약속
+    }
+
+    public void LoadGame(UserData data)
+    {
+        CurrentUserData = data;
+        GoToLobby();
+    }
+
+    // 로비 씬으로 이동
+    public void GoToLobby()
+    {
+        CurrentGameState = EGameState.Lobby;
+        // SceneLoadManager.Instance.LoadScene("LobbyScene");
+        SceneManager.LoadScene("LobbyScene"); // 임시
+    }
+
+    /// <summary>
+    /// 로비에서 보스 선택 시 호출.
+    /// bossId를 StageData로 변환하여 전투 씬을 로드합니다.
+    /// </summary>
+    public async void StartBossBattle(int bossId)
+    {
+        CurrentGameState = EGameState.LoadingScene;
+
+        // 데이터 테이블에서 로드할 스테이지 데이터 주소 가져옴
+        string stageDataAddress = $"StageData_Boss_{bossId}"; // 예시: "StageData_Boss_101"
+
+        // ResourceManager를 통해 StageData 에셋 로드
+        //SelectedStageData = await ResourceManager.Instance.LoadAssetAddressableAsync<StageData>(stageDataAddress);
+
+        if (SelectedStageData == null)
         {
-            Vector3 mousePos = Input.mousePosition;
-
-            mousePos.z = 0f;
-
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
-
-            AudioManager.Instance.PlaySFX("Sword", worldPosition);
+            Debug.LogError($"{stageDataAddress} 로드에 실패했습니다. 전투를 시작할 수 없습니다.");
+            GoToLobby(); // 로비로 복귀
+            return;
         }
+
+        // 3. StageData 로드가 완료되면 전투 씬으로 이동
+        CurrentGameState = EGameState.InGame;
+        // SceneLoadManager.Instance.LoadScene("BossBattleScene");
+        SceneManager.LoadScene("BossBattleScene"); // 임시
     }
 
-    private IEnumerator ChangeBGMCoroutine()
+    // StageManager가 보스 처치 이벤트를 발생시키면 실행
+    private void HandleBossDefeated(int bossId)
     {
-        yield return new WaitForSeconds(10f); // 10초 대기
-        AudioManager.Instance.PlayBGM("InGame"); // BGM 변경
-    }
+        if (CurrentUserData == null) return;
 
-    private IEnumerator WaitForFirebaseAndInitialize()
-    {
-        // FirebaseManager.Instance.IsInit()가 true가 될 때까지 매 프레임 기다림
-        while (!FirebaseManager.Instance.IsInit())
+        Debug.Log($"보스 ID: {bossId} 처치! 유저 데이터 업데이트 및 저장.");
+
+        // 클리어한 보스 목록에 추가 (중복 방지)
+        if (!CurrentUserData.ClearedBossIds.Contains(bossId))
         {
-            yield return null;
+            CurrentUserData.ClearedBossIds.Add(bossId);
         }
 
-        // 이 시점은 Firebase 초기화가 100% 완료되었음이 보장됨
-        InitializeGame();
+        // 튜토리얼 클리어 처리
+        if (bossId == 0 && !CurrentUserData.IsTutorialCleared)
+        {
+            CurrentUserData.IsTutorialCleared = true;
+        }
+
+        // 변경된 데이터 저장
+        SaveGame();
     }
 
-    // 게임의 실제 로직을 처리하는 메서드
-    private void InitializeGame()
+    // 현재 유저 데이터를 저장하는 기능
+    public void SaveGame()
     {
-        // Firebase 초기화가 완료되었음이 보장되는 시점
-        Debug.Log("GameManager: Firebase is confirmed to be initialized. Starting game logic.");
+        if (CurrentUserData == null || string.IsNullOrEmpty(CurrentUserUID))
+        {
+            return;
+        }
 
-        //FirebaseManager.Instance.LogStageStart("Test");
+        Debug.Log("게임을 저장합니다...");
+        // TODO: FirebaseManager에 데이터 저장 요청
+        // FirebaseManager.Instance.SaveUserData(CurrentUserUID, CurrentUserData);?
     }
 }

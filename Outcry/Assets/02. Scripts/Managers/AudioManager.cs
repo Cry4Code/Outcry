@@ -1,17 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Android;
 using UnityEngine.Audio;
+using SoundEnums;
 
-public enum EVolumeType
-{
-    Master,
-    BGM,
-    SFX
-}
+// TEMP enum 매핑
+
 
 public class AudioManager : Singleton<AudioManager>
 {
@@ -26,12 +23,8 @@ public class AudioManager : Singleton<AudioManager>
     [Tooltip("풀이 가득 찼을 때 추가로 생성할 오디오 플레이어의 수")]
     [SerializeField] private int poolExpansionAmount = 10;
 
-    [Header("Sound Container")]
-    [Tooltip("게임에서 사용할 모든 사운드 정보를 담은 ScriptableObject")]
-    [SerializeField] private SoundContainer[] soundContainers;
-
     private Queue<AudioPlayer> audioPlayerPool;
-    private Dictionary<string, Sound> soundDict;
+    private Dictionary<int, SoundData> soundDict;
     private Coroutine duckingCoroutine;
 
     // 음소거 상태 및 이전 볼륨 저장을 위한 변수
@@ -55,6 +48,8 @@ public class AudioManager : Singleton<AudioManager>
 
     private void Awake()
     {
+        DataTableManager.Instance.LoadCollectionData<SoundDataTable>();
+
         InitializePool();
         InitializeSoundContainer();
     }
@@ -79,34 +74,21 @@ public class AudioManager : Singleton<AudioManager>
     // SoundContainer의 사운드들을 딕셔너리에 등록
     private void InitializeSoundContainer()
     {
-        if (soundContainers == null || soundContainers.Length == 0)
+        // DataTableManager에서 ID를 Key로 사용하는 기본 저장소의 데이터를 가져옴
+        var dataTable = DataTableManager.Instance.CollectionData;
+
+        if (dataTable.TryGetValue(typeof(SoundData), out object soundTable))
         {
-            Debug.LogError("SoundContainer array is not assigned or empty.");
-            return;
+            // Manager에 저장된 Dictionary<int, IData>를 Dictionary<int, SoundData>로 변환
+            var originalDict = (Dictionary<int, IData>)soundTable;
+            soundDict = originalDict.ToDictionary(kvp => kvp.Key, kvp => (SoundData)kvp.Value);
+
+            Debug.Log($"[AudioManager] {soundDict.Count} sound entries loaded successfully.");
         }
-
-        soundDict = new Dictionary<string, Sound>();
-
-        foreach (SoundContainer container in soundContainers)
+        else
         {
-            if (container == null || container.sounds == null)
-            {
-                continue;
-            }
-
-            foreach (Sound sound in container.sounds)
-            {
-                // 모든 컨테이너에 걸쳐 사운드 이름 고유해야 함
-                if (!soundDict.ContainsKey(sound.name))
-                {
-                    soundDict.Add(sound.name, sound);
-                }
-                else
-                {
-                    // 어떤 컨테이너에서 중복이 발생했는지 알려주면 디버깅에 용이합니다.
-                    Debug.LogWarning($"Duplicate sound name '{sound.name}' found in container '{container.name}'. Skipping this entry.");
-                }
-            }
+            Debug.LogError("[AudioManager] Sound data could not be loaded from DataTableManager. Make sure data is loaded first.");
+            soundDict = new Dictionary<int, SoundData>();
         }
     }
 
@@ -169,24 +151,24 @@ public class AudioManager : Singleton<AudioManager>
     #endregion
 
     // 지정된 이름의 BGM 재생
-    public async void PlayBGM(string name, bool loop = true)
+    public async void PlayBGM(int id, bool loop = true)
     {
-        if(!soundDict.TryGetValue(name, out Sound sound))
+        if (!soundDict.TryGetValue(id, out SoundData sound))
         {
-            Debug.LogWarning($"BGM sound '{name}' not found!");
+            Debug.LogWarning($"BGM sound with ID '{id}' not found!");
             return;
         }
 
-        AudioClip clip = await ResourceManager.Instance.LoadAssetAddressableAsync<AudioClip>(sound.address);
+        AudioClip clip = await ResourceManager.Instance.LoadAssetAddressableAsync<AudioClip>(sound.Sound_path);
         if(clip == null)
         {
-            Debug.LogWarning($"Failed to load BGM clip from address: {sound.address}");
+            Debug.LogWarning($"Failed to load BGM clip from address: {sound.Sound_path}");
             return;
         }
 
         bgmSource.clip = clip;
-        bgmSource.volume = sound.volume;
-        bgmSource.pitch = sound.pitch;
+        bgmSource.volume = sound.Volume;
+        bgmSource.pitch = sound.Pitch;
         bgmSource.loop = loop;
         bgmSource.playOnAwake = false;
         bgmSource.outputAudioMixerGroup = bgmMixerGroup;
@@ -194,24 +176,24 @@ public class AudioManager : Singleton<AudioManager>
     }
 
     // SFX를 기본 위치(화면 중앙)에서 재생(예. UI 효과음)
-    public void PlaySFX(string name)
+    public void PlaySFX(int id)
     {
-        PlaySFX(name, Vector3.zero);
+        PlaySFX(id, Vector3.zero);
     }
 
     // 지정된 이름의 SFX를 특정 위치에서 재생
-    public async void PlaySFX(string name, Vector3 position)
+    public async void PlaySFX(int id, Vector3 position)
     {
-        if (!soundDict.TryGetValue(name, out Sound sound))
+        if (!soundDict.TryGetValue(id, out SoundData sound))
         {
             Debug.LogWarning($"SFX sound '{name}' not found!");
             return;
         }
 
-        AudioClip clip = await ResourceManager.Instance.LoadAssetAddressableAsync<AudioClip>(sound.address);
+        AudioClip clip = await ResourceManager.Instance.LoadAssetAddressableAsync<AudioClip>(sound.Sound_path);
         if (clip == null)
         {
-            Debug.LogWarning($"Failed to load SFX clip from address: {sound.address}");
+            Debug.LogWarning($"Failed to load SFX clip from address: {sound.Sound_path}");
             return;
         }
 
@@ -220,7 +202,7 @@ public class AudioManager : Singleton<AudioManager>
         {
             player.transform.position = position;
             player.gameObject.SetActive(true);
-            player.Play(clip, sound.volume, sound.pitch);
+            player.Play(clip, sound.Volume, sound.Pitch);
         }
     }
 
@@ -395,40 +377,40 @@ public class AudioManager : Singleton<AudioManager>
 
     #region 사운드 에셋 관리
     // 지정된 이름의 사운드 클립들을 미리 로드하여 캐싱 (예: 로딩 화면에서 호출)
-    public async Task PreloadSFX(params string[] names)
+    public async Task PreloadSFX(params int[] ids)
     {
         List<Task> loadTasks = new List<Task>();
-        foreach (string name in names)
+        foreach (int id in ids)
         {
-            if (soundDict.TryGetValue(name, out Sound sound))
+            if (soundDict.TryGetValue(id, out SoundData sound))
             {
-                loadTasks.Add(ResourceManager.Instance.LoadAssetAddressableAsync<AudioClip>(sound.address));
+                loadTasks.Add(ResourceManager.Instance.LoadAssetAddressableAsync<AudioClip>(sound.Sound_path));
             }
             else
             {
-                Debug.LogWarning($"SFX sound '{name}' not found!");
+                Debug.LogWarning($"SFX sound '{id}' not found!");
             }
         }
         await Task.WhenAll(loadTasks);
-        Debug.Log($"[AudioManager] {names.Length} SFX preloaded.");
+        Debug.Log($"[AudioManager] {ids.Length} SFX preloaded.");
     }
 
     // 지정된 이름의 사운드 클립들을 메모리에서 해제 (예: 스테이지 종료 시 호출)
-    public void UnloadSFX(params string[] names)
+    public void UnloadSFX(params int[] ids)
     {
-        foreach (string name in names)
+        foreach (int id in ids)
         {
-            if (soundDict.TryGetValue(name, out Sound sound))
+            if (soundDict.TryGetValue(id, out SoundData sound))
             {
-                ResourceManager.Instance.ReleaseAddressableAsset(sound.address);
+                ResourceManager.Instance.UnloadAddressableAsset(sound.Sound_path);
             }
             else
             {
-                Debug.LogWarning($"SFX sound '{name}' not found!");
+                Debug.LogWarning($"SFX sound '{id}' not found!");
             }
         }
 
-        Debug.Log($"[AudioManager] {names.Length} SFX unloaded.");
+        Debug.Log($"[AudioManager] {ids.Length} SFX unloaded.");
     }
     #endregion
 

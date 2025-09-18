@@ -4,7 +4,17 @@ using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
+
+// --------------- ResourceManager의 자체 참조 카운트가 필요한 이유 ---------------
+// Addressables의 참조 카운트는 API 호출 횟수만을 기록합니다.
+// ResourceManager는 여러 시스템(StageManager, UIManager 등)의 요청을 받아
+// 에셋 하나당 Addressables.Load를 대표로 단 한 번만 호출합니다.
+// 따라서 ResourceManager가 자체적으로 자신에게 요청한 고객이 몇 명인지를 세지 않으면
+// 한 고객이 Unload를 요청했을 때 다른 고객이 여전히 사용 중임에도 불구하고
+// 에셋을 조기에 메모리에서 해제하는 심각한 문제가 발생할 수 있습니다.
+// 이 참조 카운트는 그 문제를 해결하기 위한 고객 관리 장부입니다.
 
 public class ResourceManager : Singleton<ResourceManager>
 {
@@ -13,6 +23,8 @@ public class ResourceManager : Singleton<ResourceManager>
 
     // Addressable로 로드한 에셋 핸들 관리(메모리 해제용)
     private Dictionary<string, AsyncOperationHandle> addressableHandles = new Dictionary<string, AsyncOperationHandle>();
+    // 참조 카운트 관리
+    private Dictionary<string, int> refCounts = new Dictionary<string, int>();
 
     // 동기 Resources 에셋 로드
     public T LoadAsset<T>(string assetName,string path) where T : Object
@@ -68,94 +80,117 @@ public class ResourceManager : Singleton<ResourceManager>
         return result;
     }
 
-    // 동기 Addressable 에셋 로드
-    public T LoadAssetAddressable<T>(string address) where T : Object
+    #region 어드레서블 로드/언로드
+    // 비동기 어드레서블 에셋 로드
+    // 이미 로드된 에셋은 캐시에서 즉시 반환하며 참조 카운트 1 증가
+    public async Task<T> LoadAssetAddressableAsync<T>(string address) where T : Object
     {
-        // 캐시 확인 (이미 로드했다면 바로 반환)
-        if (assetPool.TryGetValue(address, out Object asset))
+        // 이미 로드된 에셋인지 확인 (참조 카운트 확인)
+        if (refCounts.TryGetValue(address, out int count))
         {
-            if (addressableHandles.ContainsKey(address) && addressableHandles[address].IsValid())
+            refCounts[address]++; // 참조 카운트 1 증가
+
+            // 로딩은 완료되었는지 핸들을 통해 확인
+            if (addressableHandles.TryGetValue(address, out var handle) && handle.IsDone)
             {
-                return asset as T;
+                return assetPool[address] as T;
+            }
+            else // 아직 로딩 중인 경우 완료될 때까지 대기
+            {
+                await addressableHandles[address].Task;
+                return assetPool[address] as T;
             }
         }
 
-        // 비동기 작업을 시작하고 핸들을 받음
-        var handle = Addressables.LoadAssetAsync<T>(address);
+        // 처음 로드하는 에셋인 경우
+        refCounts[address] = 1; // 참조 카운트를 1로 초기화
 
-        // 작업이 완료될 때까지 메인 스레드를 차단하고 대기
-        T result = handle.WaitForCompletion();
+        var loadHandle = Addressables.LoadAssetAsync<T>(address);
+        addressableHandles[address] = loadHandle; // 핸들 저장
 
-        // 결과 처리
-        if (handle.Status == AsyncOperationStatus.Succeeded && result != null)
+        await loadHandle.Task; // 로드가 끝날 때까지 대기
+
+        if (loadHandle.Status == AsyncOperationStatus.Succeeded)
         {
-            // 성공 시 캐시 및 핸들 딕셔너리에 추가
-            assetPool.Add(address, result);
-            addressableHandles.Add(address, handle);
+            assetPool[address] = loadHandle.Result; // 캐시에 저장
+            return loadHandle.Result;
+        }
+        else
+        {
+            Debug.LogError($"[ResourceManager] 에셋 로드 실패: {address}");
+            refCounts.Remove(address); // 실패 시 참조 카운트 정보 제거
+            addressableHandles.Remove(address);
+            Addressables.Release(loadHandle); // 실패한 핸들은 즉시 릴리즈
+            return null;
+        }
+    }
+
+    // 사용이 끝난 어드레서블 에셋 참조 카운트 1 감소
+    // 참조 카운트가 0이 되면 실제 메모리에서 언로드
+    public void UnloadAddressableAsset(string address)
+    {
+        if (!refCounts.ContainsKey(address))
+        {
+            Debug.LogWarning($"[ResourceManager] 언로드하려는 에셋이 로드된 적 없습니다: {address}");
+            return;
+        }
+
+        refCounts[address]--; // 참조 카운트 1 감소
+
+        // 참조 카운트가 0 이하가 되면
+        if (refCounts[address] <= 0)
+        {
+            refCounts.Remove(address); // 참조 카운트 제거
+            assetPool.Remove(address); // 풀에서 제거
+
+            if (addressableHandles.TryGetValue(address, out AsyncOperationHandle handle))
+            {
+                Addressables.Release(handle); // 메모리 해제
+                addressableHandles.Remove(address); // 핸들 딕셔너리에서 제거
+            }
+        }
+    }
+
+    // 동기 Addressable 에셋 로드
+    // 이미 로드된 에셋은 캐시에서 즉시 반환하며 참조 카운트 1 증가
+    /// <summary>
+    /// 메인 스레드를 차단하여 게임이 멈출 수 있으므로 사용을 권장하지 않음
+    /// </summary>
+    public T LoadAssetAddressable<T>(string address) where T : Object
+    {
+        // 이미 로드되었거나 로딩 중인 에셋인지 확인
+        if (refCounts.TryGetValue(address, out _))
+        {
+            refCounts[address]++; // 참조 카운트 1 증가
+            // 로드가 완료될 때까지 기다렸다가 캐시에서 반환
+            return addressableHandles[address].WaitForCompletion() as T;
+        }
+
+        // 처음 로드하는 에셋인 경우
+        refCounts[address] = 1; // 참조 카운트를 1로 초기화
+
+        var loadHandle = Addressables.LoadAssetAsync<T>(address);
+        addressableHandles[address] = loadHandle; // 핸들 저장
+
+        // 작업이 완료될 때까지 메인 스레드를 멈추고 대기
+        T result = loadHandle.WaitForCompletion();
+
+        if (loadHandle.Status == AsyncOperationStatus.Succeeded)
+        {
+            assetPool[address] = result; // 캐시에 저장
+            return result;
         }
         else
         {
             Debug.LogError($"[ResourceManager] 동기 로드 실패: {address}");
-            // 실패 시에는 핸들을 즉시 릴리즈하여 메모리 누수 방지
-            Addressables.Release(handle);
-            return default(T);
-        }
-
-        return result;
-    }
-
-    // 비동기 Addressable 에셋 로드
-    public async Task<T> LoadAssetAddressableAsync<T>(string address) where T : Object
-    {
-        T result = default;
-
-        // 에셋이 풀에 존재하지 않는 경우
-        if (!assetPool.ContainsKey(address))
-        {
-            // AsyncOperationHandle은 어드레서블 시스템에서 실행되는 하나의 비동기 작업에 대한 모든 정보를 담고 있음
-            // 호출하는 순간 비동기 작업에 대한 모든 것을 추적하고 제어
-            var handle = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<T>(address);
-            await handle.Task; // 비동기 작업이 끝날 때까지 대기
-
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                assetPool.Add(address, handle.Result);
-                addressableHandles.Add(address, handle);
-            }
-            else
-            {
-                Debug.LogWarning($"{address} 를 불러오기에 실패했습니다.");
-                return default(T);
-            }
-        }
-
-        // 에셋이 풀에 이미 존재하는 경우
-        if(addressableHandles.ContainsKey(address) && addressableHandles[address].IsValid())
-        {
-            result = (T)assetPool[address];
-        }
-
-        return result;
-    }
-
-    public void ReleaseAddressableAsset(string address)
-    {
-        if(addressableHandles.TryGetValue(address, out AsyncOperationHandle handle))
-        {
-            // 풀에서 제거
-            assetPool.Remove(address);
-
-            // 메모리 해제
-            Addressables.Release(handle);
-
-            // 핸들 딕셔너리에서 제거
+            // 실패 시 모든 정보 제거
+            refCounts.Remove(address);
             addressableHandles.Remove(address);
-        }
-        else
-        {
-            Debug.LogWarning($"릴리즈할 에셋을 찾을 수 없습니다. 주소: {address}");
+            Addressables.Release(loadHandle);
+            return null;
         }
     }
+    #endregion
 
     public void ClearResourcePools()
     {

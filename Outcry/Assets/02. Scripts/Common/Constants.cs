@@ -15,6 +15,11 @@ public static class EventBusKey
 {
     public const string ChangeHealth = "ChangeHealth";
     public const string ChangeStamina = "ChangeStamina";
+
+    // 필드 이벤트
+    public const string StageReady = "StageReady";
+    public const string BossDefeated = "BossDefeated";
+    public const string PlayerDied = "PlayerDied";
 }
 
 public static class AnimatorStrings
