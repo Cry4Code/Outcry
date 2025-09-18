@@ -16,8 +16,12 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
         
         //스킬 시퀀스 노드 생성
         dataList.Add(new MetalBladeSkillSequenceNode(103001));
+        dataList.Add(new EarthquakeSkillSequenceNode(103004));
         dataList.Add(new StompSkillSequenceNode(103005));
         dataList.Add(new UpperSlashSequenceNode(103006));
+        
+        dataList.Add(new UpperSlashSequenceNode(103002));
+        dataList.Add(new UpperSlashSequenceNode(103003));
     }
     
     /// <summary>
@@ -28,9 +32,28 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
     /// <returns></returns>
     public bool GetSkillSequenceNode(int skillId, out SkillSequenceNode skillSequenceNode)
     {
-        skillSequenceNode = dataList.FirstOrDefault(node => node.SkillId == skillId);
+        var tempData = dataList.FirstOrDefault(node => node.SkillId == skillId);
 
-        if (skillSequenceNode == null)
+        switch (tempData)
+        {
+            case MetalBladeSkillSequenceNode:
+                skillSequenceNode = new MetalBladeSkillSequenceNode(skillId);
+                break;
+            case EarthquakeSkillSequenceNode:
+                skillSequenceNode = new EarthquakeSkillSequenceNode(skillId);
+                break;
+            case StompSkillSequenceNode:
+                skillSequenceNode = new StompSkillSequenceNode(skillId);
+                break;
+            case UpperSlashSequenceNode:
+                skillSequenceNode = new UpperSlashSequenceNode(skillId);
+                break;
+            default:
+                skillSequenceNode = null;
+                break;
+        }
+        
+        if (tempData == null)
         {
             return false;
         }

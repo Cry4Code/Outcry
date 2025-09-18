@@ -28,4 +28,17 @@ public class MonsterSkillModel
         this.range = range;
         this.description = description;
     }
+
+    public MonsterSkillModel(MonsterSkillModel monsterSkillModel)
+    {
+        this.skillId = monsterSkillModel.skillId;
+        this.skillName = monsterSkillModel.skillName;
+        this.damage1 = monsterSkillModel.damage1;
+        this.damage2 = monsterSkillModel.damage2;
+        this.damage3 = monsterSkillModel.damage3;
+        this.healAmount = monsterSkillModel.healAmount;
+        this.cooldown = monsterSkillModel.cooldown;
+        this.range = monsterSkillModel.range;
+        this.description = monsterSkillModel.description;
+    }
 }

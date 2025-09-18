@@ -8,7 +8,7 @@
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 0.0,
-            "Range": 3.0,
+            "Range": 4.0,
             "Desc": ""
         },
         {
@@ -19,7 +19,7 @@
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 10.0,
-            "Range": 2.0,
+            "Range": 4.0,
             "Desc": ""
         },
         {
@@ -41,7 +41,7 @@
             "Damage3": 2,
             "HealAmount": 0,
             "Cooldown": 10.0,
-            "Range": 3.0,
+            "Range": 4.0,
             "Desc": ""
         },
         {
@@ -63,7 +63,7 @@
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 10.0,
-            "Range": 3.0,
+            "Range": 4.0,
             "Desc": ""
         },
         {
@@ -74,7 +74,7 @@
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 10.0,
-            "Range": 3.0,
+            "Range": 4.0,
             "Desc": ""
         },
         {
@@ -85,7 +85,7 @@
             "Damage3": 1,
             "HealAmount": 0,
             "Cooldown": 10.0,
-            "Range": 3.0,
+            "Range": 4.0,
             "Desc": ""
         },
         {
@@ -96,12 +96,12 @@
             "Damage3": 1,
             "HealAmount": 0,
             "Cooldown": 15.0,
-            "Range": 3.0,
+            "Range": 4.0,
             "Desc": ""
         },
         {
             "Skill_id": 103009,
-            "Skill_name": "",
+            "Skill_name": "ExSkill",
             "Damage": 0,
             "Damage2": 0,
             "Damage3": 0,
@@ -112,7 +112,7 @@
         },
         {
             "Skill_id": 103010,
-            "Skill_name": "",
+            "Skill_name": "ExSkill2",
             "Damage": 0,
             "Damage2": 0,
             "Damage3": 0,
@@ -123,69 +123,69 @@
         },
         {
             "Skill_id": 103101,
-            "Skill_name": "",
-            "Damage": 0,
+            "Skill_name": "gA_Attack1",
+            "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 0.0,
-            "Range": 0.0,
+            "Range": 3.0,
             "Desc": ""
         },
         {
             "Skill_id": 103102,
-            "Skill_name": "",
-            "Damage": 0,
+            "Skill_name": "gA_Skill1",
+            "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
-            "Cooldown": 0.0,
-            "Range": 0.0,
-            "Desc": ""
+            "Cooldown": 8.0,
+            "Range": 3.0,
+            "Desc": "Attack1 보다 우선실행"
         },
         {
             "Skill_id": 103201,
-            "Skill_name": "",
-            "Damage": 0,
+            "Skill_name": "gB_Attack1",
+            "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 0.0,
-            "Range": 0.0,
+            "Range": 3.0,
             "Desc": ""
         },
         {
             "Skill_id": 103202,
-            "Skill_name": "",
-            "Damage": 0,
+            "Skill_name": "gB_Skill1",
+            "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
-            "Cooldown": 0.0,
-            "Range": 0.0,
-            "Desc": ""
+            "Cooldown": 8.0,
+            "Range": 3.0,
+            "Desc": "Attack1 보다 우선실행"
         },
         {
             "Skill_id": 103301,
-            "Skill_name": "",
-            "Damage": 0,
+            "Skill_name": "gC_Attack1",
+            "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 0.0,
-            "Range": 0.0,
+            "Range": 3.0,
             "Desc": ""
         },
         {
             "Skill_id": 103302,
-            "Skill_name": "",
-            "Damage": 0,
+            "Skill_name": "gC_Skill1",
+            "Damage": 1,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
-            "Cooldown": 0.0,
-            "Range": 0.0,
-            "Desc": ""
+            "Cooldown": 8.0,
+            "Range": 3.0,
+            "Desc": "Attack1 보다 우선실행"
         }
     ]
 }

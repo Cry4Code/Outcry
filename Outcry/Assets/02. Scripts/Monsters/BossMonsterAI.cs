@@ -19,15 +19,15 @@ public class BossMonsterAI : MonsterAIBase
         SequenceNode attackSequenceNode = new SequenceNode();
         CanAttackConditionNode canAttackConditionNode = new CanAttackConditionNode(this);
         SelectorNode attackSelectorNode = new SelectorNode();
-        WaitActionNode waitActionNode = new WaitActionNode(2.0f);
+        WaitActionNode waitActionNode = new WaitActionNode(1.0f);
 
         attackSequenceNode.AddChild(canAttackConditionNode);
         attackSequenceNode.AddChild(attackSelectorNode);
         attackSequenceNode.AddChild(waitActionNode);
         
         rootNode.AddChild(attackSequenceNode);
-        
-        
+
+
         //각 스킬 노드 테스트용
         //TestSkillSequenceNode 대신에 본인이 제작한 SkillSequenceNode 상속 노드로 교체해서 테스트하세요.
         // MetalBladeSkillSequenceNode metalBladeSkillSequenceNode = new MetalBladeSkillSequenceNode(103001);
@@ -39,11 +39,15 @@ public class BossMonsterAI : MonsterAIBase
         // UpperSlashSequenceNode upperSlashSequenceNode = new UpperSlashSequenceNode(103006);
         // upperSlashSequenceNode.InitializeSkillSequenceNode(monster, target);
         //
+        // EarthquakeSkillSequenceNode earthquakeSkillSequenceNode = new EarthquakeSkillSequenceNode(103004);
+        // earthquakeSkillSequenceNode.InitializeSkillSequenceNode(monster, target);
+
         // attackSelectorNode.AddChild(metalBladeSkillSequenceNode);
         // attackSelectorNode.AddChild(stompSkillSequenceNode);
         // attackSelectorNode.AddChild(upperSlashSequenceNode);
+        // attackSelectorNode.AddChild(earthquakeSkillSequenceNode);
             
-        //스킬은 보스몬스터로 형변환 후에 접근.
+        // 스킬은 보스몬스터로 형변환 후에 접근.
         BossMonsterModel monsterModel = (BossMonsterModel)monster.MonsterData;
         if (monsterModel == null)
         {

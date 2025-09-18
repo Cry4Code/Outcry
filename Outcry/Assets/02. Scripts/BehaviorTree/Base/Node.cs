@@ -13,7 +13,7 @@ public enum NodeState
 public abstract class Node
 {
     protected NodeState nodeState;
-    public string nodeName;  // 디버그용
+    [SerializeField] public string nodeName;  // 디버그용
 
     public abstract NodeState Tick();
 

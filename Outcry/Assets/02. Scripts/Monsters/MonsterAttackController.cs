@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MonsterAttackController : MonoBehaviour
 {
@@ -65,6 +67,16 @@ public class MonsterAttackController : MonoBehaviour
         currentDamage = this.damages[2];
     }
 
+    // 투사체 생성 메서드
+    // 투사체 파괴는 각 투사체가 자체적으로 함.
+    public void InstantiateProjectile(GameObject projectile, Vector3 localPos)
+    {
+        // 부모(몬스터) 자식으로 투사체 생성
+        GameObject go = Instantiate(projectile, this.transform);
+        // 로컬 좌표로 위치 수정
+        go.transform.localPosition = localPos;
+    }
+
     private void OnTriggerStay2D(Collider2D other)
     {
         Debug.Log("OnTriggerStay2D: " + other.gameObject.name);
@@ -81,4 +93,5 @@ public class MonsterAttackController : MonoBehaviour
             }
         }
     }
+
 }
