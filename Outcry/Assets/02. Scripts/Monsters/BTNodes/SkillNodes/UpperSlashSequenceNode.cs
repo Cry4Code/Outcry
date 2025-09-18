@@ -1,11 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class UpperSlashSequenceNode : SkillSequenceNode
 {
-    [SerializeField] private float elapsedTime = 0f;
-    private bool skillTriggered = false;
     private int animationHash = AnimatorStrings.MonsterParameter.UpperSlash;  
     
     public UpperSlashSequenceNode(int skillId) : base(skillId)
@@ -31,8 +31,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
         }
 
         // 쿨다운 체크
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime >= skillData.cooldown)
+        if (Time.time - lastUsedTime >= skillData.cooldown)
         {
             isCooldownComplete = true;
         }
@@ -42,7 +41,7 @@ public class UpperSlashSequenceNode : SkillSequenceNode
         }
 
         result = isInRange && isCooldownComplete;
-        Debug.Log($"Skill {skillData.skillName} used? {result} : {elapsedTime} / {skillData.cooldown}");
+        Debug.Log($"Skill {skillData.skillName} used? {result} : {Time.time - lastUsedTime} / {skillData.cooldown}");
         return result;
     }
 
@@ -59,18 +58,18 @@ public class UpperSlashSequenceNode : SkillSequenceNode
 
         if (!skillTriggered)
         {
-            elapsedTime = 0f;
+            lastUsedTime = Time.time;
+            FlipCharacter();
             monster.Animator.SetTrigger(animationHash);
 
             // todo. 플레이어 데미지 처리
-            monster.AttackController.SetDamage(skillData.damage1);
+            monster.AttackController.SetDamages(skillData.damage1);
 
             skillTriggered = true;
         }
 
         // 시작 직후 Running 강제
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime < 0.1f)
+        if (Time.time - lastUsedTime < 0.1f)
         {            
             return NodeState.Running;
         }
@@ -85,29 +84,11 @@ public class UpperSlashSequenceNode : SkillSequenceNode
         {
             Debug.Log($"Skill End: {skillData.skillName} (ID: {skillData.skillId})");
 
-            monster.AttackController.SetDamage(0);  // 데미지 초기화
+            monster.AttackController.ResetDamages();  // 데미지 초기화
             skillTriggered = false;
             state = NodeState.Success;
         }
 
         return state;
-    }
-
-    // 나중에 부모클래스에 넣고 상속받는다고 함. Stomp 스킬 참조
-    private bool IsSkillAnimationPlaying(string animationName)
-    {
-        //스킬 애니메이션이 끝났는지 확인
-        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
-
-        if (isSkillAnimationPlaying)
-        {
-            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return true;
-        }
-        else
-        {
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return false;
-        }
     }
 }

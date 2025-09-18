@@ -1,12 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[Serializable]
 public class StompSkillSequenceNode : SkillSequenceNode
 {
-    [SerializeField] private float elapsedTime = 0f;
-    private bool skillTriggered = false;
-
     public StompSkillSequenceNode(int skillId) : base(skillId)
     {
         this.nodeName = "StompSkillSequenceNode";
@@ -18,8 +16,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         bool isInRange;
         bool isCooldownComplete;
         
-        //플레이어와의 거리 2m 이내에 있을때
-        //todo. 2f는 2m 이내. MonsterSkillModel에서 이걸 받아올 수 있도록 변경해야함
+        //플레이어와 거리 이내에 있을때
         if (Vector2.Distance(monster.transform.position, target.transform.position) <= skillData.range)
         {
             isInRange = true;
@@ -30,8 +27,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         }
 
         //쿨다운 확인
-        elapsedTime += Time.deltaTime;
-        if(elapsedTime >= skillData.cooldown)
+        if(Time.time - lastUsedTime >= skillData.cooldown)
         {
             isCooldownComplete = true;
         }
@@ -41,7 +37,7 @@ public class StompSkillSequenceNode : SkillSequenceNode
         }
 
         result = isInRange && isCooldownComplete;
-        Debug.Log($"Skill {skillData.skillName} used? {result} : {elapsedTime} / {skillData.cooldown}");
+        Debug.Log($"Skill {skillData.skillName} used? {result} : {Time.time - lastUsedTime} / {skillData.cooldown}");
         return result;
     }
 
@@ -57,17 +53,15 @@ public class StompSkillSequenceNode : SkillSequenceNode
 
         if (!skillTriggered)
         {
-            elapsedTime = 0f;
+            lastUsedTime = Time.time;
+            FlipCharacter();
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Stomp);
             //todo. player damage 처리
-            monster.AttackController.SetDamage(skillData.damage1);
-            
+            monster.AttackController.SetDamages(skillData.damage1);
             skillTriggered = true;
         }
 
-        elapsedTime += Time.deltaTime;
-        
-        if (elapsedTime < 0.1f) //시작 직후는 무조건 Running
+        if (Time.time - lastUsedTime < 0.1f) //시작 직후는 무조건 Running
         {
             return NodeState.Running;
         }
@@ -82,29 +76,11 @@ public class StompSkillSequenceNode : SkillSequenceNode
         {
             Debug.Log($"Skill End: {skillData.skillName} (ID: {skillData.skillId})");
             
-            monster.AttackController.SetDamage(0); //데미지 초기화.
+            monster.AttackController.SetDamages(0); //데미지 초기화.
             skillTriggered = false;
             state = NodeState.Success;
         }
 
         return state;
-    }
-
-    //todo. 나중에 부모 클래스에 넣어두고 상속해서 사용하도록 해도 될듯.
-    private bool IsSkillAnimationPlaying(string animationName)
-    {
-        //스킬 애니메이션이 끝났는지 확인.
-        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
-        
-        if (isSkillAnimationPlaying)
-        {
-            Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return true;
-        }
-        else
-        {
-            Debug.Log($"Using skill: {skillData.skillName} (ID: {skillData.skillId})");
-            return false;
-        }
     }
 }

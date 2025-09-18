@@ -6,7 +6,7 @@ using UnityEngine;
 public class MonsterCondition : MonoBehaviour, IDamagable
 {
     private MonsterBase monster;
-    
+     
     [SerializeField] private int maxHealth;
     [SerializeField] private int currentHealth;
     public bool IsDead { get; private set; } = false;

@@ -40,6 +40,11 @@ public class NormalJumpAttackState : NormalJumpAttackSubState
             player.ChangeState<DodgeState>();
             return;
         }
+        if (player.Inputs.Player.Parry.triggered)
+        {
+            player.ChangeState<StartParryState>();
+            return;
+        }
     }
 
     public override void LogicUpdate(PlayerController player)

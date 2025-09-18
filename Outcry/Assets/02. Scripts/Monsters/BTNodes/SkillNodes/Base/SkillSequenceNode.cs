@@ -14,6 +14,9 @@ public abstract class SkillSequenceNode : SequenceNode
     protected Player target;
     protected MonsterSkillModel skillData; //인스펙터에 직렬화 시키면 에러뜸.
     
+    protected float lastUsedTime;
+    protected bool skillTriggered = false;
+    
     public int SkillId => skillId;
     
     public SkillSequenceNode(int skillId)
@@ -23,9 +26,11 @@ public abstract class SkillSequenceNode : SequenceNode
         {
             Debug.LogError($"Skill ID {skillId} could not be found.");
         }
+
+        nodeName = skillData.skillName + skillData.skillId;
+        lastUsedTime = Time.time - skillData.cooldown;
     }
     
-    //todo. think. virtual일 이유가? 그냥 일반 클래스로 변경해도 되지 않을까? //think. 아예 생성자로 바꿔버릴까??
     public virtual void InitializeSkillSequenceNode(MonsterBase monster, Player target)
     {
         this.monster = monster;
@@ -46,5 +51,30 @@ public abstract class SkillSequenceNode : SequenceNode
     protected abstract bool CanPerform();
 
     protected abstract NodeState SkillAction();
+    
+    protected void FlipCharacter()
+    {
+        if (monster.transform.position.x < target.transform.position.x)
+            monster.transform.localScale = new Vector3(1, monster.transform.localScale.y, monster.transform.localScale.z);
+        else
+            monster.transform.localScale = new Vector3(-1, monster.transform.localScale.y, monster.transform.localScale.z);
+    }
+    
+    protected bool IsSkillAnimationPlaying(string animationName)
+    {
+        //스킬 애니메이션이 끝났는지 확인.
+        bool isSkillAnimationPlaying = monster.Animator.GetCurrentAnimatorStateInfo(0).IsName(animationName);
+        
+        if (isSkillAnimationPlaying)
+        {
+            Debug.Log($"Running skill animation: {animationName} from {skillData.skillName} (ID: {skillData.skillId})");
+            return true;
+        }
+        else
+        {
+            Debug.Log($"Using skill: {animationName} from {skillData.skillName} (ID: {skillData.skillId})");
+            return false;
+        }
+    }
     
 }
