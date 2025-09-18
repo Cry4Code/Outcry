@@ -2,27 +2,65 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : IPlayerState
+public class IdleState : GroundSubState
 {
-    public void Enter(PlayerController player)
+    public override void Enter(PlayerController player)
     {
         // 애니메이션 설정 
         // player.SetAnimation("Idle");
-
+        base.Enter(player);
+        
         player.PlayerMove.Stop();
         player.PlayerMove.ChangeGravity(false);
         player.PlayerAttack.ClearAttackCount();
         player.PlayerAnimator.ClearTrigger();
         player.PlayerAnimator.ClearInt();
+        player.PlayerAnimator.ClearBool();
         
-        player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Idle);
+        player.PlayerAnimator.OnBoolParam(PlayerAnimID.Idle);
         player.Inputs.Player.Move.Enable();
     }
 
-    public void HandleInput(PlayerController player)
+    public override void HandleInput(PlayerController player)
     {
+        AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+        if (curAnimInfo.IsName("Idle"))
+        {
+            player.isLookLocked = false;
+        }
+        else
+        {
+            player.PlayerMove.Stop();
+            return;
+        }
+        
         var input = player.Inputs.Player.Move.ReadValue<Vector2>();
-        if (player.Inputs.Player.Jump.triggered && player.PlayerMove.isGrounded && !player.PlayerMove.isGroundJump)
+        
+        if (player.Inputs.Player.NormalAttack.triggered)
+        {
+            player.isLookLocked = true;
+            player.ChangeState<NormalAttackState>();
+            return;
+        }
+
+        if (player.Inputs.Player.SpecialAttack.triggered)
+        {
+            player.isLookLocked = false;
+            player.ChangeState<SpecialAttackState>();
+            return;
+        }
+        
+        if (player.Inputs.Player.Dodge.triggered)
+        {
+            player.ChangeState<DodgeState>();
+            return;
+        }
+        
+        
+        if (player.Inputs.Player.Jump.triggered 
+            && player.PlayerMove.isGrounded 
+            && !player.PlayerMove.isGroundJump 
+            && !player.PlayerMove.isWallTouched)
         {
             // Debug.Log("Jump Key Input");
             player.ChangeState<JumpState>();
@@ -36,23 +74,26 @@ public class IdleState : IPlayerState
             return;
         }
 
-        if (player.Inputs.Player.NormalAttack.triggered)
-        {
-            player.isLookLocked = true;
-            player.ChangeState<NormalAttackState>();
-            return;
-        }
+        
     }
-
-    public void LogicUpdate(PlayerController player) 
+ 
+    public override void LogicUpdate(PlayerController player) 
     {
-        AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
-        if (curAnimInfo.IsName("Idle"))
+        
+
+        if (player.PlayerMove.isDodged)
         {
-            player.isLookLocked = false;
+            player.PlayerMove.Stop();
+            player.PlayerMove.isDodged = false;
         }
         
         if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
     }
-    public void Exit(PlayerController player) { }
+
+    public override void Exit(PlayerController player)
+    {
+        base.Exit(player);
+        player.PlayerAnimator.OffBoolParam(PlayerAnimID.Idle);
+    }
+    
 }

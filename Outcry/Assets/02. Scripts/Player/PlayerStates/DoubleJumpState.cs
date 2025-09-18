@@ -2,24 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoubleJumpState : IPlayerState
+public class DoubleJumpState : AirSubState
 {
-    public void Enter(PlayerController player)
+    public override void Enter(PlayerController player)
     {
+        base.Enter(player);
         player.SetAnimation(PlayerAnimID.DoubleJump, true);
         player.PlayerMove.DoubleJump();
     }
-
-    public void HandleInput(PlayerController player) 
+    
+    public override void HandleInput(PlayerController player) 
     {
-        if(player.PlayerMove.isWallTouched)
+        var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
+        
+        if(player.PlayerMove.isWallTouched 
+           && ((moveInput.x < 0 && player.PlayerMove.lastWallIsLeft) || (moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft)))
         {
             player.ChangeState<WallHoldState>();
             return;
         }
+        
+        if (player.Inputs.Player.SpecialAttack.triggered)
+        {
+            player.isLookLocked = false;
+            player.ChangeState<SpecialAttackState>();
+            return;
+        }
+        if (player.Inputs.Player.Dodge.triggered)
+        {
+            player.ChangeState<DodgeState>();
+            return;
+        }
     }
 
-    public void LogicUpdate(PlayerController player)
+    public override void LogicUpdate(PlayerController player)
     {
         var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
         if(moveInput != null)
@@ -53,5 +69,8 @@ public class DoubleJumpState : IPlayerState
         
     }
 
-    public void Exit(PlayerController player) { }
+    public override void Exit(PlayerController player)
+    {
+        base.Exit(player);
+    }
 }

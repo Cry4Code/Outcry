@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public PlayerInputs Inputs { get; private set; }
     public PlayerMove PlayerMove { get; private set; }
     public PlayerAttack PlayerAttack { get; private set; }
+    
+    public PlayerCondition Condition { get; private set; }
+    
     private IPlayerState currentState;
     [HideInInspector] public bool isLookLocked = false;
     
@@ -21,7 +24,8 @@ public class PlayerController : MonoBehaviour
         Inputs.Enable();
         PlayerMove = GetComponent<PlayerMove>();
         PlayerAttack = GetComponent<PlayerAttack>();
-
+        Condition = GetComponent<PlayerCondition>();
+        
         states = new Dictionary<System.Type, IPlayerState>
         {
             { typeof(IdleState), new IdleState() },
@@ -34,6 +38,8 @@ public class PlayerController : MonoBehaviour
             { typeof(NormalAttackState), new NormalAttackState() },
             { typeof(NormalJumpAttackState), new NormalJumpAttackState()},
             { typeof(DownAttackState), new DownAttackState()},
+            { typeof(SpecialAttackState), new SpecialAttackState()},
+            { typeof(DodgeState), new DodgeState()},
         };
     }
 
@@ -81,10 +87,5 @@ public class PlayerController : MonoBehaviour
     {
         if (isTrigger) PlayerAnimator.SetTriggerAnimation(animHash);
         else  PlayerAnimator.SetBoolAnimation(animHash);
-    }
-
-    public void OnMove()
-    {
-        PlayerAnimator.animator.SetBool(PlayerAnimID.Move, true);
     }
 }
