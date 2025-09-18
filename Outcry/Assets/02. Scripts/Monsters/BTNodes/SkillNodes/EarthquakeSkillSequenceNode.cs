@@ -125,12 +125,12 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         {
             //todo. 돌 프리팹 생성
             // 위치를 어떻게 잡?지?
-            Object.Instantiate(stone, new Vector3(x1, y1, 0), Quaternion.identity);
+            monster.AttackController.Test(x1, y1, stone);
         }      
 
         if (elapsedTime == INSTANTIATE_STONE2_TIME)
         {
-            Object.Instantiate(stone, new Vector3(x2, y2, 0), Quaternion.identity);
+            //Object.Instantiate(stone, new Vector3(x2, y2, 0), Quaternion.identity);
         }
 
         return state;
@@ -154,4 +154,6 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
             return false;
         }
     }
+
+
 }

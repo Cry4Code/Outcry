@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class MonsterAttackController : MonoBehaviour
@@ -26,6 +27,14 @@ public class MonsterAttackController : MonoBehaviour
         this.damage = damage;
     }
 
+    public void Test(float x, float y, GameObject projectile)
+    {
+        GameObject go = Instantiate(projectile, this.transform);
+
+        //go.transform.position.x = x;
+    }
+
+
     private void OnTriggerStay2D(Collider2D other)
     {
         Debug.Log("OnTriggerStay2D: " + other.gameObject.name);
@@ -42,4 +51,5 @@ public class MonsterAttackController : MonoBehaviour
             }
         }
     }
+
 }
