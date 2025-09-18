@@ -11,6 +11,8 @@ public class TestManager : MonoBehaviour
 
     [SerializeField] private BossMonsterModel monsterData;
     
+    private MonsterBase monster;
+    
     void Awake()
     {
         DataManager.Instance.ToString();
@@ -20,8 +22,16 @@ public class TestManager : MonoBehaviour
         //     10f, 3f, 10f, new int[0], new int[6] {103001, 103004, 103005, 103006, 103005, 103005});
         GameObject monsterObj = GameObject.Instantiate(monsterPrefab);
         
-        MonsterBase monster = monsterObj.GetComponent<MonsterBase>();
+        monster = monsterObj.GetComponent<MonsterBase>();
         monster.SetMonsterData(monsterData);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Debug.Log("TestManager: M key pressed. Monster takes 10 damage.");
+            monster.Condition.TakeDamage(10);
+        }
+    }
 }
