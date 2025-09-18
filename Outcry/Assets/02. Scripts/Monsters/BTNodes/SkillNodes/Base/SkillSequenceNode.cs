@@ -54,10 +54,11 @@ public abstract class SkillSequenceNode : SequenceNode
     
     protected void FlipCharacter()
     {
+        float originalScaleX = monster.transform.localScale.x;
         if (monster.transform.position.x < target.transform.position.x)
-            monster.transform.localScale = new Vector3(1, monster.transform.localScale.y, monster.transform.localScale.z);
+            monster.transform.localScale = new Vector3(Mathf.Abs(originalScaleX), monster.transform.localScale.y, monster.transform.localScale.z);
         else
-            monster.transform.localScale = new Vector3(-1, monster.transform.localScale.y, monster.transform.localScale.z);
+            monster.transform.localScale = new Vector3(-Mathf.Abs(originalScaleX), monster.transform.localScale.y, monster.transform.localScale.z);
     }
     
     protected bool IsSkillAnimationPlaying(string animationName)
