@@ -22,14 +22,14 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
     private GameObject stone;
 
     // 투사체 좌표
-    private Vector3 position1= new Vector3(5.7f, -1.47f, 0f);
-    private Vector3 position2= new Vector3(10.2f, -1.47f, 0f);
+    private Vector3 position1 = new Vector3(5.7f, -1.47f, 0f);
+    private Vector3 position2 = new Vector3(10.2f, -1.47f, 0f);
     private Vector3 position3 = new Vector3(14.7f, -1.47f, 0f);
 
     // 투사체 생성 플레그
-    private bool isSpaened1 = false;
-    private bool isSpaened2 = false;
-    private bool isSpaened3 = false;
+    private bool isSpawned1 = false;
+    private bool isSpawned2 = false;
+    private bool isSpawned3 = false;
 
     public EarthquakeSkillSequenceNode(int skillId) : base(skillId)
     {
@@ -68,9 +68,9 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         {
             isCooldownComplete = true;
             elapsedTime = 0f;
-            isSpaened1 = false;
-            isSpaened2 = false;
-            isSpaened3 = false;
+            isSpawned1 = false;
+            isSpawned2 = false;
+            isSpawned3 = false;
         }
         else
         {
@@ -100,7 +100,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         if (!skillTriggered)
         {
             monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Earthquake);
-            monster.AttackController.SetDamage(skillData.damage1);  // 플레이어 데미지 주기
+            monster.AttackController.SetDamages(skillData.damage1);  // 플레이어 데미지 주기
 
             skillTriggered = true;
 
@@ -126,7 +126,7 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         {
             Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
 
-            monster.AttackController.SetDamage(0);  //데미지 초기화
+            monster.AttackController.SetDamages(0);  //데미지 초기화
             skillTriggered = false;
             state = NodeState.Success;
         }
@@ -135,25 +135,25 @@ public class EarthquakeSkillSequenceNode : SkillSequenceNode
         float animationElapsedTime = Time.time - stateEnterTime;
 
         // 애니메이션의 동작 시간에 투사체(Stone) 생성 로직 실행
-        if (animationElapsedTime >= INSTANTIATE_STONE1_TIME && !isSpaened1)
+        if (animationElapsedTime >= INSTANTIATE_STONE1_TIME && !isSpawned1)
         {
             Debug.Log($"{skillData.skillName} : {stone.name} 생성 - 위치 {position1}");
             monster.AttackController.InstantiateProjectile(stone, position1);
-            isSpaened1 = true;
+            isSpawned1 = true;
         }      
 
-        if (animationElapsedTime >= INSTANTIATE_STONE2_TIME && !isSpaened2)
+        if (animationElapsedTime >= INSTANTIATE_STONE2_TIME && !isSpawned2)
         {
             Debug.Log($"{skillData.skillName} : {stone.name} 생성 - 위치 {position2}");
             monster.AttackController.InstantiateProjectile(stone, position2);
-            isSpaened2 = true;
+            isSpawned2 = true;
         }
 
-        if (animationElapsedTime >= INSTANTIATE_STONE3_TIME && !isSpaened3)
+        if (animationElapsedTime >= INSTANTIATE_STONE3_TIME && !isSpawned3)
         {
             Debug.Log($"{skillData.skillName} : {stone.name} 생성 - 위치 {position3}");
             monster.AttackController.InstantiateProjectile(stone, position3);
-            isSpaened3 = true;
+            isSpawned3 = true;
         }
 
         return state;

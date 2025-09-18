@@ -7,12 +7,7 @@ public class StoneController : MonoBehaviour
 {
     [SerializeField] private LayerMask playerLayer;
     private int damage = 1;
-
-    public void DestroySelf()
-    {
-        Destroy(gameObject);
-    }
-
+        
     private void Start()
     {
         Animator anim = GetComponent<Animator>();
