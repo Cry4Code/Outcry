@@ -11,6 +11,9 @@ public class SoundData : IData
     public string Sound_name;
     public bool Loop;
     public string Desc;
+    public string Sound_path;
+    public float Volume;
+    public float Pitch;
 }
 
 [Serializable]

@@ -102,24 +102,24 @@
         {
             "Skill_id": 103009,
             "Skill_name": "ExSkill",
-            "Damage": 0,
-            "Damage2": 0,
-            "Damage3": 0,
+            "Damage": 100,
+            "Damage2": 100,
+            "Damage3": 100,
             "HealAmount": 0,
-            "Cooldown": 0.0,
+            "Cooldown": 180.0,
             "Range": 0.0,
-            "Desc": ""
+            "Desc": "HP50 미만 || 스테이지 시작 후 180 , 스테이지당 1회만 발동"
         },
         {
             "Skill_id": 103010,
             "Skill_name": "ExSkill2",
-            "Damage": 0,
-            "Damage2": 0,
-            "Damage3": 0,
+            "Damage": 100,
+            "Damage2": 100,
+            "Damage3": 100,
             "HealAmount": 0,
-            "Cooldown": 0.0,
+            "Cooldown": 300.0,
             "Range": 0.0,
-            "Desc": ""
+            "Desc": "HP20 미만 || 스테이지 시작 후 300 , 스테이지당 1회만 발동"
         },
         {
             "Skill_id": 103101,
@@ -157,7 +157,7 @@
         {
             "Skill_id": 103202,
             "Skill_name": "gB_Skill1",
-            "Damage": 1,
+            "Damage": 2,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
