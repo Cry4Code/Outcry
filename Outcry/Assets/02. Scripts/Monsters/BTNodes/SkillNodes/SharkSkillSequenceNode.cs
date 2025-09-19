@@ -6,6 +6,8 @@ public class SharkSkillSequenceNode : SkillSequenceNode
 {
     public SharkSkillSequenceNode(int skillId) : base(skillId)
     {
+        this.nodeName = "SharkSkillSequenceNode";
+
     }
 
     protected override bool CanPerform()

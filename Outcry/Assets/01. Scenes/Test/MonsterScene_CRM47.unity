@@ -269,11 +269,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: monsterData.commonSkillIds.Array.size
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: monsterData.commonSkillIds.Array.data[0]
-      value: 103001
+      value: 103000
       objectReference: {fileID: 0}
     - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: monsterData.commonSkillIds.Array.data[1]
@@ -294,6 +294,10 @@ PrefabInstance:
     - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: monsterData.commonSkillIds.Array.data[5]
       value: 103006
+      objectReference: {fileID: 0}
+    - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
+      propertyPath: monsterData.commonSkillIds.Array.data[6]
+      value: 103007
       objectReference: {fileID: 0}
     - target: {fileID: 5226652059249393811, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: m_LocalPosition.x
