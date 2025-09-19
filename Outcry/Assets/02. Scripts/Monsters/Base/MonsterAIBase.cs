@@ -38,7 +38,7 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
                 spawnAnimationLength = clip.length;
             }
         }
-        ActivateMonster();
+        StartCoroutine(ActivateMonster());
     }
 
     private IEnumerator ActivateMonster()

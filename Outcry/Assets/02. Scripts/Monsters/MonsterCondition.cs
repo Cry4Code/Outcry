@@ -73,9 +73,14 @@ public class MonsterCondition : MonoBehaviour, IDamagable
             spriteRenderer.color = originalColor;
             StopCoroutine(animationCoroutine);
         }
-        if (currentHealth <= 0)
+
+        if (currentHealth <= 50)
         {
-            Death();
+            monster.Animator.SetBool(AnimatorStrings.MonsterParameter.IsTired, true );
+            if (currentHealth <= 0)
+            {
+                Death();
+            }
         }
         else
         {
