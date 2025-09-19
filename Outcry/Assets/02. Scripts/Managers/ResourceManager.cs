@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UI;
 
 // --------------- ResourceManager의 자체 참조 카운트가 필요한 이유 ---------------
 // Addressables의 참조 카운트는 API 호출 횟수만을 기록합니다.
@@ -125,6 +127,30 @@ public class ResourceManager : Singleton<ResourceManager>
         }
     }
 
+    /// <summary>
+    /// 지정된 주소의 모든 리소스를 병렬로 비동기 로드합니다.
+    /// </summary>
+    /// <param name="addresses">로드할 리소스 주소 목록</param>
+    public async Task LoadAllAssetsAsync(IEnumerable<string> addresses)
+    {
+        var loadTasks = new List<Task>();
+
+        foreach (var address in addresses)
+        {
+            if (string.IsNullOrEmpty(address) || assetPool.ContainsKey(address))
+            {
+                continue; // 주소가 비어있거나 이미 캐시된 경우 건너뜀
+            }
+
+            // 어드레서블 로드를 Task로 변환하여 리스트에 추가
+            Task loadTask = LoadAssetAddressableAsync<Object>(address);
+            loadTasks.Add(loadTask);
+        }
+
+        // 모든 로드 작업이 끝날 때까지 대기
+        await Task.WhenAll(loadTasks);
+    }
+
     // 사용이 끝난 어드레서블 에셋 참조 카운트 1 감소
     // 참조 카운트가 0이 되면 실제 메모리에서 언로드
     public void UnloadAddressableAsset(string address)
@@ -191,6 +217,18 @@ public class ResourceManager : Singleton<ResourceManager>
         }
     }
     #endregion
+
+    /// <summary>
+    /// 캐시에서 이미 로드된 리소스를 가져옴
+    /// </summary>
+    public T GetLoadedAsset<T>(string address) where T : Object
+    {
+        if (string.IsNullOrEmpty(address) || !assetPool.ContainsKey(address))
+        {
+            return null;
+        }
+        return assetPool[address] as T;
+    }
 
     public void ClearResourcePools()
     {

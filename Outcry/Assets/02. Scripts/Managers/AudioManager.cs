@@ -48,8 +48,6 @@ public class AudioManager : Singleton<AudioManager>
 
     private void Awake()
     {
-        DataTableManager.Instance.LoadCollectionData<SoundDataTable>();
-
         InitializePool();
         InitializeSoundContainer();
     }

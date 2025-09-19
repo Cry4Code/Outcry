@@ -28,17 +28,20 @@ public enum EGameState
     LoadingScene  // 씬 로딩 중
 }
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : Singleton<GameManager>, IStageDataProvider
 {
     public EGameState CurrentGameState { get; private set; }
     public UserData CurrentUserData { get; private set; }
-
-    // StageManager에 전달할 현재 선택된 스테이지의 모든 정보
-    public StageData SelectedStageData { get; private set; }
     public string CurrentUserUID { get; private set; }
+    public SceneLoadPackage NextLoadPackage { get; private set; }
 
-    private void Awake()
+    private StageData currentStageData;
+    public StageData GetStageData() => currentStageData;
+
+    protected override void Awake()
     {
+        base.Awake();
+
         InitializeCoreSystems();
     }
 
@@ -49,7 +52,12 @@ public class GameManager : Singleton<GameManager>
         //AudioManager.Instance.PlaySFX((int)SoundEnums.ESFX.Parry);
 
         // 스테이지 테스트
-        StartBossBattle(SelectedStageData.Monster_id[0]); // TEST
+        //StartStage(106001); // GoblinKing TEST
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
     }
 
     // 게임 시작 시 단 한번만 실행되어야 하는 초기화 로직
@@ -57,6 +65,9 @@ public class GameManager : Singleton<GameManager>
     {
         CurrentGameState = EGameState.Initializing;
         // Application.targetFrameRate = 60;
+
+        DataTableManager.Instance.LoadCollectionData<StageDataTable>();
+        DataTableManager.Instance.LoadCollectionData<SoundDataTable>();
 
         // TODO: ResourceManager, AudioManager 등 다른 핵심 시스템 초기화 호출
         // StartCoroutine(WaitForFirebaseAndInitialize());
@@ -83,7 +94,7 @@ public class GameManager : Singleton<GameManager>
         SaveGame(); 
 
         // 튜토리얼용 보스 전투 시작?
-        StartBossBattle(0); // 튜토리얼 보스 ID를 0으로 약속
+        StartStage(0); // 튜토리얼 보스 ID를 0으로 약속
     }
 
     public void LoadGame(UserData data)
@@ -95,32 +106,44 @@ public class GameManager : Singleton<GameManager>
     // 로비 씬으로 이동
     public void GoToLobby()
     {
-        CurrentGameState = EGameState.Lobby;
-        //SceneManager.LoadScene("LobbyScene");
+        CurrentGameState = EGameState.LoadingScene;
+
+        // 로비 이동을 위한 간단한 명세서 생성(미리 로드할 리소스 없음)
+        var package = new SceneLoadPackage("LobbyScene");
+
+        // 생성된 명세서 저장
+        NextLoadPackage = package;
+
+        // TODO: LoadingScene 로드
     }
 
     /// <summary>
     /// 로비에서 보스 선택 시 호출.
     /// bossId를 StageData로 변환하여 전투 씬 로드
     /// </summary>
-    public async void StartBossBattle(int bossId)
+    public void StartStage(int stageId)
     {
-        CurrentGameState = EGameState.LoadingScene;
-
-        // 데이터 테이블에서 로드할 스테이지 데이터 주소 가져옴
-        string stageDataAddress = $"StageData_Boss_{bossId}"; // 예시: "StageData_Boss_101"
-
-        if (SelectedStageData == null)
+        currentStageData = DataTableManager.Instance.GetCollectionDataById<StageData>(stageId);
+        if (currentStageData == null)
         {
-            Debug.LogError($"{stageDataAddress} 로드에 실패했습니다. 전투를 시작할 수 없습니다.");
-            GoToLobby(); // 로비로 복귀
+            Debug.LogError($"ID: {stageId}에 해당하는 StageData를 찾을 수 없습니다. 로비로 돌아갑니다.");
+            GoToLobby();
             return;
         }
 
-        // StageData 로드가 완료되면 전투 씬으로 이동
-        CurrentGameState = EGameState.InGame;
-        // SceneLoadManager.Instance.LoadScene("BossBattleScene");
-        SceneManager.LoadScene("TestStageScene"); // 임시
+        CurrentGameState = EGameState.LoadingScene;
+
+        // 스테이지 시작을 위한 데이터 설정
+        var package = new SceneLoadPackage("TestStageScene");
+        package.AdditiveSceneNames.Add("StageManagerScene");
+        package.ResourceAddressesToLoad.Add(currentStageData.Map_path);
+        package.ResourceAddressesToLoad.Add(currentStageData.Boss_path);
+        // TODO: 플레이어 프리팹 주소도 추가해야 함
+
+        // 스테이지 데이터 저장
+        NextLoadPackage = package;
+
+        SceneLoadManager.Instance.LoadScene("LoadingScene");
     }
 
     // StageManager가 보스 처치 이벤트를 발생시키면 실행

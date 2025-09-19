@@ -4,15 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
-
-public enum EStageState
-{
-    Loading,    // 리소스 로딩
-    Ready,      // 전투 시작 연출
-    InProgress, // 전투 진행 중
-    Paused,     // 일시정지
-    Finished    // 전투 종료
-}
+using StageEnums;
 
 public class StageManager : Singleton<StageManager>
 {
@@ -45,32 +37,23 @@ public class StageManager : Singleton<StageManager>
     // 이벤트
     public static event Action<int> OnBossDefeated; // 보스 처치 시 호출
 
-    private async void Start()
+    protected override void Awake()
     {
-        // 상태 변경 및 데이터 로드
-        CurrentState = EStageState.Loading;
-        // GameManager 등에서 현재 스테이지 데이터 받아옴
-        // _currentStageData = GameManager.Instance.GetCurrentStageData();
+        base.Awake();
+    }
 
-        // 테스트용 임시 데이터 로드(데이터테이블에서 받아옴)
-        //currentStageData = await ResourceManager.Instance.LoadAssetAddressableAsync<StageData>("");
-        if (currentStageData == null)
-        {
-            Debug.LogError("StageData 로드 실패!");
-            return;
-        }
-        loadedAssetKeys.Add(""); // StageData도 언로드 대상
-
-        // 스테이지에 필요한 모든 에셋(프리팹) 로드
-        //await LoadStageAssets();
-
+    private void Start()
+    {
         // 모든 로딩이 끝나면 스테이지 시작
         StartCoroutine(StageFlowRoutine());
     }
 
     private void Update()
     {
-        if (CurrentState != EStageState.InProgress) return;
+        if (CurrentState != EStageState.InProgress)
+        {
+            return;
+        }
 
         UpdateTimer();
 
@@ -91,14 +74,41 @@ public class StageManager : Singleton<StageManager>
 
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
-        // 씬 전환 시 이 스테이지에서 로드했던 모든 리소스를 해제
+        base.OnDestroy();
+
+        // 씬 전환 시 이 스테이지에서 로드했던 모든 리소스 해제
         foreach (var key in loadedAssetKeys)
         {
             ResourceManager.Instance.UnloadAddressableAsset(key);
         }
         loadedAssetKeys.Clear();
+    }
+
+    public void InitializeStage()
+    {
+        // GameManager로부터 현재 스테이지 데이터 가져오기
+        currentStageData = (GameManager.Instance as IStageDataProvider)?.GetStageData();
+        if (currentStageData == null)
+        {
+            Debug.LogError("StageData를 가져올 수 없습니다!");
+            // TODO: 로비로 돌아가는 등 예외 처리
+            return;
+        }
+
+        // ResourceManager에 이미 로드된 리소스를 즉시 가져오기
+        mapPrefab = ResourceManager.Instance.GetLoadedAsset<GameObject>(currentStageData.Map_path);
+        bossPrefab = ResourceManager.Instance.GetLoadedAsset<GameObject>(currentStageData.Boss_path);
+        // TODO: 플레이어 프리팹도 같은 방식으로 가져오기
+
+        loadedAssetKeys.Add(currentStageData.Map_path);
+        loadedAssetKeys.Add(currentStageData.Boss_path);
+        // TODO: 플레이어 프리팹 주소도 리스트에 추가
+
+        Instantiate(mapPrefab, Vector3.zero, Quaternion.identity);
+        Instantiate(bossPrefab, bossSpawnPoint.position, Quaternion.identity);
+        // TODO: 플레이어 프리팹도 같은 방식으로 생성
     }
 
     #region 스테이지 흐름 코루틴
@@ -188,29 +198,7 @@ public class StageManager : Singleton<StageManager>
     }
     #endregion
 
-    #region 에셋, 이벤트 핸들러
-    // StageData에 명시된 모든 프리팹을 로드
-    //private async Task LoadStageAssets()
-    //{
-    //    // 로드할 에셋들의 키(주소)를 리스트에 추가
-    //    var keysToLoad = new List<string>
-    //    {
-    //        currentStageData.mapAddress,
-    //        currentStageData.playerAddress,
-    //        currentStageData.bossAddress
-    //    };
-    //    loadedAssetKeys.AddRange(keysToLoad);
-
-    //    // 병렬 로딩을 위한 Task 리스트 생성
-    //    var loadTasks = new List<Task>();
-    //    loadTasks.Add(ResourceManager.Instance.LoadAssetAddressableAsync<GameObject>(currentStageData.mapAddress).ContinueWith(task => mapPrefab = task.Result));
-    //    loadTasks.Add(ResourceManager.Instance.LoadAssetAddressableAsync<GameObject>(currentStageData.playerAddress).ContinueWith(task => playerPrefab = task.Result));
-    //    loadTasks.Add(ResourceManager.Instance.LoadAssetAddressableAsync<GameObject>(currentStageData.bossAddress).ContinueWith(task => bossPrefab = task.Result));
-
-    //    // 모든 로딩 작업이 끝날 때까지 대기
-    //    await Task.WhenAll(loadTasks);
-    //}
-
+    #region 이벤트 핸들러
     // 플레이어 사망 이벤트가 방송되면 실행될 핸들러
     private void OnPlayerDiedHandler()
     {
@@ -253,13 +241,13 @@ public class StageManager : Singleton<StageManager>
         {
             CurrentState = EStageState.Paused;
             Time.timeScale = 0f;
-            pausePanel.SetActive(true);
+            //pausePanel.SetActive(true);
         }
         else if (CurrentState == EStageState.Paused)
         {
             CurrentState = EStageState.InProgress;
             Time.timeScale = 1f;
-            pausePanel.SetActive(false);
+            //pausePanel.SetActive(false);
         }
     }
     #endregion
