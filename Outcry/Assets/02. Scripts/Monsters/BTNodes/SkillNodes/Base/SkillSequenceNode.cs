@@ -26,9 +26,6 @@ public abstract class SkillSequenceNode : SequenceNode
         {
             Debug.LogError($"Skill ID {skillId} could not be found.");
         }
-
-        nodeName = skillData.skillName + skillData.skillId;
-        lastUsedTime = Time.time - skillData.cooldown;
     }
     
     public virtual void InitializeSkillSequenceNode(MonsterBase monster, Player target)
@@ -47,6 +44,9 @@ public abstract class SkillSequenceNode : SequenceNode
         children.Clear();
         AddChild(canPerform);
         AddChild(skillAction);
+
+        nodeName = skillData.skillName + skillData.skillId;
+        lastUsedTime = Time.time - skillData.cooldown;
     }
     protected abstract bool CanPerform();
 
