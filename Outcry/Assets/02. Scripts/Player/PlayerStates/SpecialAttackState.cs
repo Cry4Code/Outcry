@@ -17,11 +17,26 @@ public class SpecialAttackState : IPlayerState
     private Vector2 newPos;
     private Vector2 curPos;
     private float cursorAngle = 0f;
+    private int needStamina = 25;
 
 
     private float t;
     public void Enter(PlayerController player)
     {
+        if (!player.Condition.TryUseStamina(needStamina))
+        {
+            if (player.PlayerMove.isGrounded)
+            {
+                player.ChangeState<IdleState>();
+                return;
+            }
+            else
+            {
+                player.ChangeState<FallState>();
+                return;
+            }
+        }
+        
         player.isLookLocked = false;
         player.PlayerMove.ForceLook(CursorManager.Instance.mousePosition.x - player.transform.position.x < 0);
         player.PlayerMove.rb.velocity = Vector2.zero;

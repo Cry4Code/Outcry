@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
             { typeof(StartParryState), new StartParryState()},
             { typeof(SuccessParryState), new SuccessParryState()},
             { typeof(DamagedState), new DamagedState()},
+            { typeof(DieState), new DieState()},
         };
     }
 

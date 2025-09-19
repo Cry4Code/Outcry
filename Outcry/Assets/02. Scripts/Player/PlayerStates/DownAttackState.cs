@@ -9,6 +9,7 @@ public class DownAttackState : DownAttackSubState
         base.Enter(player);
         player.PlayerAnimator.ClearBool();
         player.isLookLocked = true; 
+        player.Condition.canStaminaRecovery = false;
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.DownAttack);
         player.Inputs.Player.Move.Disable();
         player.PlayerMove.rb.gravityScale = 3.5f;

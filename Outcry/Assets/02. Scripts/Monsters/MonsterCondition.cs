@@ -63,20 +63,27 @@ public class MonsterCondition : MonoBehaviour, IDamagable
     
     public void TakeDamage(int damage)
     {
+        if (IsDead)
+        {
+            return;
+        }
         currentHealth = Mathf.Max(0, currentHealth - damage);
         if (animationCoroutine != null)
         {
             spriteRenderer.color = originalColor;
             StopCoroutine(animationCoroutine);
         }
-        if (currentHealth <= 0)
+
+        if (currentHealth <= maxHealth / 2)
         {
-            Death();
+            monster.Animator.SetBool(AnimatorStrings.MonsterParameter.IsTired, true );
+            if (currentHealth <= 0)
+            {
+                Death();
+                return;
+            }
         }
-        else
-        {
-            animationCoroutine = StartCoroutine(HitAnimation(hitAnimationLength));
-        }
+        animationCoroutine = StartCoroutine(HitAnimation(hitAnimationLength));
     }
     
     //빨갛게 점멸하는 이펙트 코루틴

@@ -7,6 +7,9 @@ using Random = System.Random;
 // [RequireComponent(typeof(BossMonster))] //todo. think. 쓸까 말까?
 public class BossMonsterAI : MonsterAIBase
 {
+    private float SPECIAL_SKILL_INTERVAL = 2f;
+    private float COMMON_SKILL_INTERVAL = 1f;
+    
     protected override void InitializeBehaviorTree()
     {
         SelectorNode rootNode = new SelectorNode();
@@ -19,14 +22,10 @@ public class BossMonsterAI : MonsterAIBase
         SequenceNode attackSequenceNode = new SequenceNode();
         CanAttackConditionNode canAttackConditionNode = new CanAttackConditionNode(this);
         SelectorNode attackSelectorNode = new SelectorNode();
-        WaitActionNode waitActionNode = new WaitActionNode(1.0f);
-
         attackSequenceNode.AddChild(canAttackConditionNode);
         attackSequenceNode.AddChild(attackSelectorNode);
-        attackSequenceNode.AddChild(waitActionNode);
-        
         rootNode.AddChild(attackSequenceNode);
-
+        
 
         //각 스킬 노드 테스트용
         //TestSkillSequenceNode 대신에 본인이 제작한 SkillSequenceNode 상속 노드로 교체해서 테스트하세요.
@@ -59,9 +58,18 @@ public class BossMonsterAI : MonsterAIBase
             Debug.Log("monsterModel 이게 null이라서 짜증나겠지만 어쨋든 null인걸 어쩌라고.. 짜증나......");
         }
         
-        // 스페셜 스킬 셀럭터 노드 자식들 생성.
+        
+        // 스페셜 스킬 시퀀스 노드
+        SequenceNode specialSkillSequence = new SequenceNode();
         SkillSelectorNode specialSkillSelectorNode = new SkillSelectorNode();
-        specialSkillSelectorNode.nodeName = "SpecialSkillSelectorNode"; //디버깅용 노드 이름 설정.
+        WaitActionNode specialWaitActionNode = new WaitActionNode(SPECIAL_SKILL_INTERVAL);
+        
+        specialSkillSequence.AddChild(specialSkillSelectorNode);
+        specialSkillSequence.AddChild(specialWaitActionNode);
+        
+        attackSelectorNode.AddChild(specialSkillSequence);
+        
+        // 스페셜 스킬 셀럭터 노드 자식들 생성.
         foreach (int id in monsterModel.specialSkillIds )
         {
             DataManager.Instance.SkillSequenceNodeDataList.GetSkillSequenceNode(id, out SkillSequenceNode skillNode);
@@ -73,10 +81,20 @@ public class BossMonsterAI : MonsterAIBase
                 specialSkillSelectorNode.AddChild(skillNode);
             }
         }
-        attackSelectorNode.AddChild(specialSkillSelectorNode);
+        // attackSelectorNode.AddChild(specialSkillSelectorNode);
+        
+        
+        // 일반 스킬 시퀀스 노드
+        SequenceNode commonSkillSequence = new SequenceNode();
+        SkillSelectorNode commonSkillSelectorNode = new SkillSelectorNode();
+        WaitActionNode commonWaitActionNode = new WaitActionNode(COMMON_SKILL_INTERVAL);
+        
+        commonSkillSequence.AddChild(commonSkillSelectorNode);
+        commonSkillSequence.AddChild(commonWaitActionNode);
+        
+        attackSelectorNode.AddChild(commonSkillSequence);
         
         //일반 스킬 셀럭터 노드 자식들 생성.
-        SkillSelectorNode commonSkillSelectorNode = new SkillSelectorNode();
         foreach (int id in monsterModel.commonSkillIds)
         {
             DataManager.Instance.SkillSequenceNodeDataList.GetSkillSequenceNode(id, out SkillSequenceNode skillNode);
@@ -88,17 +106,13 @@ public class BossMonsterAI : MonsterAIBase
                 specialSkillSelectorNode.AddChild(skillNode);
             }
         }
-        attackSelectorNode.AddChild(commonSkillSelectorNode);
+        // attackSelectorNode.AddChild(commonSkillSelectorNode);
         
         //ChaseSelector
-        SelectorNode chaseSelectorNode = new SelectorNode();
-        //todo. 추후 DashSequenceNode및, ActionNode 추가할 것.
         ChaseActionNode chaseActionNode = new ChaseActionNode(
             monster.transform, target.transform, monster.MonsterData.chaseSpeed, monster.MonsterData.detectRange,
             monster.Animator);
-        chaseSelectorNode.AddChild(chaseActionNode);
-        
-        rootNode.AddChild(chaseSelectorNode);
+        rootNode.AddChild(chaseActionNode);
 
         #region NamingForDebug
 
@@ -106,9 +120,13 @@ public class BossMonsterAI : MonsterAIBase
         attackSequenceNode.nodeName = "AttackSequenceNode";
         canAttackConditionNode.nodeName = "CanAttackConditionNode";
         attackSelectorNode.nodeName = "AttackSelectorNode";
-        waitActionNode.nodeName = "WaitActionNode";
-        chaseSelectorNode.nodeName = "ChaseSelectorNode";
         chaseActionNode.nodeName = "ChaseActionNode";
+        specialSkillSelectorNode.nodeName = "SpecialSkillSelectorNode";
+        commonSkillSequence.nodeName = "CommonSkillSequenceNode";
+        specialSkillSelectorNode.nodeName = "SpecialSkillSelectorNode";
+        commonWaitActionNode.nodeName = "CommonWaitActionNode";
+        specialWaitActionNode.nodeName = "SpecialWaitActionNode";
+        specialSkillSequence.nodeName = "SpecialSkillSequenceNode";
         
         #endregion
         

@@ -269,11 +269,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: monsterData.commonSkillIds.Array.size
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: monsterData.commonSkillIds.Array.data[0]
-      value: 103003
+      value: 103001
       objectReference: {fileID: 0}
     - target: {fileID: 4673590449221852018, guid: 5035438ba6082cb48bd33cd4952b93ba, type: 3}
       propertyPath: monsterData.commonSkillIds.Array.data[1]
