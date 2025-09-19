@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 98956827349265367}
   - component: {fileID: 3680998514601764723}
   m_Layer: 9
-  m_Name: Goblinking
+  m_Name: GoblinKingSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 8223912052011406626}
   - component: {fileID: 1780738220554408116}
   m_Layer: 7
-  m_Name: Monster
+  m_Name: GoblinKing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = System.Random;
 
 // [RequireComponent(typeof(BossMonster))] //todo. think. 쓸까 말까?
-public class BossMonsterAI : MonsterAIBase
+public class GoblinKingAI : MonsterAIBase
 {
     private float SPECIAL_SKILL_INTERVAL = 2f;
     private float COMMON_SKILL_INTERVAL = 1f;
