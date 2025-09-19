@@ -23,6 +23,10 @@ public class TestManager : MonoBehaviour
         GameObject monsterObj = GameObject.Instantiate(monsterPrefab);
         
         monster = monsterObj.GetComponent<MonsterBase>();
+        
+        Vector3 scale = monster.transform.localScale;
+        monster.transform.localScale = new Vector3(scale.x * 2f, scale.y * 2f, scale.z);
+        
         monster.SetMonsterData(monsterData);
     }
 

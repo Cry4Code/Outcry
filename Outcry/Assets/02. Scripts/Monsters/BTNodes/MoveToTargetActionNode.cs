@@ -12,6 +12,7 @@ public class MoveToTargetActionNode : ActionNode
     private Transform target;
     private float speed;
     private float stoppingDistance;
+    private float originalScaleX;
 
     public MoveToTargetActionNode(Transform me, Transform target, float speed, float stoppingDistance)
     {
@@ -19,6 +20,7 @@ public class MoveToTargetActionNode : ActionNode
         this.target = target;
         this.speed = speed;
         this.stoppingDistance = stoppingDistance;
+        this.originalScaleX = me.localScale.x;
     }
 
     protected override NodeState Act()
@@ -38,9 +40,9 @@ public class MoveToTargetActionNode : ActionNode
         else
         {
             if (me.position.x < target.position.x)
-                me.localScale = new Vector3(1, me.localScale.y, me.localScale.z);
+                me.localScale = new Vector3(Mathf.Abs(originalScaleX) , me.localScale.y, me.localScale.z);
             else
-                me.localScale = new Vector3(-1, me.localScale.y, me.localScale.z);
+                me.localScale = new Vector3(-Mathf.Abs(originalScaleX), me.localScale.y, me.localScale.z);
             
             me.position = Vector2.MoveTowards(
                 me.position,
