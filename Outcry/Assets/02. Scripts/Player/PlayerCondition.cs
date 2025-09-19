@@ -43,7 +43,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         if(Time.time - lastRecoveryStamina >= recoveryStaminaTime)
         {
             stamina.Add(stamina.passiveValue);
-            Debug.Log($"Stamina : {stamina.CurValue()}");
+            Debug.Log($"[플레이어] Stamina : {stamina.CurValue()}");
             lastRecoveryStamina = Time.time;
         }
 
@@ -66,9 +66,9 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         {
             if(!player.IsCurrentState<DamagedState>()) player.ChangeState<DamagedState>();
             invincibleCoroutine = StartCoroutine(Invincible());
-            Debug.Log("플레이어 데미지 받음");
+            Debug.Log("[플레이어] 플레이어 데미지 받음");
             health.Substract(damage);
-            Debug.Log($"플레이어 현재 체력 : {health.CurValue()}");
+            Debug.Log($"[플레이어] 플레이어 현재 체력 : {health.CurValue()}");
             onTakeDamage?.Invoke();
         }
         
@@ -84,26 +84,26 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     IEnumerator Invincible()
     {
-        Debug.Log("플레이어 무적 시작");
+        Debug.Log("[플레이어] 플레이어 무적 시작");
         isInvincible = true;
         yield return waitInvisible;
         isInvincible = false;
         invincibleCoroutine = null;
-        Debug.Log("플레이어 무적 끝");
+        Debug.Log("[플레이어] 플레이어 무적 끝");
     }
 
     IEnumerator Invincible(float time)
     {
-        Debug.Log("플레이어 무적 시작");
+        Debug.Log("[플레이어] 플레이어 무적 시작");
         isInvincible = true;
         yield return new WaitForSecondsRealtime(time);
         isInvincible = false;
         invincibleCoroutine = null;
-        Debug.Log("플레이어 무적 끝");
+        Debug.Log("[플레이어] 플레이어 무적 끝");
     }
 
     public void Die()
     {
-        Debug.Log("죽음!");
+        Debug.Log("[플레이어] 죽음!");
     }
 }

@@ -26,12 +26,12 @@ public class PlayerAttack : MonoBehaviour
 
     public void NormalAttack()
     {
-        Debug.Log($"{AttackCount + 1} 번째 공격");
+        Debug.Log($"[플레이어] {AttackCount + 1} 번째 공격");
     }
 
     public void Update()
     {
-        Debug.Log($"어택 카운트 : {AttackCount}");
+        Debug.Log($"[플레이어] 어택 카운트 : {AttackCount}");
     }
 
     public void ClearAttackCount()
