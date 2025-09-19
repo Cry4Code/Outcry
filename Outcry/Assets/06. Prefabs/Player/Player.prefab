@@ -129,12 +129,12 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6836656985151540955}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 640
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -179,6 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4123a4173c78ada43aa3dd44d56b2909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Damage>k__BackingField: 0
 --- !u!1 &7606259816814799071
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,7 +281,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.09
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c78d72528abcd364aa490ab46f6f3553, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -306,6 +307,8 @@ MonoBehaviour:
   PlayerMove: {fileID: 0}
   PlayerController: {fileID: 0}
   PlayerCondition: {fileID: 0}
+  PlayerWeapon: {fileID: 0}
+  PlayerAttack: {fileID: 0}
 --- !u!114 &4271897825629240966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,9 +326,10 @@ MonoBehaviour:
   keyboardLeft: 0
   lookLeft: 0
   <JumpForce>k__BackingField: 6
-  <DoubleJumpForce>k__BackingField: 8
+  <DoubleJumpForce>k__BackingField: 10
   <WallJumpForce>k__BackingField: 8
   <GroundThresholdForce>k__BackingField: 0.5
+  <AirMoveThresholdTime>k__BackingField: 1.2
   groundMask:
     serializedVersion: 2
     m_Bits: 8
@@ -336,8 +340,10 @@ MonoBehaviour:
   lastWallIsLeft: 0
   isGrounded: 1
   isWallTouched: 0
+  inAirTime: 0
   rb: {fileID: 0}
   SpriteRenderer: {fileID: 0}
+  isDodged: 0
 --- !u!114 &846374023540752017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,14 +385,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health:
-    startValue: 100
-    maxValue: 100
+    startValue: 10
+    maxValue: 10
     passiveValue: 0
   stamina:
     startValue: 50
     maxValue: 100
     passiveValue: 5
   recoveryStaminaTime: 1
+  canStaminaRecovery: 0
+  invincibleTime: 0
+  isDead: 0
 --- !u!114 &2239394791966075703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,3 +411,5 @@ MonoBehaviour:
   AttackCount: 0
   MaxAttackCount: 2
   HasJumpAttack: 0
+  isStartParry: 0
+  successParry: 0

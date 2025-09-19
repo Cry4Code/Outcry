@@ -98,9 +98,9 @@ public abstract class MonsterBase : MonoBehaviour
         if (hitbox != null && hitbox.enabled)
         {
             Vector3 offset = hitbox.offset;
-            offset.x *= sign * offsetSizeX;
+            offset.x *= offsetSizeX;
             offset.y *= offsetSizeY;
-            Vector3 scaledSize = new Vector3(hitbox.size.x * Mathf.Abs(offsetSizeX), hitbox.size.y * Mathf.Abs(offsetSizeY), 1f);
+            Vector3 scaledSize = new Vector3(hitbox.size.x * Mathf.Abs(offsetSizeX) * sign, hitbox.size.y * Mathf.Abs(offsetSizeY), 1f);
             Gizmos.DrawWireCube(transform.position + offset, scaledSize);
         }
 
@@ -110,9 +110,9 @@ public abstract class MonsterBase : MonoBehaviour
         if (hurtBox != null)
         {
             Vector3 offset = hurtBox.offset;
-            offset.x *= sign * Mathf.Abs(offsetSizeX);
+            offset.x *= Mathf.Abs(offsetSizeX);
             offset.y *= Mathf.Abs(offsetSizeY);
-            Vector3 scaledSize = new Vector3(hurtBox.size.x * Mathf.Abs(offsetSizeX), hurtBox.size.y * Mathf.Abs(offsetSizeY), 1f);
+            Vector3 scaledSize = new Vector3(hurtBox.size.x * Mathf.Abs(offsetSizeX) * sign, hurtBox.size.y * Mathf.Abs(offsetSizeY), 1f);
             Gizmos.DrawWireCube(transform.position + offset, scaledSize);
         }
 

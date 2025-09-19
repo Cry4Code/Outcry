@@ -23,7 +23,7 @@ public class AttackHitbox : MonoBehaviour
             {
                 Player.PlayerAttack.successParry = true;
                 countable?.CounterAttacked();
-                Debug.Log("플레이어 패링 성공");
+                Debug.Log("[플레이어] 플레이어 패링 성공");
             }
             return;
         }
@@ -32,7 +32,7 @@ public class AttackHitbox : MonoBehaviour
             // && other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             damagable?.TakeDamage(Damage);
-            Debug.Log($"플레이어가 몬스터에게 {Damage} 만큼 데미지 줌");
+            Debug.Log($"[플레이어] 플레이어가 몬스터에게 {Damage} 만큼 데미지 줌");
         } 
         
     }

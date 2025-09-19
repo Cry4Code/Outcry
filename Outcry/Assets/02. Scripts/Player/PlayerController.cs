@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
             { typeof(StartParryState), new StartParryState()},
             { typeof(SuccessParryState), new SuccessParryState()},
             { typeof(DamagedState), new DamagedState()},
+            { typeof(DieState), new DieState()},
         };
     }
 
@@ -67,9 +68,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log($"상태 : {currentState.GetType().Name}");
-        Debug.Log($"벽 터치 : {PlayerMove.isWallTouched}");
-        // Debug.Log($"땅 : {PlayerMove.isGrounded} || 일반 점프 : {PlayerMove.isGroundJump} || 이단 점프 : {PlayerMove.isDoubleJump}");
+        Debug.Log($"[플레이어] 상태 : {currentState.GetType().Name}");
+        Debug.Log($"[플레이어] 벽 터치 : {PlayerMove.isWallTouched}");
+        // Debug.Log($"[플레이어] 땅 : {PlayerMove.isGrounded} || 일반 점프 : {PlayerMove.isGroundJump} || 이단 점프 : {PlayerMove.isDoubleJump}");
         currentState.HandleInput(this);
         currentState.LogicUpdate(this);
     }

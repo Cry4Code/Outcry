@@ -14,8 +14,24 @@ public class DodgeState : IPlayerState
     private Vector2 dodgeDirection;
     private float dodgeInvincibleTime = 0.3f;
     
+    private int needStamina = 15;
+    
     public void Enter(PlayerController player)
     {
+        if (!player.Condition.TryUseStamina(needStamina))
+        {
+            if (player.PlayerMove.isGrounded)
+            {
+                player.ChangeState<IdleState>();
+                return;
+            }
+            else
+            {
+                player.ChangeState<FallState>();
+                return;
+            }
+        }
+        
         var moveInputs = player.Inputs.Player.Move.ReadValue<Vector2>();
         player.isLookLocked = false;
         player.PlayerMove.rb.velocity = Vector2.zero;
