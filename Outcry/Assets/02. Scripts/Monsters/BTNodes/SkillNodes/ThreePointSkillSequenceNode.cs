@@ -67,6 +67,7 @@ public class ThreePointSkillSequenceNode : SkillSequenceNode
             // 상태 초기화 및 애니메이션 시작 시간 기록
             skillTriggered = true;
             FlipCharacter();
+            monster.AttackController.SetDamages(skillData.damage1);
             lastUsedTime = Time.time;
         }
 
