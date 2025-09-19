@@ -7,6 +7,9 @@ public class CommonMonster : MonsterBase
     [Header("Data")]
     [SerializeField] private List<MonsterSkillModel> commonSkillDatas;
 
+    // 페트롤 시간, 이동 속도 등 데이터 추가? 미정
+    // private float patrolSpeed;
+
     protected override void InitializeSkills()
     {
         // 데이터메니저 null 체크
