@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class FallState : AirSubState
 {
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        base.Enter(player);
-        player.isLookLocked = true; 
-        player.Condition.canStaminaRecovery = true;
-        player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Fall);
-        player.PlayerMove.rb.gravityScale = 6f;
+        base.Enter(controller);
+        controller.isLookLocked = true; 
+        controller.Condition.canStaminaRecovery.Value = true;
+        controller.Animator.SetBoolAnimation(PlayerAnimID.Fall);
+        controller.Move.rb.gravityScale = 6f;
     }
 
     public override void Exit(PlayerController player)
     {
         base.Exit(player);
-        player.PlayerMove.rb.gravityScale = 1f;
-        player.PlayerAttack.HasJumpAttack = false;
+        player.Move.rb.gravityScale = 1f;
+        player.Attack.HasJumpAttack = false;
         player.isLookLocked = false; 
     }
 
@@ -25,8 +25,8 @@ public class FallState : AirSubState
     {
         var moveInputs = player.Inputs.Player.Move.ReadValue<Vector2>();
 
-        if (player.PlayerMove.isWallTouched
-            && ((player.PlayerMove.lastWallIsLeft && moveInputs.x < 0) || (!player.PlayerMove.lastWallIsLeft && moveInputs.x > 0)))
+        if (player.Move.isWallTouched
+            && ((player.Move.lastWallIsLeft && moveInputs.x < 0) || (!player.Move.lastWallIsLeft && moveInputs.x > 0)))
         {
 
             player.ChangeState<WallHoldState>();
@@ -36,7 +36,7 @@ public class FallState : AirSubState
 
         if (player.Inputs.Player.Jump.triggered)
         {
-            if (!player.PlayerMove.isDoubleJump)
+            if (!player.Move.isDoubleJump)
             {
                 player.ChangeState<DoubleJumpState>();
                 return;
@@ -51,7 +51,7 @@ public class FallState : AirSubState
         }
         
         
-        if (player.Inputs.Player.NormalAttack.triggered && !player.PlayerAttack.HasJumpAttack)
+        if (player.Inputs.Player.NormalAttack.triggered && !player.Attack.HasJumpAttack)
         {
             player.isLookLocked = true;
             player.ChangeState<NormalJumpAttackState>();
@@ -87,12 +87,12 @@ public class FallState : AirSubState
         {
             if (input.x != 0)
             {
-                player.PlayerMove.ForceLook(input.x < 0);
+                player.Move.ForceLook(input.x < 0);
             }
-            player.PlayerMove.Move();
+            player.Move.Move();
         }
 
-        if (player.PlayerMove.isGrounded)
+        if (player.Move.isGrounded)
         {
             player.ChangeState<IdleState>();
             return;

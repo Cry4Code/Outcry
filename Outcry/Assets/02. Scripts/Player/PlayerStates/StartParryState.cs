@@ -7,33 +7,32 @@ public class StartParryState : IPlayerState
 {
     private float startStateTime;
     private float startAttackTime = 0.01f;
-    private int needStamina = 15;
-    public void Enter(PlayerController player)
+    public void Enter(PlayerController controller)
     {
-        if (!player.Condition.TryUseStamina(needStamina))
+        if (!controller.Condition.TryUseStamina(controller.Data.parryStamina))
         {
-            if (player.PlayerMove.isGrounded)
+            if (controller.Move.isGrounded)
             {
-                player.ChangeState<IdleState>();
+                controller.ChangeState<IdleState>();
                 return;
             }
             else
             {
-                player.ChangeState<FallState>();
+                controller.ChangeState<FallState>();
                 return;
             }
         }
-        player.isLookLocked = false;
-        player.PlayerMove.ForceLook(CursorManager.Instance.mousePosition.x - player.transform.position.x < 0);
-        player.PlayerMove.rb.velocity = Vector2.zero;
-        player.PlayerAnimator.ClearTrigger();
-        player.PlayerAnimator.ClearInt();
-        player.PlayerAnimator.ClearBool();
-        player.Inputs.Player.Move.Disable();
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.StartParry);
+        controller.isLookLocked = false;
+        controller.Move.ForceLook(CursorManager.Instance.mousePosition.x - controller.transform.position.x < 0);
+        controller.Move.rb.velocity = Vector2.zero;
+        controller.Animator.ClearTrigger();
+        controller.Animator.ClearInt();
+        controller.Animator.ClearBool();
+        controller.Inputs.Player.Move.Disable();
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.StartParry);
         
-        player.isLookLocked = true;
-        player.PlayerAttack.isStartParry = true;
+        controller.isLookLocked = true;
+        controller.Attack.isStartParry = true;
     }
 
     public void HandleInput(PlayerController player)
@@ -43,7 +42,7 @@ public class StartParryState : IPlayerState
 
     public void LogicUpdate(PlayerController player)
     {
-        if (player.PlayerAttack.successParry)
+        if (player.Attack.successParry)
         {
             player.ChangeState<SuccessParryState>();
             return;
@@ -51,7 +50,7 @@ public class StartParryState : IPlayerState
         
         if (Time.time - startStateTime > startAttackTime)
         {
-            AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo curAnimInfo = player.Animator.animator.GetCurrentAnimatorStateInfo(0);
 
             if (curAnimInfo.IsName("StartParry"))
             { 
@@ -59,7 +58,7 @@ public class StartParryState : IPlayerState
 
                 if (animTime >= 1.0f)
                 {
-                    if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+                    if (player.Move.isGrounded) player.ChangeState<IdleState>();
                     else player.ChangeState<FallState>();
                     return;
                 }
@@ -69,6 +68,6 @@ public class StartParryState : IPlayerState
 
     public void Exit(PlayerController player)
     {
-        player.PlayerAttack.isStartParry = false;
+        player.Attack.isStartParry = false;
     }
 }

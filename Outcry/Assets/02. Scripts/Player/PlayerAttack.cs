@@ -22,13 +22,6 @@ public class PlayerAttack : MonoBehaviour
     
     
     #endregion
-
-
-    public void NormalAttack()
-    {
-        Debug.Log($"[플레이어] {AttackCount + 1} 번째 공격");
-    }
-
     public void Update()
     {
         Debug.Log($"[플레이어] 어택 카운트 : {AttackCount}");

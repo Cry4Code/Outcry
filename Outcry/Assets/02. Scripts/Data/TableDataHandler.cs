@@ -2,22 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
-#region 임시
-
-using System;
-
-public class MonsterTableData{ //테이블에서 받아온 데이터. (가공전: 추후 기획테이블에서 자동생성될 예정)
-    public int monsterId;
-    public string monsterName;
-    public int health;
-    public float chaseSpeed;
-    public float attackRange;
-    public float attackCooldown;
-    public int[] specialSkillIds;
-    public int[] commonSkillIds;
-}
-
-#endregion
 
 /// <summary>
 /// 순수 변환만을 담당함 (기획테이블 데이터 -> 모델)
@@ -50,10 +34,25 @@ public static class TableDataHandler
         MonsterSkillModel newMonsterSkillModel = new MonsterSkillModel(
             tableData.Skill_id, tableData.Skill_name, 
             tableData.Damage, tableData.Damage2, tableData.Damage3, tableData.HealAmount, 
-            tableData.Cooldown, tableData.Range, tableData.Desc);
+            tableData.Cooldown, tableData.Range, tableData.TriggerHP, tableData.Desc);
         
         return newMonsterSkillModel;
     }
+
+    public static PlayerDataModel LoadPlayerData()
+    {
+        DataTableManager.Instance.LoadSingleData<PlayerData>();
+        PlayerData tableData =  DataTableManager.Instance.SingleData[typeof(PlayerData)] as PlayerData;
+        PlayerDataModel result = new PlayerDataModel(tableData.MaxHealth, tableData.MaxStamina, tableData.RateStamina, tableData.FullStamina,
+            tableData.SpecialAttackStamina, tableData.DodgeStamina, tableData.DodgeInvincibleTime,
+            tableData.DoubleJumpStamina, tableData.ParryStamina, tableData.ParryInvincibleTime, tableData.ParryDamage,
+            tableData.WallJumpStamina, tableData.InvincibleTime, tableData.NormalAttackDamage,
+            tableData.JumpAttackDamage, tableData.DownAttackDamage, tableData.Jumpforce, tableData.Skill_Ids,
+            tableData.MoveSpeed);
+        return result;
+    }
+    
+    
     
     //todo. 몬스터스킬데이터를 기획테이블에서 가져와서 맵핑하는 메서드 추가하기.
 }

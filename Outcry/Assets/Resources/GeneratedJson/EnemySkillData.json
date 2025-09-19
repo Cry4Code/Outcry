@@ -9,6 +9,7 @@
             "HealAmount": 0,
             "Cooldown": 0.0,
             "Range": 4.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
@@ -20,6 +21,7 @@
             "HealAmount": 0,
             "Cooldown": 10.0,
             "Range": 4.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
@@ -31,6 +33,7 @@
             "HealAmount": 0,
             "Cooldown": 0.0,
             "Range": 14.0,
+            "TriggerHP": 0.0,
             "Desc": "14f 이상일때"
         },
         {
@@ -42,6 +45,7 @@
             "HealAmount": 0,
             "Cooldown": 10.0,
             "Range": 4.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
@@ -53,6 +57,7 @@
             "HealAmount": 0,
             "Cooldown": 10.0,
             "Range": 4.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
@@ -64,6 +69,7 @@
             "HealAmount": 0,
             "Cooldown": 10.0,
             "Range": 4.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
@@ -75,6 +81,7 @@
             "HealAmount": 0,
             "Cooldown": 10.0,
             "Range": 4.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
@@ -86,6 +93,7 @@
             "HealAmount": 0,
             "Cooldown": 10.0,
             "Range": 4.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
@@ -97,29 +105,32 @@
             "HealAmount": 0,
             "Cooldown": 15.0,
             "Range": 4.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
             "Skill_id": 103009,
             "Skill_name": "ExSkill",
-            "Damage": 0,
-            "Damage2": 0,
-            "Damage3": 0,
+            "Damage": 100,
+            "Damage2": 100,
+            "Damage3": 100,
             "HealAmount": 0,
-            "Cooldown": 0.0,
+            "Cooldown": 180.0,
             "Range": 0.0,
-            "Desc": ""
+            "TriggerHP": 0.5,
+            "Desc": "HP50 미만 || 스테이지 시작 후 180 , 스테이지당 1회만 발동"
         },
         {
             "Skill_id": 103010,
             "Skill_name": "ExSkill2",
-            "Damage": 0,
-            "Damage2": 0,
-            "Damage3": 0,
+            "Damage": 100,
+            "Damage2": 100,
+            "Damage3": 100,
             "HealAmount": 0,
-            "Cooldown": 0.0,
+            "Cooldown": 300.0,
             "Range": 0.0,
-            "Desc": ""
+            "TriggerHP": 0.20000000298023225,
+            "Desc": "HP20 미만 || 스테이지 시작 후 300 , 스테이지당 1회만 발동"
         },
         {
             "Skill_id": 103101,
@@ -130,6 +141,7 @@
             "HealAmount": 0,
             "Cooldown": 0.0,
             "Range": 3.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
@@ -141,6 +153,7 @@
             "HealAmount": 0,
             "Cooldown": 8.0,
             "Range": 3.0,
+            "TriggerHP": 0.0,
             "Desc": "Attack1 보다 우선실행"
         },
         {
@@ -152,17 +165,19 @@
             "HealAmount": 0,
             "Cooldown": 0.0,
             "Range": 3.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
             "Skill_id": 103202,
             "Skill_name": "gB_Skill1",
-            "Damage": 1,
+            "Damage": 2,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 8.0,
             "Range": 3.0,
+            "TriggerHP": 0.0,
             "Desc": "Attack1 보다 우선실행"
         },
         {
@@ -174,17 +189,19 @@
             "HealAmount": 0,
             "Cooldown": 0.0,
             "Range": 3.0,
+            "TriggerHP": 0.0,
             "Desc": ""
         },
         {
             "Skill_id": 103302,
             "Skill_name": "gC_Skill1",
-            "Damage": 1,
+            "Damage": 2,
             "Damage2": 0,
             "Damage3": 0,
             "HealAmount": 0,
             "Cooldown": 8.0,
             "Range": 3.0,
+            "TriggerHP": 0.0,
             "Desc": "Attack1 보다 우선실행"
         }
     ]

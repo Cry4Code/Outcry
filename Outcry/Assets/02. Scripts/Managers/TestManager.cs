@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TestManager : MonoBehaviour
 {
-    [SerializeField] private Player player;
+    [SerializeField] private PlayerController player;
 
     [SerializeField] private GameObject monsterPrefab;
 

@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class DieState : IPlayerState
 {
-    public void Enter(PlayerController player)
+    public void Enter(PlayerController controller)
     {
-        player.SetAnimation(PlayerAnimID.Die, true);
-        player.Inputs.Disable();
+        controller.SetAnimation(PlayerAnimID.Die, true);
+        controller.Inputs.Player.Dodge.Disable();
+        controller.Inputs.Player.Move.Disable();
+        controller.Inputs.Player.SpecialAttack.Disable();
+        controller.Inputs.Player.NormalAttack.Disable();
+        controller.Inputs.Player.Jump.Disable();
+        controller.Inputs.Player.Parry.Disable();
     }
 
     public void HandleInput(PlayerController player)

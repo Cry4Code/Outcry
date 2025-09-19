@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MoveState : GroundSubState
 {
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        base.Enter(player);
-        player.PlayerAnimator.OnBoolParam(PlayerAnimID.Move);
-        player.Condition.canStaminaRecovery = true;
+        base.Enter(controller);
+        controller.Animator.OnBoolParam(PlayerAnimID.Move);
+        controller.Condition.canStaminaRecovery.Value = true;
 
     }
 
@@ -16,8 +16,8 @@ public class MoveState : GroundSubState
     {
         var input = player.Inputs.Player.Move.ReadValue<Vector2>();
         if (player.Inputs.Player.Jump.triggered
-            && player.PlayerMove.isGrounded
-            && !player.PlayerMove.isGroundJump)
+            && player.Move.isGrounded
+            && !player.Move.isGroundJump)
         {
             player.ChangeState<JumpState>();
             return;
@@ -30,9 +30,9 @@ public class MoveState : GroundSubState
         // else if (player.Inputs.Player.Dodge.triggered) player.ChangeState(new DodgeState());
 
         // 땅에 안닿아있고, 벽에 닿았고, 좌우 입력이 벽의 방향과 같을 때 벽 짚기로 변경
-        if (!player.PlayerMove.isGrounded
-            && player.PlayerMove.isWallTouched
-            && ((input.x < 0 && player.PlayerMove.lastWallIsLeft) || (input.x > 0 && !player.PlayerMove.lastWallIsLeft) ))
+        if (!player.Move.isGrounded
+            && player.Move.isWallTouched
+            && ((input.x < 0 && player.Move.lastWallIsLeft) || (input.x > 0 && !player.Move.lastWallIsLeft) ))
         {
             player.ChangeState<WallHoldState>();
             return;
@@ -68,12 +68,12 @@ public class MoveState : GroundSubState
 
     public override void LogicUpdate(PlayerController player)
     {
-        if (player.PlayerMove.rb.velocity.y < 0)
+        if (player.Move.rb.velocity.y < 0)
         {
             player.ChangeState<FallState>();
             return;
         }
-        player.PlayerMove.Move();
+        player.Move.Move();
         
         
     }
@@ -81,6 +81,6 @@ public class MoveState : GroundSubState
     public override void Exit(PlayerController player) 
     {
         base.Exit(player);
-        player.PlayerAnimator.OffBoolParam(PlayerAnimID.Move);
+        player.Animator.OffBoolParam(PlayerAnimID.Move);
     }
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DownAttackSubState : GroundSubState
 {
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        player.PlayerAnimator.OnBoolParam(PlayerAnimID.SubDownAttack);
+        controller.Animator.OnBoolParam(PlayerAnimID.SubDownAttack);
     }
 
     public override void HandleInput(PlayerController player)
@@ -21,6 +21,6 @@ public class DownAttackSubState : GroundSubState
 
     public override void Exit(PlayerController player)
     {
-        player.PlayerAnimator.OffBoolParam(PlayerAnimID.SubDownAttack);
+        player.Animator.OffBoolParam(PlayerAnimID.SubDownAttack);
     }
 }

@@ -5,23 +5,23 @@ using UnityEngine;
 
 public class AttackHitbox : MonoBehaviour
 {
-    private Player Player;
+    private PlayerController controller;
     [field : SerializeField] public int Damage { get; set; }
 
-    public void Init(Player player)
+    public void Init(PlayerController player)
     {
-        Player = player;
+        controller = player;
         Damage = 10;
     }
     
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (Player.PlayerAttack.isStartParry)
+        if (controller.Attack.isStartParry)
         {
             if (other.TryGetComponent(out ICountable countable))
             {
-                Player.PlayerAttack.successParry = true;
+                controller.Attack.successParry = true;
                 countable?.CounterAttacked();
                 Debug.Log("[플레이어] 플레이어 패링 성공");
             }

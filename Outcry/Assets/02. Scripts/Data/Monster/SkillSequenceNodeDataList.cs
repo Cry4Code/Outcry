@@ -9,6 +9,7 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
 {
     /// <summary>
     /// Json 데이터로 불러오지 않기 때문에, 스킬 노드를 생성할때마다 이 곳에 추가해줘야함.
+    /// todo. 하드코딩 피하고 자동 업데이트 할 수 있는 방법을 찾아볼 것. 팩토리 패턴? 같은거?
     /// </summary>
     public override void Initialize()
     {
@@ -24,6 +25,8 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
         dataList.Add(new NormalAttackSkillSequenceNode(103000));
         dataList.Add(new WhirlWindSkillSequenceNode(103008));
         dataList.Add(new SharkSkillSequenceNode(103007));
+        
+        dataList.Add(new RumbleOfRuinSkillSequenceNode(103009));
     }
     
     /// <summary>
@@ -64,6 +67,9 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
                 break;
             case SharkSkillSequenceNode:
                 skillSequenceNode = new SharkSkillSequenceNode(skillId);
+                break;
+            case RumbleOfRuinSkillSequenceNode:
+                skillSequenceNode = new RumbleOfRuinSkillSequenceNode(skillId);
                 break;
             default:
                 skillSequenceNode = null;

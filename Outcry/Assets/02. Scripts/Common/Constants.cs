@@ -15,6 +15,7 @@ public static class EventBusKey
 {
     public const string ChangeHealth = "ChangeHealth";
     public const string ChangeStamina = "ChangeStamina";
+    public const string ChangeStaminaRecovery = "ChangeStaminaRecovery";
 }
 
 public static class AnimatorStrings
@@ -34,7 +35,7 @@ public static class AnimatorStrings
         public static readonly int WhirlWind = Animator.StringToHash("WhirlWind");
         public static readonly int NormalAttack = Animator.StringToHash("NormalAttack");
         public static readonly int Shark = Animator.StringToHash("Shark");
-
+        public static readonly int RumbleOfRuin = Animator.StringToHash("RumbleOfRuin");
         public static readonly int IsTired = Animator.StringToHash("IsTired");
 
     }

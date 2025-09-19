@@ -1,1 +1,1 @@
-﻿{"headers":["Max_Hp","Attack_Power","Attack_Power2","Attack_Power3","Jumpforce","Skill_Ids","Speed"]}
+﻿{"headers":["MaxHealth","MaxStamina","RateStamina","FullStamina","SpecialAttackStamina","DodgeStamina","DodgeInvincibleTime","DoubleJumpStamina","ParryStamina","ParryInvincibleTime","ParryDamage","WallJumpStamina","InvincibleTime","NormalAttackDamage","JumpAttackDamage","DownAttackDamage","Jumpforce","Skill_Ids","MoveSpeed"]}

@@ -6,7 +6,7 @@ public class WhirlWindSkillSequenceNode : SkillSequenceNode
 {
     public WhirlWindSkillSequenceNode(int skillId) : base(skillId)
     {
-
+        this.nodeName = "WhirlWindSkillSequenceNode";
     }
 
     protected override bool CanPerform()

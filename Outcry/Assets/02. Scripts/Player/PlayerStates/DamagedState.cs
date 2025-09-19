@@ -9,12 +9,12 @@ public class DamagedState : IPlayerState
     private float startAttackTime = 0.01f;
     private float canInputTime = 0.1f;
     
-    public void Enter(PlayerController player)
+    public void Enter(PlayerController controller)
     {
-        player.PlayerMove.rb.velocity = Vector2.zero;
-        player.Condition.canStaminaRecovery = true;
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Damaged);
-        player.Inputs.Disable();
+        controller.Move.rb.velocity = Vector2.zero;
+        controller.Condition.canStaminaRecovery.Value = true;
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.Damaged);
+        controller.Inputs.Disable();
     }
 
     public void HandleInput(PlayerController player)
@@ -29,7 +29,7 @@ public class DamagedState : IPlayerState
     {
         if (Time.time - startStateTime > startAttackTime)
         {
-            AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo curAnimInfo = player.Animator.animator.GetCurrentAnimatorStateInfo(0);
 
             if (curAnimInfo.IsName("Damaged"))
             { 

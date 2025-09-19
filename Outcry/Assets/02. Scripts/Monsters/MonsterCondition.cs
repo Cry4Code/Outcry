@@ -7,8 +7,8 @@ public class MonsterCondition : MonoBehaviour, IDamagable
 {
     private MonsterBase monster;
      
-    [SerializeField] private int maxHealth;
-    [SerializeField] private int currentHealth;
+    [field: SerializeField] public int MaxHealth { get; private set; }
+    [field: SerializeField] public int CurrentHealth { get; private set; }
     public bool IsDead { get; private set; } = false;
     
     public Action OnHealthChanged;
@@ -57,8 +57,8 @@ public class MonsterCondition : MonoBehaviour, IDamagable
 
     private void SetMaxHealth()
     {
-        maxHealth = monster.MonsterData.health;
-        currentHealth = maxHealth;
+        MaxHealth = monster.MonsterData.health;
+        CurrentHealth = MaxHealth;
     }
     
     public void TakeDamage(int damage)
@@ -67,17 +67,17 @@ public class MonsterCondition : MonoBehaviour, IDamagable
         {
             return;
         }
-        currentHealth = Mathf.Max(0, currentHealth - damage);
+        CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
         if (animationCoroutine != null)
         {
             spriteRenderer.color = originalColor;
             StopCoroutine(animationCoroutine);
         }
 
-        if (currentHealth <= maxHealth / 2)
+        if (CurrentHealth <= MaxHealth / 2)
         {
             monster.Animator.SetBool(AnimatorStrings.MonsterParameter.IsTired, true );
-            if (currentHealth <= 0)
+            if (CurrentHealth <= 0)
             {
                 Death();
                 return;
@@ -119,7 +119,7 @@ public class MonsterCondition : MonoBehaviour, IDamagable
     
     private void Death()
     {
-        currentHealth = 0;
+        CurrentHealth = 0;
         IsDead = true;
         monster.MonsterAI.DisactivateBt();
         monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.Dead);

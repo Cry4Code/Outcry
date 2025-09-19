@@ -5,11 +5,23 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerData
 {
-    public int Max_Hp;
-    public int Attack_Power;
-    public int Attack_Power2;
-    public int Attack_Power3;
+    public int MaxHealth;
+    public int MaxStamina;
+    public float RateStamina;
+    public float FullStamina;
+    public int SpecialAttackStamina;
+    public int DodgeStamina;
+    public float DodgeInvincibleTime;
+    public int DoubleJumpStamina;
+    public int ParryStamina;
+    public float ParryInvincibleTime;
+    public int ParryDamage;
+    public int WallJumpStamina;
+    public float InvincibleTime;
+    public int[] NormalAttackDamage;
+    public int JumpAttackDamage;
+    public int DownAttackDamage;
     public float Jumpforce;
     public int Skill_Ids;
-    public float Speed;
+    public float MoveSpeed;
 }

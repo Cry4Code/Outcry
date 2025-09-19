@@ -16,7 +16,6 @@ public class PlayerMove : MonoBehaviour
     #region 이동 관련
 
     [field : Header("Movement Settings")] 
-    [field : SerializeField] public float MoveSpeed { get; set; }
     private Vector2 curMoveInput;
     [HideInInspector] public bool keyboardLeft = false;
     [HideInInspector] public bool lookLeft = false;
@@ -25,9 +24,6 @@ public class PlayerMove : MonoBehaviour
     
     #region 점프 관련
     [field : Header("Jump Settings")]
-    [field : SerializeField] public float JumpForce { get; set; }
-    [field : SerializeField] public float DoubleJumpForce { get; set; }
-    [field : SerializeField] public float WallJumpForce { get; set; }
     [field : SerializeField] public float GroundThresholdForce { get; set; } // 땅으로 인식하는 법선 벡터 크기 조건
     [field : SerializeField] public float AirMoveThresholdTime { get; set; } // 이 초 이상 체공한 후에 움직이면 RunJump 모션 출력
     public LayerMask groundMask;
@@ -101,7 +97,7 @@ public class PlayerMove : MonoBehaviour
         if (isGroundJump) return;
         isGrounded = false;
         // Debug.Log("Jump!");
-        rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * Controller.Data.jumpforce, ForceMode2D.Impulse);
         isGroundJump = true;
     }
     
@@ -111,7 +107,7 @@ public class PlayerMove : MonoBehaviour
     public void DoubleJump()
     {
         if (isDoubleJump) return;
-        rb.AddForce(Vector2.up * DoubleJumpForce, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * Controller.Data.jumpforce, ForceMode2D.Impulse);
         isDoubleJump = true;
     }
 
@@ -157,14 +153,14 @@ public class PlayerMove : MonoBehaviour
     public void Move()
     {
         Vector2 moveInput = Controller.Inputs.Player.Move.ReadValue<Vector2>();
-        rb.velocity = new Vector2(moveInput.x * MoveSpeed, rb.velocity.y);
+        rb.velocity = new Vector2(moveInput.x * Controller.Data.moveSpeed, rb.velocity.y);
         if (moveInput.x < 0) keyboardLeft = true;
         else if (moveInput.x > 0) keyboardLeft = false;
 
         if (moveInput.x != 0)
         {
             if (!isGrounded && inAirTime < AirMoveThresholdTime) return;
-            Controller.PlayerAnimator.OnBoolParam(PlayerAnimID.Move);
+            Controller.Animator.OnBoolParam(PlayerAnimID.Move);
             ForceLook(moveInput.x < 0);
         }
     }

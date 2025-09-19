@@ -15,6 +15,7 @@ public class EnemySkillData : IData
     public int HealAmount;
     public float Cooldown;
     public float Range;
+    public float TriggerHP;
     public string Desc;
 }
 

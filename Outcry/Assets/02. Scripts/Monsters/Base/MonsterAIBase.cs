@@ -10,7 +10,7 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
     
     
     [SerializeField] protected SelectorNode rootNode;
-    [SerializeField] protected Player target;
+    [SerializeField] protected PlayerController target;
 
     private bool isAvailableToAct;
     public bool IsAttacking { get; protected set; }

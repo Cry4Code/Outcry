@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class DownAttackState : DownAttackSubState
 {
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        base.Enter(player);
-        player.PlayerAnimator.ClearBool();
-        player.isLookLocked = true; 
-        player.Condition.canStaminaRecovery = false;
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.DownAttack);
-        player.Inputs.Player.Move.Disable();
-        player.PlayerMove.rb.gravityScale = 3.5f;
+        base.Enter(controller);
+        controller.Animator.ClearBool();
+        controller.isLookLocked = true; 
+        controller.Condition.canStaminaRecovery.Value = false;
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.DownAttack);
+        controller.Inputs.Player.Move.Disable();
+        controller.Move.rb.gravityScale = 3.5f;
     }
 
     public override void HandleInput(PlayerController player)
@@ -37,7 +37,7 @@ public class DownAttackState : DownAttackSubState
 
     public override void LogicUpdate(PlayerController player)
     {
-        if (player.PlayerMove.isGrounded)
+        if (player.Move.isGrounded)
         {
             player.ChangeState<IdleState>();
             return;
@@ -47,6 +47,6 @@ public class DownAttackState : DownAttackSubState
     public override void Exit(PlayerController player)
     {
         base.Exit(player);
-        player.PlayerMove.rb.gravityScale = 1f;
+        player.Move.rb.gravityScale = 1f;
     }
 }

@@ -14,9 +14,10 @@ public class MonsterSkillModel
     public int healAmount;
     public float cooldown;
     public float range;
+    public float triggerHealth;
     public string description;
     
-    public MonsterSkillModel(int skillId, string skillName, int damage1, int damage2, int damage3, int healAmount, float cooldown, float range, string description)
+    public MonsterSkillModel(int skillId, string skillName, int damage1, int damage2, int damage3, int healAmount, float cooldown, float range, float triggerHealth, string description)
     {
         this.skillId = skillId;
         this.skillName = skillName;
@@ -26,6 +27,7 @@ public class MonsterSkillModel
         this.healAmount = healAmount;
         this.cooldown = cooldown;
         this.range = range;
+        this.triggerHealth = triggerHealth;
         this.description = description;
     }
 
@@ -39,6 +41,7 @@ public class MonsterSkillModel
         this.healAmount = monsterSkillModel.healAmount;
         this.cooldown = monsterSkillModel.cooldown;
         this.range = monsterSkillModel.range;
+        this.triggerHealth = monsterSkillModel.triggerHealth;
         this.description = monsterSkillModel.description;
     }
 }

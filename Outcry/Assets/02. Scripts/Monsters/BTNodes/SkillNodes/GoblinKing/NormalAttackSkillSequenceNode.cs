@@ -6,6 +6,8 @@ public class NormalAttackSkillSequenceNode : SkillSequenceNode
 {
     public NormalAttackSkillSequenceNode(int skillId) : base(skillId)
     {
+        this.nodeName = "NormalAttackSkillSequenceNode";
+
     }
 
     protected override bool CanPerform()

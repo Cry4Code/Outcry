@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class NormalJumpAttackSubState : AirSubState
 {
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        player.PlayerAnimator.OnBoolParam(PlayerAnimID.SubNormalJumpAttack);
+        controller.Animator.OnBoolParam(PlayerAnimID.SubNormalJumpAttack);
     }
 
     public override void HandleInput(PlayerController player)
@@ -21,6 +21,6 @@ public class NormalJumpAttackSubState : AirSubState
 
     public override void Exit(PlayerController player)
     {
-        player.PlayerAnimator.OffBoolParam(PlayerAnimID.SubNormalJumpAttack);
+        player.Animator.OffBoolParam(PlayerAnimID.SubNormalJumpAttack);
     }
 }
