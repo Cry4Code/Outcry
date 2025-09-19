@@ -26,9 +26,6 @@ public abstract class SkillSequenceNode : SequenceNode
         {
             Debug.LogError($"Skill ID {skillId} could not be found.");
         }
-
-        nodeName = skillData.skillName + skillData.skillId;
-        lastUsedTime = Time.time - skillData.cooldown;
     }
     
     public virtual void InitializeSkillSequenceNode(MonsterBase monster, Player target)
@@ -47,6 +44,9 @@ public abstract class SkillSequenceNode : SequenceNode
         children.Clear();
         AddChild(canPerform);
         AddChild(skillAction);
+
+        nodeName = skillData.skillName + skillData.skillId;
+        lastUsedTime = Time.time - skillData.cooldown;
     }
     protected abstract bool CanPerform();
 
@@ -54,10 +54,11 @@ public abstract class SkillSequenceNode : SequenceNode
     
     protected void FlipCharacter()
     {
+        float originalScaleX = monster.transform.localScale.x;
         if (monster.transform.position.x < target.transform.position.x)
-            monster.transform.localScale = new Vector3(1, monster.transform.localScale.y, monster.transform.localScale.z);
+            monster.transform.localScale = new Vector3(Mathf.Abs(originalScaleX), monster.transform.localScale.y, monster.transform.localScale.z);
         else
-            monster.transform.localScale = new Vector3(-1, monster.transform.localScale.y, monster.transform.localScale.z);
+            monster.transform.localScale = new Vector3(-Mathf.Abs(originalScaleX), monster.transform.localScale.y, monster.transform.localScale.z);
     }
     
     protected bool IsSkillAnimationPlaying(string animationName)
