@@ -31,6 +31,10 @@ public static class AnimatorStrings
         public static readonly int HeavyDestroyer = Animator.StringToHash("HeavyDestroyer");
         public static readonly int IsArrived = Animator.StringToHash("IsArrived");
         public static readonly int ThreePoint = Animator.StringToHash("ThreePoint");
+        public static readonly int WhirlWind = Animator.StringToHash("WhirlWind");
+        public static readonly int NormalAttack = Animator.StringToHash("NormalAttack");
+        public static readonly int Shark = Animator.StringToHash("Shark");
+
 
     }
 
@@ -45,5 +49,8 @@ public static class AnimatorStrings
         public const string HeavyDestroyerStart = "HeavyDestroyerStart";
         public const string HeavyDestroyerLoop = "HeavyDestroyerLoop";
         public const string HeavyDestroyerEnd = "HeavyDestroyerEnd";
+        public const string Shark = "Shark";
+        public const string WhirlWind = "WhirlWind";
+        public const string NormalAttack = "NormalAttack";
     }
 }

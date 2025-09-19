@@ -455,6 +455,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3680998514601764723, guid: 7c47239983a7f284ab1a8917035b1c9f, type: 3}
+      propertyPath: m_Size.x
+      value: 5.8028784
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680998514601764723, guid: 7c47239983a7f284ab1a8917035b1c9f, type: 3}
+      propertyPath: m_Size.y
+      value: 1.7064393
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680998514601764723, guid: 7c47239983a7f284ab1a8917035b1c9f, type: 3}
+      propertyPath: m_Offset.x
+      value: 2.0862517
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680998514601764723, guid: 7c47239983a7f284ab1a8917035b1c9f, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.13043225
+      objectReference: {fileID: 0}
     - target: {fileID: 7265725166589081669, guid: 7c47239983a7f284ab1a8917035b1c9f, type: 3}
       propertyPath: m_Name
       value: Monster

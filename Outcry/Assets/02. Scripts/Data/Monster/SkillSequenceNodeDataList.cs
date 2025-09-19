@@ -21,7 +21,9 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
         dataList.Add(new EarthquakeSkillSequenceNode(103004));
         dataList.Add(new StompSkillSequenceNode(103005));
         dataList.Add(new UpperSlashSequenceNode(103006));
-        
+        dataList.Add(new NormalAttackSkillSequenceNode(103000));
+        dataList.Add(new WhirlWindSkillSequenceNode(103008));
+        dataList.Add(new SharkSkillSequenceNode(103007));
     }
     
     /// <summary>
@@ -53,6 +55,15 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
                 break;
             case ThreePointSkillSequenceNode:
                 skillSequenceNode = new ThreePointSkillSequenceNode(skillId);
+                break;
+            case NormalAttackSkillSequenceNode:
+                skillSequenceNode = new NormalAttackSkillSequenceNode(skillId);
+                break;
+            case WhirlWindSkillSequenceNode:
+                skillSequenceNode = new WhirlWindSkillSequenceNode(skillId);
+                break;
+            case SharkSkillSequenceNode:
+                skillSequenceNode = new SharkSkillSequenceNode(skillId);
                 break;
             default:
                 skillSequenceNode = null;
