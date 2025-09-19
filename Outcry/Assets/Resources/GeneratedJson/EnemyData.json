@@ -4,10 +4,10 @@
             "Enemy_Id": 101000,
             "Enemy_Name": "goblin_A",
             "Max_Hp": 200,
-            "Attack_Power": 1,
             "Patrol_Speed": 3.0,
             "Chase_Speed": 4.5,
             "Detect_Range": 10.0,
+            "Approch_Range": 3.0,
             "Skill_Set": [
                 103101
             ],
@@ -19,10 +19,10 @@
             "Enemy_Id": 101001,
             "Enemy_Name": "goblin_B",
             "Max_Hp": 200,
-            "Attack_Power": 1,
             "Patrol_Speed": 3.0,
             "Chase_Speed": 4.0,
             "Detect_Range": 10.0,
+            "Approch_Range": 3.0,
             "Skill_Set": [
                 103201
             ],
@@ -34,10 +34,10 @@
             "Enemy_Id": 101002,
             "Enemy_Name": "goblin_C",
             "Max_Hp": 500,
-            "Attack_Power": 1,
             "Patrol_Speed": 2.0,
             "Chase_Speed": 2.5,
             "Detect_Range": 10.0,
+            "Approch_Range": 3.0,
             "Skill_Set": [
                 103301
             ],
@@ -49,10 +49,10 @@
             "Enemy_Id": 102001,
             "Enemy_Name": "goblin_King",
             "Max_Hp": 28000,
-            "Attack_Power": 1,
             "Patrol_Speed": 2.0,
             "Chase_Speed": 7.0,
             "Detect_Range": 0.0,
+            "Approch_Range": 3.0,
             "Skill_Set": [
                 103000,
                 103001,
@@ -73,10 +73,10 @@
             "Enemy_Id": 102002,
             "Enemy_Name": "Boss_B",
             "Max_Hp": 28000,
-            "Attack_Power": 1,
             "Patrol_Speed": 2.0,
             "Chase_Speed": 3.0,
             "Detect_Range": 0.0,
+            "Approch_Range": 3.0,
             "Skill_Set": [],
             "Exskill_Set": []
         },
@@ -84,10 +84,10 @@
             "Enemy_Id": 102003,
             "Enemy_Name": "Boss_C",
             "Max_Hp": 28000,
-            "Attack_Power": 1,
             "Patrol_Speed": 2.0,
             "Chase_Speed": 3.0,
             "Detect_Range": 0.0,
+            "Approch_Range": 3.0,
             "Skill_Set": [],
             "Exskill_Set": []
         }

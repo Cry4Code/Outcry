@@ -1,1 +1,1 @@
-﻿{"headers":["Enemy_Id","Enemy_Name","Max_Hp","Attack_Power","Patrol_Speed","Chase_Speed","Detect_Range","Skill_Set","Exskill_Set"]}
+﻿{"headers":["Enemy_Id","Enemy_Name","Max_Hp","Patrol_Speed","Chase_Speed","Detect_Range","Approch_Range","Skill_Set","Exskill_Set"]}
