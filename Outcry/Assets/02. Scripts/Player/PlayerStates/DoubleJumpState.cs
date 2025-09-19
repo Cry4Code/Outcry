@@ -8,10 +8,25 @@ public class DoubleJumpState : AirSubState
     private float elapsedTime;
     private float fallStartTime = 0.1f;
     
+    private int needStamina = 10;
+    
     public override void Enter(PlayerController player)
     {
+        if (!player.Condition.TryUseStamina(needStamina))
+        {
+            if (player.PlayerMove.isGrounded)
+            {
+                player.ChangeState<IdleState>();
+                return;
+            }
+            else
+            {
+                player.ChangeState<FallState>();
+                return;
+            }
+        }
         base.Enter(player);
-        Debug.Log("!!Double Jump!!");
+        Debug.Log("[플레이어] !!Double Jump!!");
         player.SetAnimation(PlayerAnimID.DoubleJump, true);
         player.PlayerMove.DoubleJump();
         

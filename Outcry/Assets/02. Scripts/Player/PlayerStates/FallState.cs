@@ -8,6 +8,7 @@ public class FallState : AirSubState
     {
         base.Enter(player);
         player.isLookLocked = true; 
+        player.Condition.canStaminaRecovery = true;
         player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.Fall);
         player.PlayerMove.rb.gravityScale = 6f;
     }
@@ -35,11 +36,6 @@ public class FallState : AirSubState
 
         if (player.Inputs.Player.Jump.triggered)
         {
-            /*if(!player.PlayerMove.isGroundJump)
-            {
-                player.ChangeState<JumpState>();
-                return;
-            }*/
             if (!player.PlayerMove.isDoubleJump)
             {
                 player.ChangeState<DoubleJumpState>();

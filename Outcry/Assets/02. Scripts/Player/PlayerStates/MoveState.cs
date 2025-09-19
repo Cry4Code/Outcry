@@ -8,6 +8,7 @@ public class MoveState : GroundSubState
     {
         base.Enter(player);
         player.PlayerAnimator.OnBoolParam(PlayerAnimID.Move);
+        player.Condition.canStaminaRecovery = true;
 
     }
 

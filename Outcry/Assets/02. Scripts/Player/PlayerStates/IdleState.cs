@@ -12,6 +12,7 @@ public class IdleState : GroundSubState
         
         player.PlayerMove.Stop();
         player.PlayerMove.ChangeGravity(false);
+        player.Condition.canStaminaRecovery = true;
         player.PlayerAttack.ClearAttackCount();
         player.PlayerAnimator.ClearTrigger();
         player.PlayerAnimator.ClearInt();
