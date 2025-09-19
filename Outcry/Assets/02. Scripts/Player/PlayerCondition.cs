@@ -143,9 +143,9 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     public bool TryUseStamina(int useStamina)
     {
-        canStaminaRecovery.Value = false;
         if (stamina.CurValue() - useStamina >= 0)
         {
+            canStaminaRecovery.Value = false;
             stamina.Substract(useStamina);
             Debug.Log($"[플레이어] 스태미나 {useStamina} 사용. 현재 스태미나 {stamina.CurValue()}");
             canStaminaRecovery.Value = true;

@@ -4,13 +4,16 @@
     "RateStamina": 1.0,
     "FullStamina": 5.0,
     "SpecialAttackStamina": 25,
+    "SpecialAttackDamage": 40,
     "DodgeStamina": 15,
     "DodgeInvincibleTime": 0.30000001192092898,
+    "DodgeDistance": 4.0,
     "DoubleJumpStamina": 10,
     "ParryStamina": 15,
     "ParryInvincibleTime": 1.0,
     "ParryDamage": 80,
     "WallJumpStamina": 10,
+    "WallJumpDistance": 5.0,
     "InvincibleTime": 0.75,
     "NormalAttackDamage": [
         10,
@@ -20,6 +23,7 @@
     "JumpAttackDamage": 16,
     "DownAttackDamage": 20,
     "Jumpforce": 5.0,
+    "DoubleJumpForce": 3.0,
     "Skill_Ids": 102000,
     "MoveSpeed": 5.0
 }

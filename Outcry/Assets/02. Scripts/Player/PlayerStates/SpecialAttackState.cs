@@ -48,7 +48,7 @@ public class SpecialAttackState : IPlayerState
             controller.Animator.animator.runtimeAnimatorController
                 .animationClips.First(c => c.name == "SpecialAttack").length;
         specialAttackDirection = (CursorManager.Instance.mousePosition - controller.transform.position).normalized;
-        
+        controller.Hitbox.Damage = controller.Data.specialAttackDamage;
         controller.Animator.SetTriggerAnimation(PlayerAnimID.SpecialAttack);
         
         controller.isLookLocked = true;

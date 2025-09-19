@@ -12,7 +12,6 @@ public class WallJumpState : AirSubState
     private float animRunningTime = 0f;
     private float wallJumpAnimationLength;
     private float wallJumpSpeed = 5f;
-    private float wallJumpDistance = 8f;
 
     private Vector2 wallJumpDirection;
     private Vector2 startPos;
@@ -55,7 +54,7 @@ public class WallJumpState : AirSubState
         
         wallJumpDirection = new Vector2((controller.Move.lastWallIsLeft ?  1.5f : -1.5f),1f).normalized;
         startPos = controller.transform.position;
-        targetPos = startPos + (wallJumpDirection * wallJumpDistance);
+        targetPos = startPos + (wallJumpDirection * controller.Data.wallJumpDistance);
     }
 
     public override void HandleInput(PlayerController player) 

@@ -43,11 +43,29 @@ public static class TableDataHandler
     {
         DataTableManager.Instance.LoadSingleData<PlayerData>();
         PlayerData tableData =  DataTableManager.Instance.SingleData[typeof(PlayerData)] as PlayerData;
-        PlayerDataModel result = new PlayerDataModel(tableData.MaxHealth, tableData.MaxStamina, tableData.RateStamina, tableData.FullStamina,
-            tableData.SpecialAttackStamina, tableData.DodgeStamina, tableData.DodgeInvincibleTime,
-            tableData.DoubleJumpStamina, tableData.ParryStamina, tableData.ParryInvincibleTime, tableData.ParryDamage,
-            tableData.WallJumpStamina, tableData.InvincibleTime, tableData.NormalAttackDamage,
-            tableData.JumpAttackDamage, tableData.DownAttackDamage, tableData.Jumpforce, tableData.Skill_Ids,
+        PlayerDataModel result = new PlayerDataModel(
+            tableData.MaxHealth, 
+            tableData.MaxStamina, 
+            tableData.RateStamina, 
+            tableData.FullStamina,
+            tableData.SpecialAttackStamina, 
+            tableData.SpecialAttackDamage, 
+            tableData.DodgeStamina, 
+            tableData.DodgeInvincibleTime,
+            tableData.DodgeDistance,
+            tableData.DoubleJumpStamina, 
+            tableData.ParryStamina, 
+            tableData.ParryInvincibleTime, 
+            tableData.ParryDamage,
+            tableData.WallJumpStamina, 
+            tableData.WallJumpDistance,
+            tableData.InvincibleTime, 
+            tableData.NormalAttackDamage,
+            tableData.JumpAttackDamage, 
+            tableData.DownAttackDamage, 
+            tableData.Jumpforce, 
+            tableData.DoubleJumpForce,
+            tableData.Skill_Ids,
             tableData.MoveSpeed);
         return result;
     }
