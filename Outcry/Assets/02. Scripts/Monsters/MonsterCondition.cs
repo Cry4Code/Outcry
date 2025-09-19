@@ -63,6 +63,10 @@ public class MonsterCondition : MonoBehaviour, IDamagable
     
     public void TakeDamage(int damage)
     {
+        if (IsDead)
+        {
+            return;
+        }
         currentHealth = Mathf.Max(0, currentHealth - damage);
         if (animationCoroutine != null)
         {
