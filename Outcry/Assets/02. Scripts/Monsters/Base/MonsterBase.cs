@@ -87,32 +87,38 @@ public abstract class MonsterBase : MonoBehaviour
     }
     protected abstract void InitializeSkills();
 #if UNITY_EDITOR
-    void OnDrawGizmos() //히트박스 색상 변경
+    void OnDrawGizmos()
     {
         float sign = transform.localScale.x >= 0 ? 1f : -1f;
-        
+        float offsetSizeX = transform.localScale.x;
+        float offsetSizeY = transform.localScale.y;
+
         // 공격 범위 표시
         Gizmos.color = Color.red;
         if (hitbox != null && hitbox.enabled)
         {
             Vector3 offset = hitbox.offset;
-            offset.x *= sign;
-            Gizmos.DrawWireCube(transform.position + offset, hitbox.size);
+            offset.x *= sign * offsetSizeX;
+            offset.y *= offsetSizeY;
+            Vector3 scaledSize = new Vector3(hitbox.size.x * Mathf.Abs(offsetSizeX), hitbox.size.y * Mathf.Abs(offsetSizeY), 1f);
+            Gizmos.DrawWireCube(transform.position + offset, scaledSize);
         }
-        
+
         // 피격 범위 표시
         Gizmos.color = Color.yellow;
         BoxCollider2D hurtBox = GetComponent<BoxCollider2D>();
         if (hurtBox != null)
         {
             Vector3 offset = hurtBox.offset;
-            offset.x *= sign;
-            Gizmos.DrawWireCube(transform.position + offset, hurtBox.size);
+            offset.x *= sign * Mathf.Abs(offsetSizeX);
+            offset.y *= Mathf.Abs(offsetSizeY);
+            Vector3 scaledSize = new Vector3(hurtBox.size.x * Mathf.Abs(offsetSizeX), hurtBox.size.y * Mathf.Abs(offsetSizeY), 1f);
+            Gizmos.DrawWireCube(transform.position + offset, scaledSize);
         }
-        
-        //접근 범위 표시
+
+        // 접근 범위 표시
         Gizmos.color = Color.black;
-        Gizmos.DrawWireSphere(transform.position, monsterData.detectRange);
+        Gizmos.DrawWireSphere(transform.position, monsterData.detectRange * Mathf.Max(Mathf.Abs(offsetSizeX), Mathf.Abs(offsetSizeY)));
     }
 #endif
 }
