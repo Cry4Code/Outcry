@@ -57,6 +57,8 @@ public class MetalBladeSkillSequenceNode : SkillSequenceNode
         bool isCooldownComplete = (cooldownTimer >= skillData.cooldown);
 
         // 두 조건이 모두 만족해야 스킬 사용 가능
+        Debug.Log($"Skill {skillData.skillName} used? {isInRange && isCooldownComplete} : {cooldownTimer} / {skillData.cooldown}");
+
         return isInRange && isCooldownComplete;
     }
 
@@ -104,10 +106,12 @@ public class MetalBladeSkillSequenceNode : SkillSequenceNode
         {
             skillTriggered = false; // 다음 스킬 사용을 위해 플래그 리셋
             monster.AttackController.ResetDamages(); //데미지 초기화
+            Debug.Log($"Skill End: {skillData.skillName} (ID: {skillData.skillId})");
             return NodeState.Success;
         }
 
         // 위의 종료 조건에 해당하지 않으면 스킬이 아직 진행 중인 것
+        Debug.Log($"Running skill: {skillData.skillName} (ID: {skillData.skillId})");
         return NodeState.Running;
     }
 }
