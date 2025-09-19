@@ -2,22 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
-#region 임시
-
-using System;
-
-public class MonsterTableData{ //테이블에서 받아온 데이터. (가공전: 추후 기획테이블에서 자동생성될 예정)
-    public int monsterId;
-    public string monsterName;
-    public int health;
-    public float chaseSpeed;
-    public float attackRange;
-    public float attackCooldown;
-    public int[] specialSkillIds;
-    public int[] commonSkillIds;
-}
-
-#endregion
 
 /// <summary>
 /// 순수 변환만을 담당함 (기획테이블 데이터 -> 모델)
@@ -50,7 +34,7 @@ public static class TableDataHandler
         MonsterSkillModel newMonsterSkillModel = new MonsterSkillModel(
             tableData.Skill_id, tableData.Skill_name, 
             tableData.Damage, tableData.Damage2, tableData.Damage3, tableData.HealAmount, 
-            tableData.Cooldown, tableData.Range, tableData.Desc);
+            tableData.Cooldown, tableData.Range, tableData.TriggerHP, tableData.Desc);
         
         return newMonsterSkillModel;
     }
