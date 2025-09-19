@@ -7,6 +7,8 @@ public class PlayerData
 {
     public int MaxHealth;
     public int MaxStamina;
+    public float RateStamina;
+    public float FullStamina;
     public int SpecialAttackStamina;
     public int DodgeStamina;
     public float DodgeInvincibleTime;
@@ -21,5 +23,5 @@ public class PlayerData
     public int DownAttackDamage;
     public float Jumpforce;
     public int Skill_Ids;
-    public float Speed;
+    public float MoveSpeed;
 }

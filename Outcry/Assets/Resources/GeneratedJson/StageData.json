@@ -1,0 +1,39 @@
+﻿{
+    "stagedata": [
+        {
+            "Stage_id": 106000,
+            "Monster_id": [
+                101000,
+                101001,
+                101002
+            ],
+            "Boss_name": [
+                "goblin_A",
+                "goblin_B",
+                "goblin_C"
+            ],
+            "Boss_path": "",
+            "Map_path": "",
+            "Time_limit": 0.0,
+            "BossPhaseThresholds": [
+                0.0
+            ]
+        },
+        {
+            "Stage_id": 106001,
+            "Monster_id": [
+                102001
+            ],
+            "Boss_name": [
+                "goblin_King"
+            ],
+            "Boss_path": "",
+            "Map_path": "",
+            "Time_limit": 600.0,
+            "BossPhaseThresholds": [
+                50.0,
+                20.0
+            ]
+        }
+    ]
+}
