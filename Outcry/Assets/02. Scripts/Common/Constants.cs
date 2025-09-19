@@ -45,5 +45,6 @@ public static class AnimatorStrings
         public const string HeavyDestroyerStart = "HeavyDestroyerStart";
         public const string HeavyDestroyerLoop = "HeavyDestroyerLoop";
         public const string HeavyDestroyerEnd = "HeavyDestroyerEnd";
+        public const string Spawn = "Spawn";
     }
 }

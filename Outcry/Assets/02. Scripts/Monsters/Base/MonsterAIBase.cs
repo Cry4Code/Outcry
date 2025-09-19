@@ -12,10 +12,12 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
     [SerializeField] protected SelectorNode rootNode;
     [SerializeField] protected Player target;
 
-    private bool isAvailableToAct = true;
-    public bool IsAttacking { get; protected set; } //추후 Stun이나 다른 상태이상 추가.
+    private bool isAvailableToAct;
+    public bool IsAttacking { get; protected set; }
 
-    public void Initialize(MonsterBase monster) //외부에서 얘 호출되어야함.
+    private float spawnAnimationLength;
+
+    public virtual void Initialize(MonsterBase monster) //외부에서 호출되어야함.
     {
         target = PlayerManager.Instance.player;
         if (monster == null)
@@ -25,6 +27,24 @@ public abstract class MonsterAIBase : MonoBehaviour //MonoBehaviour 상속 안�
         }
         this.monster = monster;
         InitializeBehaviorTree();
+        IsAttacking = false;
+        isAvailableToAct = false;
+        //spawn 애니메이션 길이 가져오기
+        RuntimeAnimatorController ac = monster.Animator.runtimeAnimatorController;
+        foreach (AnimationClip clip in ac.animationClips)
+        {
+            if (clip.name == AnimatorStrings.MonsterAnimation.Spawn)
+            {
+                spawnAnimationLength = clip.length;
+            }
+        }
+        ActivateMonster();
+    }
+
+    private IEnumerator ActivateMonster()
+    {
+        yield return new WaitForSeconds(spawnAnimationLength);
+        isAvailableToAct = true;
     }
     protected abstract void InitializeBehaviorTree(); 
     
