@@ -15,6 +15,7 @@ public static class EventBusKey
 {
     public const string ChangeHealth = "ChangeHealth";
     public const string ChangeStamina = "ChangeStamina";
+    public const string ChangeStaminaRecovery = "ChangeStaminaRecovery";
 }
 
 public static class AnimatorStrings

@@ -19,7 +19,7 @@ public class Condition
     }
     public float GetPercent()
     {
-        return curValue.Value / maxValue;
+        return (float)curValue.Value / maxValue;
     }
     public void Add(int value)
     {
@@ -36,5 +36,10 @@ public class Condition
     public float CurValue()
     {
         return curValue.Value;
+    }
+
+    public void SetCurValue(int value)
+    {
+        curValue.Value = value;
     }
 }
