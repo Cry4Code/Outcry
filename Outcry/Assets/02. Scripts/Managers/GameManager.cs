@@ -45,8 +45,11 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         // 오디오 테스트
-        AudioManager.Instance.PlayBGM((int)SoundEnums.EBGM.Title);
-        AudioManager.Instance.PlaySFX((int)SoundEnums.ESFX.Parry);
+        //AudioManager.Instance.PlayBGM((int)SoundEnums.EBGM.Title);
+        //AudioManager.Instance.PlaySFX((int)SoundEnums.ESFX.Parry);
+
+        // 스테이지 테스트
+        StartBossBattle(SelectedStageData.Monster_id[0]); // TEST
     }
 
     // 게임 시작 시 단 한번만 실행되어야 하는 초기화 로직
@@ -77,9 +80,9 @@ public class GameManager : Singleton<GameManager>
     {
         CurrentUserData = new UserData(nickname);
         // TODO: 새 데이터 저장 요청
-        // SaveGame(); 
+        SaveGame(); 
 
-        // 튜토리얼용 보스 전투 시작
+        // 튜토리얼용 보스 전투 시작?
         StartBossBattle(0); // 튜토리얼 보스 ID를 0으로 약속
     }
 
@@ -93,13 +96,12 @@ public class GameManager : Singleton<GameManager>
     public void GoToLobby()
     {
         CurrentGameState = EGameState.Lobby;
-        // SceneLoadManager.Instance.LoadScene("LobbyScene");
-        SceneManager.LoadScene("LobbyScene"); // 임시
+        //SceneManager.LoadScene("LobbyScene");
     }
 
     /// <summary>
     /// 로비에서 보스 선택 시 호출.
-    /// bossId를 StageData로 변환하여 전투 씬을 로드합니다.
+    /// bossId를 StageData로 변환하여 전투 씬 로드
     /// </summary>
     public async void StartBossBattle(int bossId)
     {
@@ -108,9 +110,6 @@ public class GameManager : Singleton<GameManager>
         // 데이터 테이블에서 로드할 스테이지 데이터 주소 가져옴
         string stageDataAddress = $"StageData_Boss_{bossId}"; // 예시: "StageData_Boss_101"
 
-        // ResourceManager를 통해 StageData 에셋 로드
-        //SelectedStageData = await ResourceManager.Instance.LoadAssetAddressableAsync<StageData>(stageDataAddress);
-
         if (SelectedStageData == null)
         {
             Debug.LogError($"{stageDataAddress} 로드에 실패했습니다. 전투를 시작할 수 없습니다.");
@@ -118,10 +117,10 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        // 3. StageData 로드가 완료되면 전투 씬으로 이동
+        // StageData 로드가 완료되면 전투 씬으로 이동
         CurrentGameState = EGameState.InGame;
         // SceneLoadManager.Instance.LoadScene("BossBattleScene");
-        SceneManager.LoadScene("BossBattleScene"); // 임시
+        SceneManager.LoadScene("TestStageScene"); // 임시
     }
 
     // StageManager가 보스 처치 이벤트를 발생시키면 실행
