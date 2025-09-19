@@ -21,41 +21,40 @@ public class WallJumpState : AirSubState
     private Vector2 curPos;
     
     private float t;
-    private int needStamina = 10;
 
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        if (!player.Condition.TryUseStamina(needStamina))
+        if (!controller.Condition.TryUseStamina(controller.Data.wallJumpStamina))
         {
-            if (player.PlayerMove.isGrounded)
+            if (controller.Move.isGrounded)
             {
-                player.ChangeState<IdleState>();
+                controller.ChangeState<IdleState>();
                 return;
             }
             else
             {
-                player.ChangeState<FallState>();
+                controller.ChangeState<FallState>();
                 return;
             }
         }
-        base.Enter(player);
+        base.Enter(controller);
         // 벽점할 때에는 벽 반대방향 봐야됨
-        player.PlayerMove.ForceLook(!player.PlayerMove.lastWallIsLeft);
-        player.isLookLocked = true;
+        controller.Move.ForceLook(!controller.Move.lastWallIsLeft);
+        controller.isLookLocked = true;
         // 벽점했으니까 강제로 벽 터치 취소
-        player.PlayerAnimator.ClearBool(); // WallHold 끄려고
-        player.PlayerMove.isWallTouched = false;
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.WallJump);
+        controller.Animator.ClearBool(); // WallHold 끄려고
+        controller.Move.isWallTouched = false;
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.WallJump);
         
         wallJumpStartTime = Time.time;
         
         animRunningTime = 0f;
         wallJumpAnimationLength = 
-            player.PlayerAnimator.animator.runtimeAnimatorController
+            controller.Animator.animator.runtimeAnimatorController
                 .animationClips.First(c => c.name == "WallJump").length;
         
-        wallJumpDirection = new Vector2((player.PlayerMove.lastWallIsLeft ?  1.5f : -1.5f),1f).normalized;
-        startPos = player.transform.position;
+        wallJumpDirection = new Vector2((controller.Move.lastWallIsLeft ?  1.5f : -1.5f),1f).normalized;
+        startPos = controller.transform.position;
         targetPos = startPos + (wallJumpDirection * wallJumpDistance);
     }
 
@@ -64,20 +63,20 @@ public class WallJumpState : AirSubState
 
         var moveInputs = player.Inputs.Player.Move.ReadValue<Vector2>();
 
-        if (player.Inputs.Player.Jump.triggered && !player.PlayerMove.isDoubleJump)
+        if (player.Inputs.Player.Jump.triggered && !player.Move.isDoubleJump)
         {
             player.ChangeState<DoubleJumpState>();
             return;
         }
 
-        if(Time.time - wallJumpStartTime > wallHoldAbleTime && player.PlayerMove.isWallTouched)
+        if(Time.time - wallJumpStartTime > wallHoldAbleTime && player.Move.isWallTouched)
         {
             player.ChangeState<WallHoldState>();
             return;
         }
         else
         {
-            player.PlayerMove.isWallTouched = false;
+            player.Move.isWallTouched = false;
         }
         
         if (player.Inputs.Player.NormalAttack.triggered && moveInputs.y < 0)
@@ -87,7 +86,7 @@ public class WallJumpState : AirSubState
             return;
         }
         
-        if (player.Inputs.Player.NormalAttack.triggered && !player.PlayerAttack.HasJumpAttack)
+        if (player.Inputs.Player.NormalAttack.triggered && !player.Attack.HasJumpAttack)
         {
             player.isLookLocked = true;
             player.ChangeState<NormalJumpAttackState>();
@@ -125,29 +124,29 @@ public class WallJumpState : AirSubState
         float distance = Vector2.Distance(curPos, newPos);
         
         RaycastHit2D hit =
-            Physics2D.Raycast(player.transform.position, direction, distance, player.PlayerMove.groundMask);
+            Physics2D.Raycast(player.transform.position, direction, distance, player.Move.groundMask);
         
         if (hit.collider != null)
         {
-            player.PlayerMove.rb.MovePosition(hit.point - direction * 0.01f);
-            if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+            player.Move.rb.MovePosition(hit.point - direction * 0.01f);
+            if (player.Move.isGrounded) player.ChangeState<IdleState>();
             else player.ChangeState<FallState>();
             return;
         }
         
         
-        player.PlayerMove.rb.MovePosition(newPos);
+        player.Move.rb.MovePosition(newPos);
         
         if (Vector2.Distance(newPos, targetPos) < 0.01f)
         {
-            player.PlayerMove.rb.velocity = Vector2.zero;
-            if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+            player.Move.rb.velocity = Vector2.zero;
+            if (player.Move.isGrounded) player.ChangeState<IdleState>();
             else player.ChangeState<FallState>();
             return;
         }
 
         
-        if (player.PlayerMove.isGrounded)
+        if (player.Move.isGrounded)
         {
             player.ChangeState<IdleState>();
             return;

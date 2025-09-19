@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class WallHoldState : AirSubState
 {
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        base.Enter(player);
-        player.PlayerMove.ForceLook(!player.PlayerMove.lastWallIsLeft);
-        player.PlayerAttack.ClearAttackCount();
-        player.isLookLocked = true;
+        base.Enter(controller);
+        controller.Move.ForceLook(!controller.Move.lastWallIsLeft);
+        controller.Attack.ClearAttackCount();
+        controller.isLookLocked = true;
     }
 
     public override void Exit(PlayerController player)
@@ -23,27 +23,27 @@ public class WallHoldState : AirSubState
     public override void HandleInput(PlayerController player)
     {
         var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
-        if (!player.PlayerMove.isWallTouched)
+        if (!player.Move.isWallTouched)
         {
             player.ChangeState<FallState>();
             return;
         }
 
         // 벽이 있는 방향으로 입력이 들어왔을 때
-        if (((moveInput.x < 0 && player.PlayerMove.lastWallIsLeft) 
-            || moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft) )
+        if (((moveInput.x < 0 && player.Move.lastWallIsLeft) 
+            || moveInput.x > 0 && !player.Move.lastWallIsLeft) )
         {
             // 점프 키가 눌림 and 벽점 가능함
-            if(player.Inputs.Player.Jump.triggered && player.PlayerMove.CanWallJump())
+            if(player.Inputs.Player.Jump.triggered && player.Move.CanWallJump())
             {
                 // Debug.Log("벽점으로");
                 player.ChangeState<WallJumpState>();
                 return;
             }
-            if (player.PlayerMove.isWallTouched)
+            if (player.Move.isWallTouched)
             {
                 // Debug.Log("중력 감소");
-                player.PlayerMove.ChangeGravity(true);
+                player.Move.ChangeGravity(true);
                 return;
             }
         }
@@ -53,7 +53,7 @@ public class WallHoldState : AirSubState
             player.ChangeState<FallState>();
             return;
         }
-        if (player.PlayerMove.isGrounded)
+        if (player.Move.isGrounded)
         {
             player.ChangeState<IdleState>();
             return;
@@ -75,14 +75,14 @@ public class WallHoldState : AirSubState
 
     public override void LogicUpdate(PlayerController player)
     {
-        if (player.PlayerMove.rb.velocity.y < 0)
+        if (player.Move.rb.velocity.y < 0)
         {
-            player.PlayerAnimator.SetBoolAnimation(PlayerAnimID.WallHold);
+            player.Animator.SetBoolAnimation(PlayerAnimID.WallHold);
         }
         
-        if (player.PlayerMove.keyboardLeft != player.PlayerMove.lastWallIsLeft)
+        if (player.Move.keyboardLeft != player.Move.lastWallIsLeft)
         {
-            player.PlayerMove.Move();
+            player.Move.Move();
             return;
         }
     }

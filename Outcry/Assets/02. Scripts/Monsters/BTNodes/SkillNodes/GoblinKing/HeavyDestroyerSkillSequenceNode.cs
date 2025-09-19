@@ -19,7 +19,7 @@ public class HeavyDestroyerSkillSequenceNode : SkillSequenceNode
     {
     }
 
-    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target)
+    public override void InitializeSkillSequenceNode(MonsterBase monster, PlayerController target)
     {
         base.InitializeSkillSequenceNode(monster, target);
         this.nodeName = "HeavyDestroyerSkillSequenceNode";

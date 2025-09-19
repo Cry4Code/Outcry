@@ -1,6 +1,8 @@
 ﻿{
     "MaxHealth": 10,
     "MaxStamina": 100,
+    "RateStamina": 1.0,
+    "FullStamina": 5.0,
     "SpecialAttackStamina": 25,
     "DodgeStamina": 15,
     "DodgeInvincibleTime": 0.30000001192092898,
@@ -19,5 +21,5 @@
     "DownAttackDamage": 20,
     "Jumpforce": 5.0,
     "Skill_Ids": 102000,
-    "Speed": 0.0
+    "MoveSpeed": 5.0
 }

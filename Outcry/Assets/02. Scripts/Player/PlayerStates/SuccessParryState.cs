@@ -6,18 +6,19 @@ public class SuccessParryState : IPlayerState
 {
     private float startStateTime;
     private float startAttackTime = 0.01f;
-    public void Enter(PlayerController player)
+    public void Enter(PlayerController controller)
     {
-        player.isLookLocked = false;
-        player.PlayerMove.ForceLook(CursorManager.Instance.mousePosition.x - player.transform.position.x < 0);
-        player.PlayerMove.rb.velocity = Vector2.zero;
-        player.PlayerAnimator.ClearTrigger();
-        player.PlayerAnimator.ClearInt();
-        player.PlayerAnimator.ClearBool();
-        player.Inputs.Player.Move.Disable();
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.SuccessParry);
+        controller.isLookLocked = false;
+        controller.Move.ForceLook(CursorManager.Instance.mousePosition.x - controller.transform.position.x < 0);
+        controller.Move.rb.velocity = Vector2.zero;
+        controller.Animator.ClearTrigger();
+        controller.Animator.ClearInt();
+        controller.Animator.ClearBool();
+        controller.Inputs.Player.Move.Disable();
+        controller.Hitbox.Damage = controller.Data.parryDamage;
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.SuccessParry);
         
-        player.isLookLocked = true;
+        controller.isLookLocked = true;
     }
 
     public void HandleInput(PlayerController player)
@@ -29,7 +30,7 @@ public class SuccessParryState : IPlayerState
     {
         if (Time.time - startStateTime > startAttackTime)
         {
-            AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo curAnimInfo = player.Animator.animator.GetCurrentAnimatorStateInfo(0);
 
             if (curAnimInfo.IsName("SuccessParry"))
             { 
@@ -37,7 +38,7 @@ public class SuccessParryState : IPlayerState
 
                 if (animTime >= 1.0f)
                 {
-                    if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+                    if (player.Move.isGrounded) player.ChangeState<IdleState>();
                     else player.ChangeState<FallState>();
                     return;
                 }
@@ -47,6 +48,6 @@ public class SuccessParryState : IPlayerState
 
     public void Exit(PlayerController player)
     {
-        player.PlayerAttack.successParry = false;
+        player.Attack.successParry = false;
     }
 }

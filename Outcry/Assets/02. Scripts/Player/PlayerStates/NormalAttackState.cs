@@ -12,26 +12,27 @@ public class NormalAttackState : NormalAttackSubState
     private float attackAnimationLength;
     private float animRunningTime = 0f;
     
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        base.Enter(player);
+        base.Enter(controller);
         startStateTime = Time.time;
         isComboInput = false;
-        player.Condition.canStaminaRecovery.Value = false;
+        controller.Condition.canStaminaRecovery.Value = false;
         // AttackCount = 0 + NormalAttack Trigger On.
-        player.PlayerAnimator.ClearBool();
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.NormalAttack);
-        player.Inputs.Player.Move.Disable();
+        controller.Animator.ClearBool();
+        controller.Hitbox.Damage = controller.Data.normalAttackDamage[controller.Attack.AttackCount];
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.NormalAttack);
+        controller.Inputs.Player.Move.Disable();
         animRunningTime = 0f;
         attackAnimationLength = 
-            player.PlayerAnimator.animator.runtimeAnimatorController
-                .animationClips.First(c => c.name == $"NormalAttack_{player.PlayerAttack.AttackCount}").length;
+            controller.Animator.animator.runtimeAnimatorController
+                .animationClips.First(c => c.name == $"NormalAttack_{controller.Attack.AttackCount}").length;
         
     }
 
     public override void HandleInput(PlayerController player)
     {
-        player.PlayerMove.rb.velocity = Vector2.zero;
+        player.Move.rb.velocity = Vector2.zero;
         // 키 입력이 필요
         if (Time.time - startStateTime <= comboTime)
         {
@@ -72,15 +73,15 @@ public class NormalAttackState : NormalAttackSubState
         animRunningTime += Time.deltaTime;
         if (Time.time - startStateTime > startAttackTime)
         {
-            if (player.PlayerAttack.AttackCount >= player.PlayerAttack.MaxAttackCount)
+            if (player.Attack.AttackCount >= player.Attack.MaxAttackCount)
             {
-                player.PlayerAnimator.ClearInt();
+                player.Animator.ClearInt();
                 player.ChangeState<IdleState>();
                 return;
             }
             
-            AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
-            AnimatorStateInfo nextAnimInfo = player.PlayerAnimator.animator.GetNextAnimatorStateInfo(0);
+            AnimatorStateInfo curAnimInfo = player.Animator.animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo nextAnimInfo = player.Animator.animator.GetNextAnimatorStateInfo(0);
 
             if (curAnimInfo.IsTag("NormalAttack"))
             { 
@@ -91,13 +92,13 @@ public class NormalAttackState : NormalAttackSubState
                     // 애니메이션 끝
                     if (isComboInput)
                     {
-                        player.PlayerAttack.AttackCount++;
-                        player.PlayerAnimator.SetIntAniamtion(PlayerAnimID.NormalAttackCount, player.PlayerAttack.AttackCount);
+                        player.Attack.AttackCount++;
+                        player.Animator.SetIntAniamtion(PlayerAnimID.NormalAttackCount, player.Attack.AttackCount);
                         player.ChangeState<NormalAttackState>();
                     }
                     else
                     {
-                        player.PlayerAnimator.ClearInt();
+                        player.Animator.ClearInt();
                         player.ChangeState<IdleState>();
                     }
                 }
@@ -108,7 +109,7 @@ public class NormalAttackState : NormalAttackSubState
             }
             else
             {
-                player.PlayerAnimator.ClearInt();
+                player.Animator.ClearInt();
                 player.ChangeState<IdleState>();
             }
         }

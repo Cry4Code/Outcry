@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    public Player player;
+    public PlayerController player;
     private void OnEnable()
     {
-        Player[] players = FindObjectsOfType<Player>();
+        PlayerController[] players = FindObjectsOfType<PlayerController>();
         if (players.Length == 0)
         {
             Debug.LogError("플레이어를 찾을 수 없습니다.");

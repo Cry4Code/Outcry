@@ -11,8 +11,10 @@ public class DataManager : Singleton<DataManager>
 {
     [SerializeField] private SkillSequenceNodeDataList skillSequenceNodeDataList;
     [SerializeField] private MonsterSkillDataList monsterSkillDataList;
+    [SerializeField] private PlayerDataModel playerDataModel;
     public SkillSequenceNodeDataList SkillSequenceNodeDataList => skillSequenceNodeDataList;
     public MonsterSkillDataList MonsterSkillDataList => monsterSkillDataList;
+    public PlayerDataModel PlayerDataModel => playerDataModel;
     
     private void Awake()
     {
@@ -29,6 +31,9 @@ public class DataManager : Singleton<DataManager>
         //SkillNode 리스트 초기화
         skillSequenceNodeDataList = new SkillSequenceNodeDataList();    
         skillSequenceNodeDataList.Initialize();
+        
+        // Player 데이터 초기화
+        playerDataModel = TableDataHandler.LoadPlayerData();
     }
     
     // private void SetMonsterSkillDataList()

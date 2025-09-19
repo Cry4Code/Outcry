@@ -14,26 +14,26 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     public float startRecoveryStaminaTime; // 스태미나 회복 최소 시간
     public Observable<bool> canStaminaRecovery;
     private float recoveryElapsedTime;
-    private float recoveryFullTime = 5f;
+    private float recoveryFullTime;
     private float recoveryStaminaThresholdTime;
     private float k; // k = (최대 회복시간) / (최대 스태미나)^2
+    private float reverseK; // 1/k;
 
     [Header("Invisible Settings")] 
     private bool isInvincible;
     public float invincibleTime; // 한 대 맞았을 때 무적 초 (일단은 1초)
     private WaitForSecondsRealtime waitInvisible;
     
-    private PlayerController player;
+    private PlayerController controller;
     private Coroutine invincibleCoroutine;
     [HideInInspector] public bool isDead;
 
     private void Awake()
     {
         canStaminaRecovery = new Observable<bool>(EventBusKey.ChangeStaminaRecovery, false);
-        startRecoveryStaminaTime = 1f;
-        player = GetComponent<PlayerController>();
-        k = (recoveryFullTime) / Mathf.Pow(stamina.maxValue, 2);
-        Debug.Log($"[플레이어] 스태미나 상수 k = {k}");
+        controller = GetComponent<PlayerController>();
+        
+        
     }
 
     private void OnEnable()
@@ -50,9 +50,16 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     void Start()
     {
+        health.startValue = health.maxValue = controller.Data.maxHealth;
+        stamina.startValue = stamina.maxValue = controller.Data.maxStamina;
         health.Init(EventBusKey.ChangeHealth);
         stamina.Init(EventBusKey.ChangeStamina);
-        invincibleTime = 0.75f;
+        invincibleTime = controller.Data.invincibleTime;
+        startRecoveryStaminaTime = controller.Data.rateStamina;
+        recoveryFullTime = controller.Data.fullStamina;
+        k = (recoveryFullTime) / Mathf.Pow(stamina.maxValue, 2);
+        reverseK = 1 / k;
+        Debug.Log($"[플레이어] 스태미나 상수 k = {k}");
         waitInvisible = new WaitForSecondsRealtime(invincibleTime);
         invincibleCoroutine = null;
         canStaminaRecovery.Value = true;
@@ -67,7 +74,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
             if (Time.time > recoveryStaminaThresholdTime)
             {
                 recoveryElapsedTime += Time.fixedDeltaTime;
-                var tempStamina = Mathf.FloorToInt(Mathf.Sqrt(recoveryElapsedTime * (1 / k)));
+                var tempStamina = Mathf.FloorToInt(Mathf.Sqrt(recoveryElapsedTime * reverseK));
                 stamina.SetCurValue(Mathf.Min(stamina.maxValue, tempStamina));
             }
         }
@@ -82,15 +89,22 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damage)
     {
-        if (isDead) return;
-        if (player.PlayerAttack.successParry)
+        if (isDead)
+        {
+            if (!controller.Animator.animator.GetAnimatorTransitionInfo(0).IsName("Die"))
+            {
+                controller.ChangeState<DieState>();
+            }
+            return;
+        }
+        if (controller.Attack.successParry)
         {
             if (invincibleCoroutine != null) return;
-            invincibleCoroutine = StartCoroutine(Invincible(0.3f));
+            invincibleCoroutine = StartCoroutine(Invincible(controller.Data.parryInvincibleTime));
         }
         if (invincibleCoroutine == null)
         {
-            if(!player.IsCurrentState<DamagedState>()) player.ChangeState<DamagedState>();
+            if(!controller.IsCurrentState<DamagedState>()) controller.ChangeState<DamagedState>();
             invincibleCoroutine = StartCoroutine(Invincible());
             Debug.Log("[플레이어] 플레이어 데미지 받음");
             health.Substract(damage);
@@ -150,7 +164,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     {
         isDead = true;
         Debug.Log("[플레이어] 죽음!");
-        player.ChangeState<DieState>();
+        controller.ChangeState<DieState>();
     }
 
     public void OnStaminaRecoveryChanged(object data)
