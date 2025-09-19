@@ -9,12 +9,17 @@ public class RumbleOfRuinSkillSequenceNode : SkillSequenceNode
         this.nodeName = "RumbleOfRuinSkillSequenceNode";
     }
 
+    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target)
+    {
+        base.InitializeSkillSequenceNode(monster, target);
+        lastUsedTime = Time.time;
+    }
+
     protected override bool CanPerform()
     {
         bool result;
         bool isCooldownComplete;
         bool isLowHealth;
-
         if (skillTriggered) //한번 실행되면 다시 실행될 일 없음. 실행 끝난 이후 리셋 X
         {
             return false;
@@ -23,12 +28,13 @@ public class RumbleOfRuinSkillSequenceNode : SkillSequenceNode
         //체력이 일정 이하일때
         isLowHealth = monster.Condition.CurrentHealth < skillData.triggerHealth * monster.Condition.MaxHealth;
 
+        skillData.cooldown = 10f;
         //쿨다운 확인
-        isCooldownComplete = lastUsedTime - Time.time <= skillData.cooldown;
+        isCooldownComplete = Time.time - lastUsedTime >= skillData.cooldown;
         
 
         result = isLowHealth || isCooldownComplete;
-        Debug.Log($"Skill {skillData.skillName} used? {result} : {Time.time - lastUsedTime} / {skillData.cooldown}");
+        Debug.Log($"Skill {skillData.skillName} used? {result} : {Time.time - lastUsedTime} / {skillData.cooldown} || {monster.Condition.CurrentHealth} / {monster.Condition.MaxHealth}");
         return result;
     }
 
@@ -42,9 +48,11 @@ public class RumbleOfRuinSkillSequenceNode : SkillSequenceNode
             return NodeState.Failure;
         }
 
+        Debug.Log("Rumble of Ruin Skill Action Triggered: 트리거됨");
         lastUsedTime = Time.time;
         FlipCharacter();
-        //todo. 몬스터 애니메이션 // monster.Animator.SetTrigger();
+        //todo. 몬스터 애니메이션
+        monster.Animator.SetTrigger(AnimatorStrings.MonsterParameter.RumbleOfRuin);
         skillTriggered = true;
         
         if (Time.time - lastUsedTime < 0.1f) //시작 직후는 무조건 Running

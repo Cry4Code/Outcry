@@ -25,6 +25,8 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
         dataList.Add(new NormalAttackSkillSequenceNode(103000));
         dataList.Add(new WhirlWindSkillSequenceNode(103008));
         dataList.Add(new SharkSkillSequenceNode(103007));
+        
+        dataList.Add(new RumbleOfRuinSkillSequenceNode(103009));
     }
     
     /// <summary>

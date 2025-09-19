@@ -35,7 +35,7 @@ public static class AnimatorStrings
         public static readonly int WhirlWind = Animator.StringToHash("WhirlWind");
         public static readonly int NormalAttack = Animator.StringToHash("NormalAttack");
         public static readonly int Shark = Animator.StringToHash("Shark");
-
+        public static readonly int RumbleOfRuin = Animator.StringToHash("RumbleOfRuin");
         public static readonly int IsTired = Animator.StringToHash("IsTired");
 
     }
