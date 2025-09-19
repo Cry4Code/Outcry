@@ -9,7 +9,7 @@ public class RumbleOfRuinSkillSequenceNode : SkillSequenceNode
         this.nodeName = "RumbleOfRuinSkillSequenceNode";
     }
 
-    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target)
+    public override void InitializeSkillSequenceNode(MonsterBase monster, PlayerController target)
     {
         base.InitializeSkillSequenceNode(monster, target);
         lastUsedTime = Time.time;
