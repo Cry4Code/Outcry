@@ -128,19 +128,7 @@ public class PlayerMove : MonoBehaviour
         }
         return false;
     }
-
-    public void WallJump()
-    {
-        rightWallCheckPos = (Vector2)transform.position + Vector2.right * checkDistance;
-        leftWallCheckPos = (Vector2)transform.position + Vector2.left * checkDistance;
-
-        curWall = Physics2D.OverlapBox(keyboardLeft ? leftWallCheckPos : rightWallCheckPos, wallCheckBoxSize, 0f, groundMask);
-
-        Vector2 dir = ((lastWallIsLeft ? Vector2.right : Vector2.left) + Vector2.up).normalized * WallJumpForce;
-        rb.AddForce(dir, ForceMode2D.Impulse);
-
-    }   
-
+    
     public void ChangeGravity(bool holdWall)
     {
         if (holdWall) rb.gravityScale = 0.5f;
@@ -189,12 +177,6 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    public void SetAnimation(string animName)
-    {
-        // Animator 호출
-    }
-
-
     public void Look()
     {
         // 플레이어는 오른쪽을 봐야함.
@@ -222,7 +204,6 @@ public class PlayerMove : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            // Debug.Log("벽");
             UpdateGrounded(collision);
             UpdateWallTouched(collision);
         }
@@ -234,17 +215,6 @@ public class PlayerMove : MonoBehaviour
         {
             UpdateGrounded(collision);
             UpdateWallTouched(collision);
-            /*if(!isGrounded)
-            {
-                foreach (ContactPoint2D contact in collision.contacts)
-                {
-                    if (contact.normal.x != 0)
-                    {
-                        isWallTouched = true;
-
-                    }
-                }
-            }*/
         }
     }
 
@@ -262,7 +232,6 @@ public class PlayerMove : MonoBehaviour
     {
         foreach (ContactPoint2D contact in collision.contacts)
         {
-            // Debug.Log($"법선벡터 : {contact.normal}");
             // 캐릭터가 아래로 향하는 충돌에서만 grounded
             if (contact.normal.y > GroundThresholdForce)    
             {
@@ -292,13 +261,6 @@ public class PlayerMove : MonoBehaviour
                     // 벽면에서 나오는 방향이 법선벡터이기 때문에, 왼쪽 벽으로 부딛혔다면 (1,0) 이 나옴.
                     lastWallIsLeft = contact.normal.x > 0;
                     return;
-                    //if (curWall != collision.collider)
-                    //{
-                    //    Debug.Log("다른 벽 건드림");
-                    //    prevWall = curWall;
-                    //    curWall = collision.collider;
-                    //    lastWallIsLeft = contact.normal.x > 0;
-                    //}
                 }
             }
         }

@@ -35,11 +35,6 @@ public class FallState : AirSubState
 
         if (player.Inputs.Player.Jump.triggered)
         {
-            /*if(!player.PlayerMove.isGroundJump)
-            {
-                player.ChangeState<JumpState>();
-                return;
-            }*/
             if (!player.PlayerMove.isDoubleJump)
             {
                 player.ChangeState<DoubleJumpState>();
