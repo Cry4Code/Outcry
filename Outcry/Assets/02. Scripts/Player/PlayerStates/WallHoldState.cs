@@ -16,7 +16,7 @@ public class WallHoldState : AirSubState
     {
         base.Exit(player);
         player.isLookLocked = false;
-        player.Condition.canStaminaRecovery = true;
+        player.Condition.canStaminaRecovery.Value = true;
         // player.PlayerAnimator.ClearBool();
     }
 

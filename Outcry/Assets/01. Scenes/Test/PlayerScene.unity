@@ -983,6 +983,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6276033214387485104, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
+      propertyPath: stamina.startValue
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 7606259816814799071, guid: 654a5ce240274574fae7677b7efb5359, type: 3}
       propertyPath: m_Name
       value: Player
