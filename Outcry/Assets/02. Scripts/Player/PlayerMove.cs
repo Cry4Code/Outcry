@@ -107,7 +107,7 @@ public class PlayerMove : MonoBehaviour
     public void DoubleJump()
     {
         if (isDoubleJump) return;
-        rb.AddForce(Vector2.up * Controller.Data.jumpforce, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * Controller.Data.doubleJumpForce, ForceMode2D.Impulse);
         isDoubleJump = true;
     }
 
