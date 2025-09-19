@@ -40,12 +40,12 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         isDead = false;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if(Time.time - lastRecoveryStamina >= recoveryStaminaTime && canStaminaRecovery)
         {
             stamina.Add(stamina.passiveValue);
-            Debug.Log($"[플레이어] Stamina : {stamina.CurValue()}");
+            Debug.Log($"[플레이어] 스태미나 : {stamina.CurValue()}");
             lastRecoveryStamina = Time.time;
         }
 
@@ -109,7 +109,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         if (stamina.CurValue() - useStamina >= 0)
         {
             stamina.Substract(useStamina);
-            Debug.Log($"[플레이어] 스태미나 {useStamina} 사용 가능");
+            Debug.Log($"[플레이어] 스태미나 {useStamina} 사용. 현재 스태미나 {stamina.CurValue()}");
             return true;
         }
         else

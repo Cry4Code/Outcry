@@ -12,6 +12,7 @@ public class DamagedState : IPlayerState
     public void Enter(PlayerController player)
     {
         player.PlayerMove.rb.velocity = Vector2.zero;
+        player.Condition.canStaminaRecovery = true;
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Damaged);
         player.Inputs.Disable();
     }

@@ -11,7 +11,7 @@ public class JumpState : AirSubState
     public override void Enter(PlayerController player)
     {
         base.Enter(player);
-        
+        player.Condition.canStaminaRecovery = true;
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Jump);
         player.isLookLocked = true; 
         elapsedTime = 0f;

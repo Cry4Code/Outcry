@@ -21,9 +21,23 @@ public class WallJumpState : AirSubState
     private Vector2 curPos;
     
     private float t;
+    private int needStamina = 10;
 
     public override void Enter(PlayerController player)
     {
+        if (!player.Condition.TryUseStamina(needStamina))
+        {
+            if (player.PlayerMove.isGrounded)
+            {
+                player.ChangeState<IdleState>();
+                return;
+            }
+            else
+            {
+                player.ChangeState<FallState>();
+                return;
+            }
+        }
         base.Enter(player);
         // 벽점할 때에는 벽 반대방향 봐야됨
         player.PlayerMove.ForceLook(!player.PlayerMove.lastWallIsLeft);

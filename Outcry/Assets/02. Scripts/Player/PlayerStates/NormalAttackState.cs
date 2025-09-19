@@ -17,6 +17,7 @@ public class NormalAttackState : NormalAttackSubState
         base.Enter(player);
         startStateTime = Time.time;
         isComboInput = false;
+        player.Condition.canStaminaRecovery = false;
         // AttackCount = 0 + NormalAttack Trigger On.
         player.PlayerAnimator.ClearBool();
         player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.NormalAttack);
@@ -117,5 +118,6 @@ public class NormalAttackState : NormalAttackSubState
     {
         base.Exit(player);
         isComboInput = false;
+        player.Condition.canStaminaRecovery = true;
     }
 }

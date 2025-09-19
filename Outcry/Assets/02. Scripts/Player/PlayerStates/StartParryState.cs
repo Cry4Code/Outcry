@@ -7,8 +7,22 @@ public class StartParryState : IPlayerState
 {
     private float startStateTime;
     private float startAttackTime = 0.01f;
+    private int needStamina = 15;
     public void Enter(PlayerController player)
     {
+        if (!player.Condition.TryUseStamina(needStamina))
+        {
+            if (player.PlayerMove.isGrounded)
+            {
+                player.ChangeState<IdleState>();
+                return;
+            }
+            else
+            {
+                player.ChangeState<FallState>();
+                return;
+            }
+        }
         player.isLookLocked = false;
         player.PlayerMove.ForceLook(CursorManager.Instance.mousePosition.x - player.transform.position.x < 0);
         player.PlayerMove.rb.velocity = Vector2.zero;
