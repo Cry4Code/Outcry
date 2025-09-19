@@ -8,27 +8,25 @@ public class DoubleJumpState : AirSubState
     private float elapsedTime;
     private float fallStartTime = 0.1f;
     
-    private int needStamina = 10;
-    
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        if (!player.Condition.TryUseStamina(needStamina))
+        if (!controller.Condition.TryUseStamina(controller.Data.doubleJumpStamina))
         {
-            if (player.PlayerMove.isGrounded)
+            if (controller.Move.isGrounded)
             {
-                player.ChangeState<IdleState>();
+                controller.ChangeState<IdleState>();
                 return;
             }
             else
             {
-                player.ChangeState<FallState>();
+                controller.ChangeState<FallState>();
                 return;
             }
         }
-        base.Enter(player);
+        base.Enter(controller);
         Debug.Log("[플레이어] !!Double Jump!!");
-        player.SetAnimation(PlayerAnimID.DoubleJump, true);
-        player.PlayerMove.DoubleJump();
+        controller.SetAnimation(PlayerAnimID.DoubleJump, true);
+        controller.Move.DoubleJump();
         
     }
     
@@ -37,8 +35,8 @@ public class DoubleJumpState : AirSubState
         elapsedTime += Time.deltaTime;
         var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
         
-        if(player.PlayerMove.isWallTouched 
-           && ((moveInput.x < 0 && player.PlayerMove.lastWallIsLeft) || (moveInput.x > 0 && !player.PlayerMove.lastWallIsLeft)))
+        if(player.Move.isWallTouched 
+           && ((moveInput.x < 0 && player.Move.lastWallIsLeft) || (moveInput.x > 0 && !player.Move.lastWallIsLeft)))
         {
             player.ChangeState<WallHoldState>();
             return;
@@ -66,17 +64,17 @@ public class DoubleJumpState : AirSubState
     {
         var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
         if(moveInput != null)
-            player.PlayerMove.Move();
+            player.Move.Move();
 
         if (elapsedTime > fallStartTime)
         {
-            if (player.PlayerMove.rb.velocity.y < 0)
+            if (player.Move.rb.velocity.y < 0)
             {
                 player.ChangeState<FallState>();
                 return;
             }
         }
-        if (player.PlayerMove.isGrounded)
+        if (player.Move.isGrounded)
         {
             player.ChangeState<IdleState>();
             return;
@@ -89,7 +87,7 @@ public class DoubleJumpState : AirSubState
             return;
         }
         
-        if (player.Inputs.Player.NormalAttack.triggered && !player.PlayerAttack.HasJumpAttack)
+        if (player.Inputs.Player.NormalAttack.triggered && !player.Attack.HasJumpAttack)
         {
             player.isLookLocked = true;
             player.ChangeState<NormalJumpAttackState>();

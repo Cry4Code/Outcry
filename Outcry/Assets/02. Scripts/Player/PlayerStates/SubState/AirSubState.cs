@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class AirSubState : IPlayerState
 {
-    public virtual void Enter(PlayerController player)
+    public virtual void Enter(PlayerController controller)
     {
-        player.PlayerAnimator.OnBoolParam(PlayerAnimID.SubAir);
+        controller.Animator.OnBoolParam(PlayerAnimID.SubAir);
     }
 
     public virtual void HandleInput(PlayerController player)
@@ -21,6 +21,6 @@ public class AirSubState : IPlayerState
 
     public virtual void Exit(PlayerController player)
     {
-        player.PlayerAnimator.OffBoolParam(PlayerAnimID.SubAir);
+        player.Animator.OffBoolParam(PlayerAnimID.SubAir);
     }
 }

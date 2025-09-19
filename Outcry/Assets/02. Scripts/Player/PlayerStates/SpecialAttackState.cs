@@ -17,41 +17,41 @@ public class SpecialAttackState : IPlayerState
     private Vector2 newPos;
     private Vector2 curPos;
     private float cursorAngle = 0f;
-    private int needStamina = 25;
 
 
     private float t;
-    public void Enter(PlayerController player)
+    public void Enter(PlayerController controller)
     {
-        if (!player.Condition.TryUseStamina(needStamina))
+        if (!controller.Condition.TryUseStamina(controller.Data.specialAttackStamina))
         {
-            if (player.PlayerMove.isGrounded)
+            if (controller.Move.isGrounded)
             {
-                player.ChangeState<IdleState>();
+                controller.ChangeState<IdleState>();
                 return;
             }
             else
             {
-                player.ChangeState<FallState>();
+                controller.ChangeState<FallState>();
                 return;
             }
         }
         
-        player.isLookLocked = false;
-        player.PlayerMove.ForceLook(CursorManager.Instance.mousePosition.x - player.transform.position.x < 0);
-        player.PlayerMove.rb.velocity = Vector2.zero;
-        player.PlayerAnimator.ClearTrigger();
-        player.PlayerAnimator.ClearInt();
-        player.PlayerAnimator.ClearBool();
-        player.Inputs.Player.Move.Disable();
+        controller.isLookLocked = false;
+        controller.Move.ForceLook(CursorManager.Instance.mousePosition.x - controller.transform.position.x < 0);
+        controller.Move.rb.velocity = Vector2.zero;
+        controller.Animator.ClearTrigger();
+        controller.Animator.ClearInt();
+        controller.Animator.ClearBool();
+        controller.Inputs.Player.Move.Disable();
         animRunningTime = 0f;
         attackAnimationLength = 
-            player.PlayerAnimator.animator.runtimeAnimatorController
+            controller.Animator.animator.runtimeAnimatorController
                 .animationClips.First(c => c.name == "SpecialAttack").length;
-        specialAttackDirection = (CursorManager.Instance.mousePosition - player.transform.position).normalized;
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.SpecialAttack);
+        specialAttackDirection = (CursorManager.Instance.mousePosition - controller.transform.position).normalized;
         
-        player.isLookLocked = true;
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.SpecialAttack);
+        
+        controller.isLookLocked = true;
         
         // 마우스 바라보는 방향으로 캐릭터 돌리기
         // 1. 마우스를 바라보는 각도 구하기
@@ -60,14 +60,14 @@ public class SpecialAttackState : IPlayerState
         // 2. 그 각도대로 돌리기
         if (specialAttackDirection.x > 0)
         {
-            player.transform.rotation = Quaternion.Euler(0, 0, cursorAngle);
+            controller.transform.rotation = Quaternion.Euler(0, 0, cursorAngle);
         }
         else
         {
-            player.transform.rotation = Quaternion.Euler(0, 0, -180f+cursorAngle);
+            controller.transform.rotation = Quaternion.Euler(0, 0, -180f+cursorAngle);
         }
         
-        startPos = player.transform.position;
+        startPos = controller.transform.position;
         targetPos = startPos + (specialAttackDirection * specialAttackDistance);
     }
 
@@ -91,30 +91,30 @@ public class SpecialAttackState : IPlayerState
         float distance = Vector2.Distance(curPos, newPos);
         
         RaycastHit2D hit =
-            Physics2D.Raycast(player.transform.position, direction, distance, player.PlayerMove.groundMask);
+            Physics2D.Raycast(player.transform.position, direction, distance, player.Move.groundMask);
         
         if (hit.collider != null)
         {
-             player.PlayerMove.rb.MovePosition(hit.point - direction * 0.01f);
-            if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+             player.Move.rb.MovePosition(hit.point - direction * 0.01f);
+            if (player.Move.isGrounded) player.ChangeState<IdleState>();
             else player.ChangeState<FallState>();
             return;
         }
         
         
-        player.PlayerMove.rb.MovePosition(newPos);
+        player.Move.rb.MovePosition(newPos);
         
         if (Vector2.Distance(newPos, targetPos) < 0.01f)
         {
-            player.PlayerMove.rb.velocity = Vector2.zero;
-            if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+            player.Move.rb.velocity = Vector2.zero;
+            if (player.Move.isGrounded) player.ChangeState<IdleState>();
             else player.ChangeState<FallState>();
             return;
         }
         
         if (Time.time - startStateTime > startAttackTime)
         {
-            AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo curAnimInfo = player.Animator.animator.GetCurrentAnimatorStateInfo(0);
 
             if (curAnimInfo.IsName("SpecialAttack"))
             { 
@@ -122,7 +122,7 @@ public class SpecialAttackState : IPlayerState
 
                 if (animTime >= 1.0f)
                 {
-                    if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+                    if (player.Move.isGrounded) player.ChangeState<IdleState>();
                     else player.ChangeState<FallState>();
                     return;
                 }
@@ -130,7 +130,7 @@ public class SpecialAttackState : IPlayerState
 
             if (animRunningTime >= attackAnimationLength)
             {
-                if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+                if (player.Move.isGrounded) player.ChangeState<IdleState>();
                 else player.ChangeState<FallState>();
                 return;
             }

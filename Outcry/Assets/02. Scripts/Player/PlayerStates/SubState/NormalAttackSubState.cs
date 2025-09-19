@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class NormalAttackSubState : GroundSubState
 {
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        base.Enter(player);
-        player.PlayerAnimator.OnBoolParam(PlayerAnimID.SubNormalAttack);
+        base.Enter(controller);
+        controller.Animator.OnBoolParam(PlayerAnimID.SubNormalAttack);
     }
 
     public override void HandleInput(PlayerController player)
@@ -23,6 +23,6 @@ public class NormalAttackSubState : GroundSubState
     public override void Exit(PlayerController player)
     {
         base.Exit(player);
-        player.PlayerAnimator.OffBoolParam(PlayerAnimID.SubNormalAttack);
+        player.Animator.OffBoolParam(PlayerAnimID.SubNormalAttack);
     }
 }

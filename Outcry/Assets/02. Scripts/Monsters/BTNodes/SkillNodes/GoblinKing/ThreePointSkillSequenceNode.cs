@@ -16,7 +16,7 @@ public class ThreePointSkillSequenceNode : SkillSequenceNode
         this.nodeName = "ThreePointSkillSequenceNode";
     }
 
-    public override void InitializeSkillSequenceNode(MonsterBase monster, Player target)
+    public override void InitializeSkillSequenceNode(MonsterBase monster, PlayerController target)
     {
         base.InitializeSkillSequenceNode(monster, target);
 

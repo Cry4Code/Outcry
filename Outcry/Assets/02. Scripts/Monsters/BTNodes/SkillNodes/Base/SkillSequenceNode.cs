@@ -11,7 +11,7 @@ public abstract class SkillSequenceNode : SequenceNode
 {
     [SerializeField]  protected int skillId;
     protected MonsterBase monster;
-    protected Player target;
+    protected PlayerController target;
     protected MonsterSkillModel skillData; //인스펙터에 직렬화 시키면 에러뜸.
     
     protected float lastUsedTime;
@@ -28,7 +28,7 @@ public abstract class SkillSequenceNode : SequenceNode
         }
     }
     
-    public virtual void InitializeSkillSequenceNode(MonsterBase monster, Player target)
+    public virtual void InitializeSkillSequenceNode(MonsterBase monster, PlayerController target)
     {
         this.monster = monster;
         this.target = target;

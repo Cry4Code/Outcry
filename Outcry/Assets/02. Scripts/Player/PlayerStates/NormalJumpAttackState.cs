@@ -12,18 +12,19 @@ public class NormalJumpAttackState : NormalJumpAttackSubState
     private float animRunningTime = 0f;
     /*private float inAirTime = 0.1f;*/
     
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
-        base.Enter(player);
+        base.Enter(controller);
         startStateTime = Time.time;
-        player.PlayerAnimator.ClearBool();
-        player.PlayerAttack.HasJumpAttack = true;
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.NormalAttack);
-        player.Inputs.Player.Move.Disable();
-        player.PlayerMove.rb.gravityScale = 0;
+        controller.Animator.ClearBool();
+        controller.Attack.HasJumpAttack = true;
+        controller.Hitbox.Damage = controller.Data.jumpAttackDamage;
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.NormalAttack);
+        controller.Inputs.Player.Move.Disable();
+        controller.Move.rb.gravityScale = 0;
         animRunningTime = 0f;
         jumpAnimationLength = 
-            player.PlayerAnimator.animator.runtimeAnimatorController
+            controller.Animator.animator.runtimeAnimatorController
             .animationClips.First(c => c.name == "NormalJumpAttack").length;
     }
 
@@ -51,12 +52,12 @@ public class NormalJumpAttackState : NormalJumpAttackSubState
     {
         /*player.PlayerMove.rb.velocity = new Vector2(player.PlayerMove.rb.velocity.x, 0);*/
         
-        player.PlayerMove.rb.velocity = Vector2.zero;
+        player.Move.rb.velocity = Vector2.zero;
         animRunningTime += Time.deltaTime;
         
         if (Time.time - startStateTime > startAttackTime)
         {
-            AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo curAnimInfo = player.Animator.animator.GetCurrentAnimatorStateInfo(0);
 
             if (curAnimInfo.IsName("NormalJumpAttack"))
             { 
@@ -81,6 +82,6 @@ public class NormalJumpAttackState : NormalJumpAttackSubState
     public override void Exit(PlayerController player)
     {
         base.Exit(player);
-        player.PlayerMove.rb.gravityScale = 1;
+        player.Move.rb.gravityScale = 1;
     }
 }

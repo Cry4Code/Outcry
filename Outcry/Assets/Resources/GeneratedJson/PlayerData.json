@@ -1,9 +1,25 @@
 ﻿{
-    "Max_Hp": 0,
-    "Attack_Power": 0,
-    "Attack_Power2": 0,
-    "Attack_Power3": 0,
+    "MaxHealth": 10,
+    "MaxStamina": 100,
+    "RateStamina": 1.0,
+    "FullStamina": 5.0,
+    "SpecialAttackStamina": 25,
+    "DodgeStamina": 15,
+    "DodgeInvincibleTime": 0.30000001192092898,
+    "DoubleJumpStamina": 10,
+    "ParryStamina": 15,
+    "ParryInvincibleTime": 1.0,
+    "ParryDamage": 80,
+    "WallJumpStamina": 10,
+    "InvincibleTime": 0.75,
+    "NormalAttackDamage": [
+        10,
+        12,
+        18
+    ],
+    "JumpAttackDamage": 16,
+    "DownAttackDamage": 20,
     "Jumpforce": 5.0,
     "Skill_Ids": 102000,
-    "Speed": 5.0
+    "MoveSpeed": 5.0
 }

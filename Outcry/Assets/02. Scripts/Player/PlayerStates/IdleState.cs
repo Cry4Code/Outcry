@@ -4,34 +4,34 @@ using UnityEngine;
 
 public class IdleState : GroundSubState
 {
-    public override void Enter(PlayerController player)
+    public override void Enter(PlayerController controller)
     {
         // 애니메이션 설정 
         // player.SetAnimation("Idle");
-        base.Enter(player);
+        base.Enter(controller);
         
-        player.PlayerMove.Stop();
-        player.PlayerMove.ChangeGravity(false);
-        player.Condition.canStaminaRecovery.Value = true;
-        player.PlayerAttack.ClearAttackCount();
-        player.PlayerAnimator.ClearTrigger();
-        player.PlayerAnimator.ClearInt();
-        player.PlayerAnimator.ClearBool();
+        controller.Move.Stop();
+        controller.Move.ChangeGravity(false);
+        controller.Condition.canStaminaRecovery.Value = true;
+        controller.Attack.ClearAttackCount();
+        controller.Animator.ClearTrigger();
+        controller.Animator.ClearInt();
+        controller.Animator.ClearBool();
         
-        player.PlayerAnimator.OnBoolParam(PlayerAnimID.Idle);
-        player.Inputs.Player.Move.Enable();
+        controller.Animator.OnBoolParam(PlayerAnimID.Idle);
+        controller.Inputs.Player.Move.Enable();
     }
 
     public override void HandleInput(PlayerController player)
     {
-        AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo curAnimInfo = player.Animator.animator.GetCurrentAnimatorStateInfo(0);
         if (curAnimInfo.IsName("Idle"))
         {
             player.isLookLocked = false;
         }
         else
         {
-            player.PlayerMove.Stop();
+            player.Move.Stop();
             return;
         }
         
@@ -65,9 +65,9 @@ public class IdleState : GroundSubState
         
         
         if (player.Inputs.Player.Jump.triggered 
-            && player.PlayerMove.isGrounded 
-            && !player.PlayerMove.isGroundJump 
-            && !player.PlayerMove.isWallTouched)
+            && player.Move.isGrounded 
+            && !player.Move.isGroundJump 
+            && !player.Move.isWallTouched)
         {
             // Debug.Log("Jump Key Input");
             player.ChangeState<JumpState>();
@@ -75,7 +75,7 @@ public class IdleState : GroundSubState
         }
         if (input.x != 0)
         {
-            player.PlayerMove.ForceLook(input.x < 0);
+            player.Move.ForceLook(input.x < 0);
             player.isLookLocked = true;
             player.ChangeState<MoveState>();
             return;
@@ -88,19 +88,19 @@ public class IdleState : GroundSubState
     {
         
 
-        if (player.PlayerMove.isDodged)
+        if (player.Move.isDodged)
         {
-            player.PlayerMove.Stop();
-            player.PlayerMove.isDodged = false;
+            player.Move.Stop();
+            player.Move.isDodged = false;
         }
         
-        if (player.PlayerMove.rb.velocity.y < 0) player.ChangeState<FallState>();
+        if (player.Move.rb.velocity.y < 0) player.ChangeState<FallState>();
     }
 
     public override void Exit(PlayerController player)
     {
         base.Exit(player);
-        player.PlayerAnimator.OffBoolParam(PlayerAnimID.Idle);
+        player.Animator.OffBoolParam(PlayerAnimID.Idle);
     }
     
 }

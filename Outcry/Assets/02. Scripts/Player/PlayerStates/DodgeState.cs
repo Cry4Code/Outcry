@@ -12,53 +12,50 @@ public class DodgeState : IPlayerState
     private float dodgePower = 20f;
     private float dodgeAnimationLength;
     private Vector2 dodgeDirection;
-    private float dodgeInvincibleTime = 0.3f;
     
-    private int needStamina = 15;
-    
-    public void Enter(PlayerController player)
+    public void Enter(PlayerController controller)
     {
-        if (!player.Condition.TryUseStamina(needStamina))
+        if (!controller.Condition.TryUseStamina(controller.Data.dodgeStamina))
         {
-            if (player.PlayerMove.isGrounded)
+            if (controller.Move.isGrounded)
             {
-                player.ChangeState<IdleState>();
+                controller.ChangeState<IdleState>();
                 return;
             }
             else
             {
-                player.ChangeState<FallState>();
+                controller.ChangeState<FallState>();
                 return;
             }
         }
         
-        var moveInputs = player.Inputs.Player.Move.ReadValue<Vector2>();
-        player.isLookLocked = false;
-        player.PlayerMove.rb.velocity = Vector2.zero;
+        var moveInputs = controller.Inputs.Player.Move.ReadValue<Vector2>();
+        controller.isLookLocked = false;
+        controller.Move.rb.velocity = Vector2.zero;
         if (moveInputs.x != 0)
         {
             // 입력이 있을 때 그 쪽 보게
             dodgeDirection = (moveInputs.x < 0 ? Vector2.left : Vector2.right) * dodgePower;
-            player.PlayerMove.ForceLook(moveInputs.x < 0);
+            controller.Move.ForceLook(moveInputs.x < 0);
         }
         else
         {
             // 입력이 없으면 그냥 보던 쪽으로 가게
-            dodgeDirection = (player.transform.localScale.x < 0 ? Vector2.left : Vector2.right) * dodgePower;
-            player.PlayerMove.ForceLook(player.transform.localScale.x < 0);
+            dodgeDirection = (controller.transform.localScale.x < 0 ? Vector2.left : Vector2.right) * dodgePower;
+            controller.Move.ForceLook(controller.transform.localScale.x < 0);
         }
-        player.PlayerMove.isDodged = true;
-        player.PlayerAnimator.ClearTrigger();
-        player.PlayerAnimator.ClearInt();
-        player.PlayerAnimator.ClearBool();
-        player.Inputs.Player.Move.Disable();
+        controller.Move.isDodged = true;
+        controller.Animator.ClearTrigger();
+        controller.Animator.ClearInt();
+        controller.Animator.ClearBool();
+        controller.Inputs.Player.Move.Disable();
         dodgeAnimationLength = 
-            player.PlayerAnimator.animator.runtimeAnimatorController
+            controller.Animator.animator.runtimeAnimatorController
                 .animationClips.First(c => c.name == "Dodge").length;
-        player.PlayerMove.rb.AddForce(dodgeDirection, ForceMode2D.Impulse);
-        player.PlayerAnimator.SetTriggerAnimation(PlayerAnimID.Dodge);
-        player.Condition.SetInvincible(dodgeInvincibleTime);
-        player.isLookLocked = true;
+        controller.Move.rb.AddForce(dodgeDirection, ForceMode2D.Impulse);
+        controller.Animator.SetTriggerAnimation(PlayerAnimID.Dodge);
+        controller.Condition.SetInvincible(controller.Data.dodgeInvincibleTime);
+        controller.isLookLocked = true;
         startStateTime = Time.time;
         animRunningTime = 0f;
     }
@@ -74,7 +71,7 @@ public class DodgeState : IPlayerState
         
         if (Time.time - startStateTime > startAttackTime)
         {
-            AnimatorStateInfo curAnimInfo = player.PlayerAnimator.animator.GetCurrentAnimatorStateInfo(0);
+            AnimatorStateInfo curAnimInfo = player.Animator.animator.GetCurrentAnimatorStateInfo(0);
 
             if (curAnimInfo.IsName("Dodge"))
             { 
@@ -82,7 +79,7 @@ public class DodgeState : IPlayerState
 
                 if (animTime >= 1.0f)
                 {
-                    if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+                    if (player.Move.isGrounded) player.ChangeState<IdleState>();
                     else player.ChangeState<FallState>();
                     return;
                 }
@@ -90,7 +87,7 @@ public class DodgeState : IPlayerState
 
             if (animRunningTime >= dodgeAnimationLength)
             {
-                if (player.PlayerMove.isGrounded) player.ChangeState<IdleState>();
+                if (player.Move.isGrounded) player.ChangeState<IdleState>();
                 else player.ChangeState<FallState>();
                 return;
             }

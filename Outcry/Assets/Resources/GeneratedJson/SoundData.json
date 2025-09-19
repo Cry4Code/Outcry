@@ -4,67 +4,100 @@
             "Sound_id": 104000,
             "Sound_name": "Title(Temp)",
             "Loop": true,
-            "Desc": "배경음"
+            "Desc": "배경음",
+            "Sound_path": "Sounds/BGM/Title.mp3",
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104001,
             "Sound_name": "InGame(Temp)",
             "Loop": true,
-            "Desc": "배경음"
+            "Desc": "배경음",
+            "Sound_path": "Sounds/BGM/InGame.mp3",
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104101,
             "Sound_name": "Sword_Fix",
             "Loop": false,
-            "Desc": "평타1"
+            "Desc": "평타1",
+            "Sound_path": "Sounds/SFX/PlayerSFX/Sword_Fix.mp3",
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104102,
             "Sound_name": "Parry_Fix",
             "Loop": false,
-            "Desc": "패링"
+            "Desc": "패링",
+            "Sound_path": "Sounds/SFX/PlayerSFX/Parry_Fix.mp3",
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104103,
             "Sound_name": "Fury_Fix",
             "Loop": false,
-            "Desc": "섬단"
+            "Desc": "섬단",
+            "Sound_path": "Sounds/SFX/PlayerSFX/Fury_Fix.mp3",
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104104,
             "Sound_name": "",
             "Loop": false,
-            "Desc": ""
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
         },
         {
             "Sound_id": 104105,
             "Sound_name": "",
             "Loop": false,
-            "Desc": ""
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
         },
         {
             "Sound_id": 104106,
             "Sound_name": "",
             "Loop": false,
-            "Desc": ""
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
         },
         {
             "Sound_id": 104107,
             "Sound_name": "",
             "Loop": false,
-            "Desc": ""
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
         },
         {
             "Sound_id": 104108,
             "Sound_name": "",
             "Loop": false,
-            "Desc": ""
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
         },
         {
             "Sound_id": 104109,
             "Sound_name": "",
             "Loop": false,
-            "Desc": ""
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
         }
     ]
 }

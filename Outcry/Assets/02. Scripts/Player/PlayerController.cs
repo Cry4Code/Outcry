@@ -9,23 +9,30 @@ public class PlayerController : MonoBehaviour
 
     private Dictionary<System.Type, IPlayerState> states; // 상태 저장용
     public PlayerInputs Inputs { get; private set; }
-    public PlayerMove PlayerMove { get; private set; }
-    public PlayerAttack PlayerAttack { get; private set; }
+    public PlayerMove Move { get; private set; }
+    public PlayerAttack Attack { get; private set; }
     
     public PlayerCondition Condition { get; private set; }
+    
+    public PlayerAnimator Animator { get; private set; }
+    
+    public PlayerDataModel Data {get; private set;}
+    
+    public AttackHitbox Hitbox { get; private set; }
     
     private IPlayerState currentState;
     [HideInInspector] public bool isLookLocked = false;
     
-    public PlayerAnimator PlayerAnimator { get; private set; }
-
+    
     private void Awake()
     {
         Inputs = new PlayerInputs();
         Inputs.Enable();
-        PlayerMove = GetComponent<PlayerMove>();
-        PlayerAttack = GetComponent<PlayerAttack>();
+        Move = GetComponent<PlayerMove>();
+        Attack = GetComponent<PlayerAttack>();
         Condition = GetComponent<PlayerCondition>();
+        Hitbox = GetComponentInChildren<AttackHitbox>();
+        Hitbox.Init(this);
         
         states = new Dictionary<System.Type, IPlayerState>
         {
@@ -50,26 +57,28 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        PlayerAnimator = GetComponentInChildren<PlayerAnimator>();
+        Animator = GetComponentInChildren<PlayerAnimator>();
         ChangeState<IdleState>();
     }
 
     private void OnEnable()
     {
         Inputs.Player.Look.performed += CursorManager.Instance.OnLook;
-        Inputs.Player.Pause.started += PlayerMove.OnPause;
+        Inputs.Player.Pause.started += Move.OnPause;
+        Data = DataManager.Instance.PlayerDataModel;
+        Debug.Log($"[플레이어] 플레이어 데이터 로드 완료 -> 테스트 : 최대 체력 = {Data.maxHealth}");
     }
 
     private void OnDisable()
     {
         Inputs.Player.Look.performed -= CursorManager.Instance.OnLook;
-        Inputs.Player.Pause.started -= PlayerMove.OnPause;
+        Inputs.Player.Pause.started -= Move.OnPause;
     }
 
     private void Update()
     {
         Debug.Log($"[플레이어] 상태 : {currentState.GetType().Name}");
-        Debug.Log($"[플레이어] 벽 터치 : {PlayerMove.isWallTouched}");
+        Debug.Log($"[플레이어] 벽 터치 : {Move.isWallTouched}");
         // Debug.Log($"[플레이어] 땅 : {PlayerMove.isGrounded} || 일반 점프 : {PlayerMove.isGroundJump} || 이단 점프 : {PlayerMove.isDoubleJump}");
         currentState.HandleInput(this);
         currentState.LogicUpdate(this);
@@ -77,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(!isLookLocked) PlayerMove.Look();
+        if(!isLookLocked) Move.Look();
     }
 
     public void ChangeState<T>() where T : IPlayerState
@@ -95,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetAnimation(int animHash, bool isTrigger = false)
     {
-        if (isTrigger) PlayerAnimator.SetTriggerAnimation(animHash);
-        else  PlayerAnimator.SetBoolAnimation(animHash);
+        if (isTrigger) Animator.SetTriggerAnimation(animHash);
+        else  Animator.SetBoolAnimation(animHash);
     }
 }

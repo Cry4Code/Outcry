@@ -38,6 +38,21 @@ public static class TableDataHandler
         
         return newMonsterSkillModel;
     }
+
+    public static PlayerDataModel LoadPlayerData()
+    {
+        DataTableManager.Instance.LoadSingleData<PlayerData>();
+        PlayerData tableData =  DataTableManager.Instance.SingleData[typeof(PlayerData)] as PlayerData;
+        PlayerDataModel result = new PlayerDataModel(tableData.MaxHealth, tableData.MaxStamina, tableData.RateStamina, tableData.FullStamina,
+            tableData.SpecialAttackStamina, tableData.DodgeStamina, tableData.DodgeInvincibleTime,
+            tableData.DoubleJumpStamina, tableData.ParryStamina, tableData.ParryInvincibleTime, tableData.ParryDamage,
+            tableData.WallJumpStamina, tableData.InvincibleTime, tableData.NormalAttackDamage,
+            tableData.JumpAttackDamage, tableData.DownAttackDamage, tableData.Jumpforce, tableData.Skill_Ids,
+            tableData.MoveSpeed);
+        return result;
+    }
+    
+    
     
     //todo. 몬스터스킬데이터를 기획테이블에서 가져와서 맵핑하는 메서드 추가하기.
 }

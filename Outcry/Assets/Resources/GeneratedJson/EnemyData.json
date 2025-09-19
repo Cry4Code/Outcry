@@ -35,8 +35,8 @@
             "Enemy_Name": "goblin_C",
             "Max_Hp": 500,
             "Attack_Power": 1,
-            "Patrol_Speed": 0.800000011920929,
-            "Chase_Speed": 1.5,
+            "Patrol_Speed": 2.0,
+            "Chase_Speed": 2.5,
             "Detect_Range": 10.0,
             "Skill_Set": [
                 103301
