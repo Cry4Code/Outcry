@@ -80,12 +80,10 @@ public class MonsterCondition : MonoBehaviour, IDamagable
             if (currentHealth <= 0)
             {
                 Death();
+                return;
             }
         }
-        else
-        {
-            animationCoroutine = StartCoroutine(HitAnimation(hitAnimationLength));
-        }
+        animationCoroutine = StartCoroutine(HitAnimation(hitAnimationLength));
     }
     
     //빨갛게 점멸하는 이펙트 코루틴
