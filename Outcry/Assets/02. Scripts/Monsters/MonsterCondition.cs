@@ -74,7 +74,7 @@ public class MonsterCondition : MonoBehaviour, IDamagable
             StopCoroutine(animationCoroutine);
         }
 
-        if (currentHealth <= 50)
+        if (currentHealth <= maxHealth / 2)
         {
             monster.Animator.SetBool(AnimatorStrings.MonsterParameter.IsTired, true );
             if (currentHealth <= 0)
