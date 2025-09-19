@@ -7,6 +7,9 @@ using Random = System.Random;
 // [RequireComponent(typeof(BossMonster))] //todo. think. 쓸까 말까?
 public class BossMonsterAI : MonsterAIBase
 {
+    private float SPECIAL_SKILL_INTERVAL = 2f;
+    private float COMMON_SKILL_INTERVAL = 1f;
+    
     protected override void InitializeBehaviorTree()
     {
         SelectorNode rootNode = new SelectorNode();
@@ -59,7 +62,7 @@ public class BossMonsterAI : MonsterAIBase
         // 스페셜 스킬 시퀀스 노드
         SequenceNode specialSkillSequence = new SequenceNode();
         SkillSelectorNode specialSkillSelectorNode = new SkillSelectorNode();
-        WaitActionNode specialWaitActionNode = new WaitActionNode(2.0f);
+        WaitActionNode specialWaitActionNode = new WaitActionNode(SPECIAL_SKILL_INTERVAL);
         
         specialSkillSequence.AddChild(specialSkillSelectorNode);
         specialSkillSequence.AddChild(specialWaitActionNode);
@@ -84,7 +87,7 @@ public class BossMonsterAI : MonsterAIBase
         // 일반 스킬 시퀀스 노드
         SequenceNode commonSkillSequence = new SequenceNode();
         SkillSelectorNode commonSkillSelectorNode = new SkillSelectorNode();
-        WaitActionNode commonWaitActionNode = new WaitActionNode(1.0f);
+        WaitActionNode commonWaitActionNode = new WaitActionNode(COMMON_SKILL_INTERVAL);
         
         commonSkillSequence.AddChild(commonSkillSelectorNode);
         commonSkillSequence.AddChild(commonWaitActionNode);
