@@ -19,11 +19,9 @@ public class AttackHitbox : MonoBehaviour
     {
         if (Player.PlayerAttack.isStartParry)
         {
-            Player.PlayerAttack.successParry = true;
-
             if (other.TryGetComponent(out ICountable countable))
             {
-                Player.PlayerCondition.SetInvincible(0.2f);
+                Player.PlayerAttack.successParry = true;
                 countable?.CounterAttacked();
                 Debug.Log("플레이어 패링 성공");
             }

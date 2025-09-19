@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DoubleJumpState : AirSubState
 {
+    private float elapsedTime;
+    private float fallStartTime = 0.1f;
+    
     public override void Enter(PlayerController player)
     {
         base.Enter(player);
+        Debug.Log("!!Double Jump!!");
         player.SetAnimation(PlayerAnimID.DoubleJump, true);
         player.PlayerMove.DoubleJump();
+        
     }
     
     public override void HandleInput(PlayerController player) 
     {
+        elapsedTime += Time.deltaTime;
         var moveInput = player.Inputs.Player.Move.ReadValue<Vector2>();
         
         if(player.PlayerMove.isWallTouched 
@@ -46,10 +53,13 @@ public class DoubleJumpState : AirSubState
         if(moveInput != null)
             player.PlayerMove.Move();
 
-        if (player.PlayerMove.rb.velocity.y < 0)
+        if (elapsedTime > fallStartTime)
         {
-            player.ChangeState<FallState>();
-            return;
+            if (player.PlayerMove.rb.velocity.y < 0)
+            {
+                player.ChangeState<FallState>();
+                return;
+            }
         }
         if (player.PlayerMove.isGrounded)
         {
