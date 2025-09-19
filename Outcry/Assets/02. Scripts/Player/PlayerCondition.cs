@@ -11,23 +11,23 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     public Condition health;
     public Condition stamina;
     public float recoveryStaminaTime; // 스태미나 회복 주기 (일단은 1초)
+    public bool canStaminaRecovery;
 
     [Header("Invisible Settings")] 
     private bool isInvincible;
     public float invincibleTime; // 한 대 맞았을 때 무적 초 (일단은 1초)
     private WaitForSecondsRealtime waitInvisible;
-    public event Action onTakeDamage;
 
     private float lastRecoveryStamina;
     private PlayerController player;
     private Coroutine invincibleCoroutine;
+    [HideInInspector] public bool isDead;
 
     private void Awake()
     {
         player = GetComponent<PlayerController>();
     }
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         health.Init(EventBusKey.ChangeHealth);
@@ -36,18 +36,20 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         invincibleTime = 0.75f;
         waitInvisible = new WaitForSecondsRealtime(invincibleTime);
         invincibleCoroutine = null;
+        canStaminaRecovery = true;
+        isDead = false;
     }
 
     void Update()
     {
-        if(Time.time - lastRecoveryStamina >= recoveryStaminaTime)
+        if(Time.time - lastRecoveryStamina >= recoveryStaminaTime && canStaminaRecovery)
         {
             stamina.Add(stamina.passiveValue);
             Debug.Log($"[플레이어] Stamina : {stamina.CurValue()}");
             lastRecoveryStamina = Time.time;
         }
 
-        if (health.CurValue() <= 0f)
+        if (health.CurValue() <= 0f && !isDead)
         {
             Die();
         }
@@ -57,6 +59,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     public void TakeDamage(int damage)
     {
+        if (isDead) return;
         if (player.PlayerAttack.successParry)
         {
             if (invincibleCoroutine != null) return;
@@ -69,7 +72,6 @@ public class PlayerCondition : MonoBehaviour, IDamagable
             Debug.Log("[플레이어] 플레이어 데미지 받음");
             health.Substract(damage);
             Debug.Log($"[플레이어] 플레이어 현재 체력 : {health.CurValue()}");
-            onTakeDamage?.Invoke();
         }
         
     }
@@ -102,8 +104,25 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         Debug.Log("[플레이어] 플레이어 무적 끝");
     }
 
+    public bool TryUseStamina(int useStamina)
+    {
+        if (stamina.CurValue() - useStamina >= 0)
+        {
+            stamina.Substract(useStamina);
+            Debug.Log($"[플레이어] 스태미나 {useStamina} 사용 가능");
+            return true;
+        }
+        else
+        {
+            Debug.Log($"[플레이어] 스태미나 {useStamina} 사용 불가");
+            return false;
+        }
+    }
+
     public void Die()
     {
+        isDead = true;
         Debug.Log("[플레이어] 죽음!");
+        player.ChangeState<DieState>();
     }
 }
