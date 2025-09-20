@@ -35,7 +35,7 @@ public class SkillSequenceNodeDataList: DataListBase<SkillSequenceNode>
     /// <param name="skillId"></param>
     /// <param name="skillSequenceNode"></param>
     /// <returns></returns>
-    public bool GetSkillSequenceNode(int skillId, out SkillSequenceNode skillSequenceNode)
+    public bool TryGetSkillSequenceNode(int skillId, out SkillSequenceNode skillSequenceNode)
     {
         var tempData = dataList.FirstOrDefault(node => node.SkillId == skillId);
 

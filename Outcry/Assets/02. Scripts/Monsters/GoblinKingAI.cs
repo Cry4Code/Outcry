@@ -72,8 +72,8 @@ public class GoblinKingAI : MonsterAIBase
         // 스페셜 스킬 셀럭터 노드 자식들 생성.
         foreach (int id in monsterModel.specialSkillIds )
         {
-            DataManager.Instance.SkillSequenceNodeDataList.GetSkillSequenceNode(id, out SkillSequenceNode skillNode);
-            DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(id, out MonsterSkillModel skillData);
+            DataManager.Instance.SkillSequenceNodeDataList.TryGetSkillSequenceNode(id, out SkillSequenceNode skillNode);
+            DataManager.Instance.MonsterSkillDataList.TryGetMonsterSkillModelData(id, out MonsterSkillModel skillData);
             if (skillNode != null)
             {
                 skillNode.InitializeSkillSequenceNode(monster, target);
@@ -97,8 +97,8 @@ public class GoblinKingAI : MonsterAIBase
         //일반 스킬 셀럭터 노드 자식들 생성.
         foreach (int id in monsterModel.commonSkillIds)
         {
-            DataManager.Instance.SkillSequenceNodeDataList.GetSkillSequenceNode(id, out SkillSequenceNode skillNode);
-            DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(id, out MonsterSkillModel skillData);
+            DataManager.Instance.SkillSequenceNodeDataList.TryGetSkillSequenceNode(id, out SkillSequenceNode skillNode);
+            DataManager.Instance.MonsterSkillDataList.TryGetMonsterSkillModelData(id, out MonsterSkillModel skillData);
             if (skillNode != null)
             {
                 skillNode.InitializeSkillSequenceNode(monster, target);

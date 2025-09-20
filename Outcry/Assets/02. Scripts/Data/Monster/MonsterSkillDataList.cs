@@ -18,7 +18,7 @@ public class MonsterSkillDataList : DataListBase<MonsterSkillModel>
     /// <param name="skillId"></param>
     /// <param name="monsterSkillData"></param>
     /// <returns></returns>
-    public bool GetMonsterSkillModelData(int skillId, out MonsterSkillModel monsterSkillData)
+    public bool TryGetMonsterSkillModelData(int skillId, out MonsterSkillModel monsterSkillData)
     {
         monsterSkillData = dataList.FirstOrDefault(data => data.skillId == skillId);
 

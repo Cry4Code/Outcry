@@ -27,7 +27,7 @@ public class BossMonster : MonsterBase
             foreach (int skillId in bossMonsterData.specialSkillIds)
             {
                 
-                DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(skillId, out MonsterSkillModel skillData);
+                DataManager.Instance.MonsterSkillDataList.TryGetMonsterSkillModelData(skillId, out MonsterSkillModel skillData);
                 if (skillData != null)
                 {
                     specialSkillDatas.Add(skillData);
@@ -37,7 +37,7 @@ public class BossMonster : MonsterBase
             //커먼 스킬 데이터 초기화
             foreach (int skillId in bossMonsterData.commonSkillIds)
             {
-                DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(skillId, out MonsterSkillModel skillData);
+                DataManager.Instance.MonsterSkillDataList.TryGetMonsterSkillModelData(skillId, out MonsterSkillModel skillData);
                 if (skillData != null)
                 {
                     commonSkillDatas.Add(skillData);

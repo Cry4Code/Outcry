@@ -22,7 +22,7 @@ public abstract class SkillSequenceNode : SequenceNode
     public SkillSequenceNode(int skillId)
     {
         this.skillId = skillId;
-        if (!DataManager.Instance.MonsterSkillDataList.GetMonsterSkillModelData(skillId, out skillData))
+        if (!DataManager.Instance.MonsterSkillDataList.TryGetMonsterSkillModelData(skillId, out skillData))
         {
             Debug.LogError($"Skill ID {skillId} could not be found.");
         }
