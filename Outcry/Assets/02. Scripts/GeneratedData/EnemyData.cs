@@ -10,10 +10,10 @@ public class EnemyData : IData
     public int Enemy_Id;
     public string Enemy_Name;
     public int Max_Hp;
-    public int Attack_Power;
     public float Patrol_Speed;
     public float Chase_Speed;
     public float Detect_Range;
+    public float Approch_Range;
     public int[] Skill_Set;
     public int[] Exskill_Set;
 }

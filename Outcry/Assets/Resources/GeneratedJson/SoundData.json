@@ -47,42 +47,51 @@
         },
         {
             "Sound_id": 104104,
-            "Sound_name": "",
+            "Sound_name": "AirAtk",
             "Loop": false,
-            "Desc": "",
+            "Desc": "공중공격",
             "Sound_path": "",
-            "Volume": 0.0,
-            "Pitch": 0.0
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104105,
-            "Sound_name": "",
+            "Sound_name": "Stomp",
             "Loop": false,
-            "Desc": "",
+            "Desc": "보스1:스톰프",
             "Sound_path": "",
-            "Volume": 0.0,
-            "Pitch": 0.0
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104106,
-            "Sound_name": "",
+            "Sound_name": "Earthquake",
             "Loop": false,
-            "Desc": "",
+            "Desc": "보스1:어스퀰",
             "Sound_path": "",
-            "Volume": 0.0,
-            "Pitch": 0.0
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104107,
-            "Sound_name": "",
+            "Sound_name": "hurt1",
             "Loop": false,
-            "Desc": "",
+            "Desc": "?",
             "Sound_path": "",
-            "Volume": 0.0,
-            "Pitch": 0.0
+            "Volume": 1.0,
+            "Pitch": 1.0
         },
         {
             "Sound_id": 104108,
+            "Sound_name": "hurt2",
+            "Loop": false,
+            "Desc": "?",
+            "Sound_path": "",
+            "Volume": 1.0,
+            "Pitch": 1.0
+        },
+        {
+            "Sound_id": 104109,
             "Sound_name": "",
             "Loop": false,
             "Desc": "",
@@ -91,7 +100,133 @@
             "Pitch": 0.0
         },
         {
-            "Sound_id": 104109,
+            "Sound_id": 104110,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104111,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104112,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104113,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104114,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104115,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104116,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104117,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104118,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104119,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104120,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104121,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104122,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104123,
+            "Sound_name": "",
+            "Loop": false,
+            "Desc": "",
+            "Sound_path": "",
+            "Volume": 0.0,
+            "Pitch": 0.0
+        },
+        {
+            "Sound_id": 104124,
             "Sound_name": "",
             "Loop": false,
             "Desc": "",
