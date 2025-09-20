@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public abstract class MonsterBase : MonoBehaviour
 {
     [Header("Data")]
@@ -14,6 +15,8 @@ public abstract class MonsterBase : MonoBehaviour
     protected MonsterAIBase monsterAI;
     protected Animator animator;
     protected MonsterAttackController attackController;
+    protected Rigidbody2D rb2D;
+    protected SpriteRenderer spriteRenderer;
 
     [Header("Hitbox")]
     [SerializeField] protected BoxCollider2D hitbox;
@@ -24,6 +27,8 @@ public abstract class MonsterBase : MonoBehaviour
     public Animator Animator => animator;
     public MonsterAttackController AttackController => attackController;
     public BoxCollider2D Hitbox => hitbox;  //attackController가 있으면.. hitBox도 갖고 있을 필요가 없을텐데...?
+    public Rigidbody2D Rb2D => rb2D;
+    public SpriteRenderer SpriteRenderer => spriteRenderer;
     
     protected void Awake()
     {
@@ -60,6 +65,17 @@ public abstract class MonsterBase : MonoBehaviour
         if (hitbox == null)
         {
             Debug.LogError(this.monsterData.monsterId + ": hitBox is missing");
+        }
+
+        rb2D = GetComponent<Rigidbody2D>();
+        if (rb2D == null)
+        {
+            Debug.LogError(this.monsterData.monsterId + ": rb2D is missing");
+        }
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            Debug.LogError(this.monsterData.monsterId + ": spriteRenderer is missing");
         }
         
         Debug.Log($"{monsterData.monsterId}가 Awake 되었습니다.");

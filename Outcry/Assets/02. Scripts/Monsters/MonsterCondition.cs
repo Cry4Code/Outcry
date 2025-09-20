@@ -15,7 +15,6 @@ public class MonsterCondition : MonoBehaviour, IDamagable
     public Action OnDeath;  //todo. think. BT 중지도 여기에 하면 될듯? 그럼 isDead 필요 없음? 고민해봐야할듯.
 
     private Coroutine animationCoroutine;
-    private SpriteRenderer spriteRenderer;
     private Color originalColor;
     
     private float stunAnimationLength;
@@ -45,9 +44,7 @@ public class MonsterCondition : MonoBehaviour, IDamagable
             }
         }
         
-        //hit 애니메이션 관련
-        spriteRenderer = monster.AttackController.GetComponent<SpriteRenderer>();
-        originalColor = spriteRenderer.color;
+        originalColor = monster.SpriteRenderer.color;
     }
 
     public void Initialize()    //오브젝트 풀이 필요할 것인가? 상정하고 짜뒀음.
@@ -70,7 +67,7 @@ public class MonsterCondition : MonoBehaviour, IDamagable
         CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
         if (animationCoroutine != null)
         {
-            spriteRenderer.color = originalColor;
+            monster.SpriteRenderer.color = originalColor;
             StopCoroutine(animationCoroutine);
         }
 
@@ -94,12 +91,12 @@ public class MonsterCondition : MonoBehaviour, IDamagable
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
-            spriteRenderer.color = spriteRenderer.color == Color.red ? originalColor : hitColor;
+            monster.SpriteRenderer.color = monster.SpriteRenderer.color == Color.red ? originalColor : hitColor;
             yield return new WaitForSeconds(flashDuration);
             elapsedTime += flashDuration;
         }
 
-        spriteRenderer.color = originalColor;
+        monster.SpriteRenderer.color = originalColor;
     }
 
     public void Stunned()

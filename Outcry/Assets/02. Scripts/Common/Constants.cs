@@ -37,6 +37,7 @@ public static class AnimatorStrings
         public static readonly int Shark = Animator.StringToHash("Shark");
         public static readonly int RumbleOfRuin = Animator.StringToHash("RumbleOfRuin");
         public static readonly int IsTired = Animator.StringToHash("IsTired");
+        public static readonly int IsReady = Animator.StringToHash("IsReady");
 
     }
 
